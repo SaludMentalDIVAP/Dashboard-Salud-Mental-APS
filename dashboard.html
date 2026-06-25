@@ -1,0 +1,1743 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dashboard Salud Mental APS Chile 2014–2025</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<style>
+:root{
+  --az1:#003F6B;--az2:#005F9E;--az3:#0090D0;
+  --rojo:#D0222A;--verde:#2E8B57;--naranja:#E67E22;--morado:#7c3aed;
+  --celeste:#E8F4FB;--gris-claro:#F4F7FA;--gris-borde:#D0DCE8;
+  --texto:#1A2A3A;--texto-s:#4A6080;--blanco:#fff;
+  --sombra:0 2px 12px rgba(0,60,120,.10);--sombra-h:0 6px 24px rgba(0,60,120,.18);
+  --radius:10px;--font:'Segoe UI','Helvetica Neue',Arial,sans-serif;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:var(--font);background:var(--gris-claro);color:var(--texto);min-height:100vh}
+
+/* HEADER */
+.header{background:linear-gradient(135deg,var(--az1) 0%,var(--az2) 60%,var(--az3) 100%);color:#fff;position:sticky;top:0;z-index:1000;box-shadow:0 3px 16px rgba(0,0,0,.25)}
+.header-inner{max-width:1600px;margin:0 auto;padding:10px 24px;display:flex;align-items:center;gap:16px}
+.header-logo{display:flex;align-items:center;flex-shrink:0;background:#fff;border-radius:8px;padding:6px 12px;height:62px;box-shadow:0 2px 8px rgba(0,0,0,.18)}
+.logo-text{font-size:14px;font-weight:900;color:var(--az1);line-height:1.1}
+.logo-sub{font-size:9px;font-weight:700;color:var(--az2);text-transform:uppercase;letter-spacing:1px}
+.header-title{flex:1}
+.header-title h1{font-size:17px;font-weight:700;line-height:1.3}
+.header-title .hsub{font-size:11px;opacity:.72;margin-top:2px}
+.header-meta{display:flex;gap:8px;flex-shrink:0;flex-wrap:wrap}
+.meta-chip{background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.25);border-radius:20px;padding:5px 12px;font-size:11px;font-weight:600;white-space:nowrap}
+.meta-chip span{opacity:.75;font-weight:400}
+
+/* TABS */
+.tabs-bar{background:#fff;border-bottom:3px solid var(--gris-borde);position:sticky;top:82px;z-index:998;box-shadow:0 2px 8px rgba(0,60,120,.07)}
+.tabs-inner{max-width:1600px;margin:0 auto;padding:0 24px;display:flex;gap:0}
+.tab-btn{padding:12px 22px;font-size:12px;font-weight:700;color:var(--texto-s);border:none;background:none;cursor:pointer;border-bottom:3px solid transparent;margin-bottom:-3px;transition:all .2s;letter-spacing:.3px;display:flex;align-items:center;gap:6px}
+.tab-btn:hover{color:var(--az2);background:var(--celeste)}
+.tab-btn.active{color:var(--az2);border-bottom-color:var(--az2)}
+.tab-content{display:none}.tab-content.active{display:block}
+
+/* FILTROS */
+.filtros-bar{background:#fff;border-bottom:2px solid var(--gris-borde);position:sticky;top:130px;z-index:997;box-shadow:0 2px 8px rgba(0,60,120,.07)}
+.filtros-inner{max-width:1600px;margin:0 auto;padding:8px 24px;display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.filtros-label{font-size:11px;font-weight:700;color:var(--az2);text-transform:uppercase;letter-spacing:1px;flex-shrink:0}
+.filtro-group{display:flex;align-items:center;gap:5px}
+.filtro-group label{font-size:11px;color:var(--texto-s);font-weight:600;white-space:nowrap}
+select.filtro{font-size:11px;font-family:var(--font);border:1.5px solid var(--gris-borde);border-radius:6px;padding:5px 8px;background:var(--gris-claro);color:var(--texto);cursor:pointer;outline:none;transition:border-color .2s;min-width:120px;max-width:190px}
+select.filtro:focus{border-color:var(--az2);background:#fff}
+.btn-reset{padding:6px 14px;background:var(--az2);color:#fff;border:none;border-radius:6px;font-size:11px;font-weight:600;cursor:pointer;transition:background .2s;margin-left:auto;white-space:nowrap}
+.btn-reset:hover{background:var(--az1)}
+.filtros-count{font-size:10px;color:var(--texto-s);flex-shrink:0}
+.filtro-cat-group{display:none}
+.filtro-cat-group.visible{display:flex;align-items:center;gap:5px}
+
+/* MAIN */
+.main{max-width:1600px;margin:0 auto;padding:18px 24px 40px}
+
+/* KPIs */
+.kpi-row{display:grid;grid-template-columns:repeat(5,1fr);gap:14px;margin-bottom:20px}
+.kpi-card{background:#fff;border-radius:var(--radius);box-shadow:var(--sombra);padding:16px 18px;border-left:5px solid var(--az2);display:flex;flex-direction:column;gap:4px;transition:box-shadow .2s,transform .2s;cursor:default}
+.kpi-card:hover{box-shadow:var(--sombra-h);transform:translateY(-2px)}
+.kpi-card.verde{border-left-color:var(--verde)}.kpi-card.naranja{border-left-color:var(--naranja)}
+.kpi-card.rojo{border-left-color:var(--rojo)}.kpi-card.morado{border-left-color:var(--morado)}
+.kpi-icon{font-size:20px;margin-bottom:2px}
+.kpi-label{font-size:10px;color:var(--texto-s);font-weight:600;text-transform:uppercase;letter-spacing:.5px}
+.kpi-value{font-size:26px;font-weight:800;color:var(--az1);line-height:1}
+.kpi-value.sm{font-size:18px}.kpi-value.xs{font-size:15px}
+.kpi-sub{font-size:10px;color:var(--texto-s);margin-top:2px}
+
+/* CHARTS */
+.sec-title{font-size:12px;font-weight:700;color:var(--az2);text-transform:uppercase;letter-spacing:1.2px;margin-bottom:12px;display:flex;align-items:center;gap:8px}
+.sec-title::before{content:'';display:block;width:4px;height:16px;background:var(--az2);border-radius:2px}
+.sec-sep{height:1px;background:var(--gris-borde);margin:4px 0 16px}
+.charts-grid{display:grid;gap:14px;margin-bottom:18px}
+.g1{grid-template-columns:1fr}.g2{grid-template-columns:1fr 1fr}.g3{grid-template-columns:1fr 1fr 1fr}
+.g2c{grid-template-columns:2fr 1fr}.gc2{grid-template-columns:1fr 2fr}
+.chart-card{background:#fff;border-radius:var(--radius);box-shadow:var(--sombra);padding:16px 18px;display:flex;flex-direction:column;transition:box-shadow .2s}
+.chart-card:hover{box-shadow:var(--sombra-h)}
+.chart-header{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:12px}
+.chart-title{font-size:12px;font-weight:700;color:var(--texto);line-height:1.3}
+.chart-sub{font-size:10px;color:var(--texto-s);margin-top:2px}
+.chart-badge{background:var(--celeste);color:var(--az2);font-size:10px;font-weight:700;padding:3px 8px;border-radius:10px;white-space:nowrap;flex-shrink:0}
+.cw{flex:1;position:relative;min-height:200px}
+.cw.t{min-height:290px}.cw.xt{min-height:380px}.cw.xxl{min-height:460px}.cw.xxxl{min-height:520px}
+
+/* MAPA */
+.mapa{height:540px;border-radius:8px;z-index:1}
+.map-ctrl{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:10px;align-items:center}
+.map-sel{font-size:11px;padding:5px 10px;border:1.5px solid var(--gris-borde);border-radius:6px;background:var(--gris-claro);color:var(--texto);cursor:pointer;outline:none}
+.map-leg{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
+.leg-item{display:flex;align-items:center;gap:5px;font-size:10px;font-weight:600;color:var(--texto-s);background:var(--gris-claro);border-radius:12px;padding:3px 8px;border:1.5px solid var(--gris-borde)}
+.leg-dot{width:10px;height:10px;border-radius:50%;flex-shrink:0}
+
+/* TABLA */
+.tabla-wrap{overflow:auto;margin-top:4px;max-height:420px}
+table{width:100%;border-collapse:collapse;font-size:11px}
+thead th{background:var(--az2);color:#fff;font-weight:700;padding:8px 10px;text-align:left;white-space:nowrap;font-size:10px;text-transform:uppercase;cursor:pointer;position:sticky;top:0;z-index:2}
+thead th:hover{background:var(--az1)}
+tbody tr:nth-child(even){background:var(--celeste)}
+tbody tr:hover{background:#D0E8F5}
+tbody td{padding:7px 10px;border-bottom:1px solid var(--gris-borde)}
+tbody td.num{text-align:right;font-weight:600}
+tbody td.rank{font-weight:800;color:var(--az2);text-align:center}
+.prog{height:4px;background:var(--gris-borde);border-radius:3px;margin-top:3px;overflow:hidden}
+.prog-fill{height:100%;border-radius:3px}
+
+/* INDICADOR TAB: colores especiales */
+.ind-note{background:var(--celeste);border:1.5px solid var(--az3);border-radius:8px;padding:10px 14px;font-size:11px;color:var(--az1);margin-bottom:16px;line-height:1.6}
+.ind-note strong{font-weight:700}
+
+/* FOOTER */
+.footer{background:var(--az1);color:rgba(255,255,255,.65);text-align:center;padding:12px 24px;font-size:10px;letter-spacing:.3px}
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<div id="loading-overlay" style="position:fixed;top:0;left:0;width:100%;height:100%;background:linear-gradient(135deg,#003F6B,#005F9E);z-index:9999;display:flex;flex-direction:column;align-items:center;justify-content:center;color:white">
+  <div style="font-size:52px;margin-bottom:16px">🧠</div>
+  <div style="font-size:18px;font-weight:700;margin-bottom:6px">Dashboard Salud Mental APS Chile</div>
+  <div style="font-size:12px;opacity:.7;margin-bottom:24px">DIVAP · Departamento de Salud Mental · MINSAL</div>
+  <div style="font-size:11px;opacity:.55">Cargando...</div>
+</div>
+<div class="header">
+  <div class="header-inner">
+    <div class="header-logo">
+      <div><div class="logo-text">MINSAL</div><div class="logo-sub">Chile</div></div>
+    </div>
+    <div class="header-title">
+      <h1>Dashboard Salud Mental APS Chile — Indicadores de Gestión Clínica</h1>
+      <div class="hsub">División de Atención Primaria (DIVAP) · Departamento de Salud Mental · Datos DEIS MINSAL 2014–2025</div>
+    </div>
+    <div class="header-meta">
+      <div class="meta-chip">📅 <span>Período</span> 2014–2025</div>
+      <div class="meta-chip">🏥 <span>Establecimientos</span> 2.110</div>
+      <div class="meta-chip">🗺️ <span>Servicios de Salud</span> 29</div>
+    </div>
+  </div>
+</div>
+
+<!-- TABS -->
+<div class="tabs-bar">
+  <div class="tabs-inner">
+    <button class="tab-btn active" onclick="switchTab('home',this)">🏠 Inicio</button>
+    <button class="tab-btn" onclick="switchTab('altas',this)">🏆 Altas Clínicas SM</button>
+    <button class="tab-btn" onclick="switchTab('pbc',this)">👥 Población Bajo Control</button>
+    <button class="tab-btn" onclick="switchTab('ind',this)">📊 % Altas / PBC</button>
+    <button class="tab-btn" onclick="switchTab('cat',this)">🗂️ Categorización SM</button>
+  </div>
+</div>
+
+<!-- FILTROS (compartidos) -->
+<div class="filtros-bar">
+  <div class="filtros-inner">
+    <span class="filtros-label">🔍 Filtros</span>
+    <div class="filtro-group"><label>Año</label><select class="filtro" id="f-anio"><option value="total">Total 2014–2025</option></select></div>
+    <div class="filtro-group"><label>Servicio de Salud</label><select class="filtro" id="f-ss"><option value="">Todos los SS</option></select></div>
+    <div class="filtro-group"><label>Comuna</label><select class="filtro" id="f-comuna"><option value="">Todas las comunas</option></select></div>
+    <div class="filtro-group"><label>Establecimiento</label><select class="filtro" id="f-estab"><option value="">Todos</option></select></div>
+    <div class="filtro-group"><label>Tipo Establecimiento</label><select class="filtro" id="f-tipo"><option value="">Todos los tipos</option></select></div>
+    <div class="filtro-group"><label>Dependencia</label><select class="filtro" id="f-dep"><option value="">Todas</option></select></div>
+    <div class="filtro-group filtro-cat-group" id="filtro-cat-group">
+      <label style="color:#E67E22;font-weight:700">Categoría</label>
+      <select class="filtro" id="f-cat" style="border-color:#E67E22;min-width:180px">
+        <option value="">Todas las categorías</option>
+        <option value="N0">N0 — Sin diagnóstico SM / Sin riesgo</option>
+        <option value="N1">N1 — Sospecha SM / Riesgo bajo</option>
+        <option value="N2">N2 — Sospecha SM / Riesgo moderado</option>
+        <option value="N3">N3 — Sospecha SM / Riesgo moderado-alto (resolutivo APS)</option>
+        <option value="N4">N4 — SM grave / Riesgo alto (derivar especialidad)</option>
+      </select>
+    </div>
+    <button class="btn-reset" onclick="resetFiltros()">↺ Restablecer</button>
+    <span class="filtros-count" id="filtros-count"></span>
+  </div>
+</div>
+
+<!-- ===== TAB HOME ===== -->
+<div id="tab-home" class="tab-content active">
+<div class="main">
+  <div style="max-width:960px;margin:0 auto;padding:10px 0">
+    <div style="background:linear-gradient(135deg,#003F6B 0%,#005F9E 60%,#0090D0 100%);border-radius:14px;padding:28px 36px;color:white;margin-bottom:22px;display:flex;gap:28px;align-items:center">
+      <div style="font-size:48px;flex-shrink:0">🧠</div>
+      <div style="flex:1">
+        <div style="font-size:20px;font-weight:800;line-height:1.3;margin-bottom:6px">Dashboard de Salud Mental en Atención Primaria de Salud</div>
+        <div style="font-size:12px;opacity:.78;line-height:1.6">División de Atención Primaria (DIVAP) · Departamento de Salud Mental · MINSAL Chile · Datos DEIS 2014–2025</div>
+        <div style="margin-top:12px;display:flex;gap:8px;flex-wrap:wrap">
+          <span style="background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.3);border-radius:20px;padding:3px 11px;font-size:11px;font-weight:600">📅 2014–2025</span>
+          <span style="background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.3);border-radius:20px;padding:3px 11px;font-size:11px;font-weight:600">🏥 2.110 centros</span>
+          <span style="background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.3);border-radius:20px;padding:3px 11px;font-size:11px;font-weight:600">🗺️ 29 SS</span>
+        </div>
+      </div>
+      <div style="flex-shrink:0;text-align:center">
+        <div style="font-size:26px;font-weight:800" id="home-total-altas">—</div>
+        <div style="font-size:10px;opacity:.7;margin-top:2px">Altas clínicas 2014–2025</div>
+        <div style="font-size:22px;font-weight:800;color:#90EE90;margin-top:8px" id="home-pbc-2025">—</div>
+        <div style="font-size:10px;opacity:.7;margin-top:2px">Bajo control dic. 2025</div>
+      </div>
+    </div>
+
+    <!-- MODO SELECTOR -->
+    <div style="display:flex;gap:0;background:#F4F7FA;border-radius:10px;padding:4px;margin-bottom:18px;border:1.5px solid #D0DCE8">
+      <button id="modo-btn-var" onclick="setModo('var')" style="flex:1;padding:10px 16px;border:none;border-radius:7px;font-size:12px;font-weight:700;cursor:pointer;transition:all .2s;background:#005F9E;color:white">📊 Analizar por Variable</button>
+      <button id="modo-btn-terr" onclick="setModo('terr')" style="flex:1;padding:10px 16px;border:none;border-radius:7px;font-size:12px;font-weight:700;cursor:pointer;transition:all .2s;background:transparent;color:#4A6080">🗺️ Analizar por Territorio</button>
+    </div>
+
+    <!-- MODO 1: VARIABLE -->
+    <div id="modo-var">
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px">
+        <div onclick="switchTabByName('altas')" style="background:white;border-radius:12px;box-shadow:0 2px 12px rgba(0,60,120,.10);padding:20px 22px;cursor:pointer;border-left:5px solid #005F9E;transition:all .2s" onmouseover="this.style.transform='translateY(-2px)';this.style.boxShadow='0 6px 24px rgba(0,60,120,.18)'" onmouseout="this.style.transform='none';this.style.boxShadow='0 2px 12px rgba(0,60,120,.10)'">
+          <div style="font-size:26px;margin-bottom:8px">🏆</div>
+          <div style="font-size:13px;font-weight:800;color:#003F6B;margin-bottom:5px">Altas Clínicas SM</div>
+          <div style="font-size:11px;color:#4A6080;line-height:1.5">Total de personas con alta clínica de salud mental en APS. Evolución 2014–2025 por SS, tipo y establecimiento.</div>
+          <div style="margin-top:10px;font-size:10px;font-weight:700;color:#005F9E;text-transform:uppercase;letter-spacing:.5px">10 gráficos + mapa + tabla →</div>
+        </div>
+        <div onclick="switchTabByName('pbc')" style="background:white;border-radius:12px;box-shadow:0 2px 12px rgba(0,60,120,.10);padding:20px 22px;cursor:pointer;border-left:5px solid #2E8B57;transition:all .2s" onmouseover="this.style.transform='translateY(-2px)';this.style.boxShadow='0 6px 24px rgba(0,60,120,.18)'" onmouseout="this.style.transform='none';this.style.boxShadow='0 2px 12px rgba(0,60,120,.10)'">
+          <div style="font-size:26px;margin-bottom:8px">👥</div>
+          <div style="font-size:13px;font-weight:800;color:#003F6B;margin-bottom:5px">Población Bajo Control</div>
+          <div style="font-size:11px;color:#4A6080;line-height:1.5">Personas en tratamiento SM registradas en diciembre de cada año. Tendencia y distribución territorial.</div>
+          <div style="margin-top:10px;font-size:10px;font-weight:700;color:#2E8B57;text-transform:uppercase;letter-spacing:.5px">10 gráficos + mapa + tabla →</div>
+        </div>
+        <div onclick="switchTabByName('ind')" style="background:white;border-radius:12px;box-shadow:0 2px 12px rgba(0,60,120,.10);padding:20px 22px;cursor:pointer;border-left:5px solid #7c3aed;transition:all .2s" onmouseover="this.style.transform='translateY(-2px)';this.style.boxShadow='0 6px 24px rgba(0,60,120,.18)'" onmouseout="this.style.transform='none';this.style.boxShadow='0 2px 12px rgba(0,60,120,.10)'">
+          <div style="font-size:26px;margin-bottom:8px">📊</div>
+          <div style="font-size:13px;font-weight:800;color:#003F6B;margin-bottom:5px">% Altas / PBC</div>
+          <div style="font-size:11px;color:#4A6080;line-height:1.5">Indicador oficial de resolución clínica. Porcentaje de altas sobre población bajo control por SS y año.</div>
+          <div style="margin-top:10px;font-size:10px;font-weight:700;color:#7c3aed;text-transform:uppercase;letter-spacing:.5px">7 gráficos + tabla →</div>
+        </div>
+        <div onclick="switchTabByName('cat')" style="background:white;border-radius:12px;box-shadow:0 2px 12px rgba(0,60,120,.10);padding:20px 22px;cursor:pointer;border-left:5px solid #E67E22;transition:all .2s" onmouseover="this.style.transform='translateY(-2px)';this.style.boxShadow='0 6px 24px rgba(0,60,120,.18)'" onmouseout="this.style.transform='none';this.style.boxShadow='0 2px 12px rgba(0,60,120,.10)'">
+          <div style="font-size:26px;margin-bottom:8px">🗂️</div>
+          <div style="font-size:13px;font-weight:800;color:#003F6B;margin-bottom:5px">Categorización SM en APS</div>
+          <div style="font-size:11px;color:#4A6080;line-height:1.5">Modelo N0–N4 en centros APS. 436 centros, 27 SS, 84.191 personas categorizadas (2025).</div>
+          <div style="margin-top:10px;font-size:10px;font-weight:700;color:#E67E22;text-transform:uppercase;letter-spacing:.5px">8 gráficos + mapa + tabla →</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- MODO 2: TERRITORIO -->
+    <div id="modo-terr" style="display:none">
+      <div style="background:white;border-radius:12px;box-shadow:0 2px 12px rgba(0,60,120,.10);padding:18px 22px;margin-bottom:16px">
+        <div style="font-size:12px;font-weight:700;color:#005F9E;text-transform:uppercase;letter-spacing:.8px;margin-bottom:12px">🔍 Seleccionar territorio</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;align-items:end">
+          <div>
+            <label style="font-size:10px;font-weight:700;color:#4A6080;text-transform:uppercase;letter-spacing:.5px;display:block;margin-bottom:5px">Servicio de Salud</label>
+            <select id="terr-ss" class="filtro" style="width:100%" onchange="terrCascade()"><option value="">— Nacional —</option></select>
+          </div>
+          <div>
+            <label style="font-size:10px;font-weight:700;color:#4A6080;text-transform:uppercase;letter-spacing:.5px;display:block;margin-bottom:5px">Comuna</label>
+            <select id="terr-comuna" class="filtro" style="width:100%" onchange="terrFiltraComunaChange()"><option value="">— Todas —</option></select>
+          </div>
+          <div>
+            <label style="font-size:10px;font-weight:700;color:#4A6080;text-transform:uppercase;letter-spacing:.5px;display:block;margin-bottom:5px">Establecimiento</label>
+            <select id="terr-estab" class="filtro" style="width:100%" onchange="renderFicha()"><option value="">— Todos —</option></select>
+          </div>
+        </div>
+      </div>
+
+      <div id="ficha-territorio" style="display:none">
+        <div id="ficha-head" style="background:linear-gradient(135deg,#003F6B,#005F9E);border-radius:12px 12px 0 0;padding:16px 22px;color:white;display:flex;align-items:center;gap:14px">
+          <div style="font-size:32px" id="ficha-icon">🗺️</div>
+          <div><div style="font-size:16px;font-weight:800" id="ficha-nombre">—</div><div style="font-size:11px;opacity:.75;margin-top:3px" id="ficha-sub">—</div></div>
+        </div>
+        <div style="display:grid;grid-template-columns:repeat(4,1fr);background:white;border-left:1.5px solid #D0DCE8;border-right:1.5px solid #D0DCE8">
+          <div style="padding:14px 16px;border-right:1px solid #D0DCE8;text-align:center"><div style="font-size:10px;color:#4A6080;font-weight:600;text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px">Altas SM 2014–2025</div><div style="font-size:22px;font-weight:800;color:#005F9E" id="ficha-kpi-altas">—</div></div>
+          <div style="padding:14px 16px;border-right:1px solid #D0DCE8;text-align:center"><div style="font-size:10px;color:#4A6080;font-weight:600;text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px">Bajo Control dic. 2025</div><div style="font-size:22px;font-weight:800;color:#2E8B57" id="ficha-kpi-pbc">—</div></div>
+          <div style="padding:14px 16px;border-right:1px solid #D0DCE8;text-align:center"><div style="font-size:10px;color:#4A6080;font-weight:600;text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px">% Altas/PBC 2025</div><div style="font-size:22px;font-weight:800;color:#7c3aed" id="ficha-kpi-pct">—</div></div>
+          <div style="padding:14px 16px;text-align:center"><div style="font-size:10px;color:#4A6080;font-weight:600;text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px">Categorizados 2025</div><div style="font-size:22px;font-weight:800;color:#E67E22" id="ficha-kpi-cat">—</div></div>
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;background:white;border:1.5px solid #D0DCE8;border-top:none;border-radius:0 0 12px 12px;overflow:hidden">
+          <div style="padding:14px 16px;border-right:1px solid #D0DCE8;border-bottom:1px solid #D0DCE8">
+            <div style="font-size:11px;font-weight:700;color:#003F6B;margin-bottom:8px">🏆 Altas Clínicas SM por año</div>
+            <div style="position:relative;height:120px"><canvas id="ficha-c-altas"></canvas></div>
+          </div>
+          <div style="padding:14px 16px;border-bottom:1px solid #D0DCE8">
+            <div style="font-size:11px;font-weight:700;color:#003F6B;margin-bottom:8px">👥 Población Bajo Control por año</div>
+            <div style="position:relative;height:120px"><canvas id="ficha-c-pbc"></canvas></div>
+          </div>
+          <div style="padding:14px 16px;border-right:1px solid #D0DCE8">
+            <div style="font-size:11px;font-weight:700;color:#003F6B;margin-bottom:8px">📊 % Altas/PBC por año</div>
+            <div style="position:relative;height:120px"><canvas id="ficha-c-pct"></canvas></div>
+          </div>
+          <div style="padding:14px 16px">
+            <div style="font-size:11px;font-weight:700;color:#003F6B;margin-bottom:8px">🗂️ Distribución Categorías N0–N4</div>
+            <div id="ficha-cat-content"></div>
+          </div>
+        </div>
+        <div style="margin-top:10px;text-align:center">
+          <button onclick="verFichaCompleta()" style="background:#005F9E;color:white;border:none;border-radius:8px;padding:8px 20px;font-size:11px;font-weight:700;cursor:pointer;margin-right:8px">📊 Ver análisis completo en pestañas →</button>
+          <span style="font-size:10px;color:#4A6080">Los filtros se aplicarán automáticamente a todas las pestañas</span>
+        </div>
+      </div>
+
+      <div id="ficha-empty" style="text-align:center;padding:40px;color:#4A6080;background:white;border-radius:12px;border:1.5px dashed #D0DCE8">
+        <div style="font-size:40px;margin-bottom:12px">🗺️</div>
+        <div style="font-size:14px;font-weight:700;color:#003F6B;margin-bottom:6px">Selecciona un territorio</div>
+        <div style="font-size:12px;line-height:1.6">Elige un Servicio de Salud, una Comuna o un Establecimiento<br>para ver su ficha con todos los indicadores.</div>
+      </div>
+    </div>
+
+  </div>
+</div>
+</div>
+<!-- ===== TAB 1: ALTAS ===== -->
+<div id="tab-altas" class="tab-content">
+<div class="main">
+  <div class="kpi-row">
+    <div class="kpi-card"><div class="kpi-icon">🏆</div><div class="kpi-label">Total Altas Clínicas SM</div><div class="kpi-value" id="a-kpi-total">—</div><div class="kpi-sub" id="a-kpi-total-sub">—</div></div>
+    <div class="kpi-card verde"><div class="kpi-icon">🏥</div><div class="kpi-label">Establecimientos activos</div><div class="kpi-value" id="a-kpi-estab">—</div><div class="kpi-sub">Con registro de altas</div></div>
+    <div class="kpi-card naranja"><div class="kpi-icon">📊</div><div class="kpi-label">Promedio anual / estab.</div><div class="kpi-value sm" id="a-kpi-prom">—</div><div class="kpi-sub">Altas por centro por año</div></div>
+    <div class="kpi-card rojo"><div class="kpi-icon">📈</div><div class="kpi-label">Año con más altas</div><div class="kpi-value sm" id="a-kpi-best-yr">—</div><div class="kpi-sub" id="a-kpi-best-yr-val">—</div></div>
+    <div class="kpi-card morado"><div class="kpi-icon">🥇</div><div class="kpi-label">SS líder</div><div class="kpi-value xs" id="a-kpi-top-ss">—</div><div class="kpi-sub" id="a-kpi-top-ss-val">—</div></div>
+  </div>
+
+  <div class="sec-title">📈 Tendencia Temporal</div><div class="sec-sep"></div>
+  <div class="charts-grid g1" style="margin-bottom:18px">
+    <div class="chart-card">
+      <div class="chart-header">
+        <div><div class="chart-title">Evolución Total de Altas Clínicas SM por Año (2014–2025)</div><div class="chart-sub">Total nacional según filtros activos · Impacto COVID-19 visible en 2020</div></div>
+        <div class="chart-badge" id="a-badge-tend">Nacional</div>
+      </div>
+      <div class="cw t"><canvas id="a-c-tend"></canvas></div>
+    </div>
+  </div>
+
+  <div class="charts-grid g2">
+    <div class="chart-card">
+      <div class="chart-header"><div><div class="chart-title">Altas Clínicas SM por Servicio de Salud</div><div class="chart-sub">Comparación entre los 29 SS</div></div><div class="chart-badge" id="a-badge-ss">SS</div></div>
+      <div class="cw xt"><canvas id="a-c-ss"></canvas></div>
+    </div>
+    <div class="chart-card">
+      <div class="chart-header"><div><div class="chart-title">Variación % Año a Año</div><div class="chart-sub">Cambio porcentual respecto al año anterior</div></div><div class="chart-badge">Δ% anual</div></div>
+      <div class="cw t"><canvas id="a-c-var"></canvas></div>
+    </div>
+  </div>
+
+  <div class="sec-title" style="margin-top:22px">🏥 Análisis por Tipo y Dependencia</div><div class="sec-sep"></div>
+  <div class="charts-grid g3">
+    <div class="chart-card">
+      <div class="chart-header"><div><div class="chart-title">Distribución por Tipo de Establecimiento</div><div class="chart-sub">Participación en el total de altas</div></div><div class="chart-badge">Tipo</div></div>
+      <div class="cw t"><canvas id="a-c-tipo-dona"></canvas></div>
+    </div>
+    <div class="chart-card">
+      <div class="chart-header"><div><div class="chart-title">Evolución por Tipo de Establecimiento</div><div class="chart-sub">CESFAM, CECOSF, Posta, Hospital Comunitario</div></div><div class="chart-badge">Tendencia</div></div>
+      <div class="cw t"><canvas id="a-c-tipo-linea"></canvas></div>
+    </div>
+    <div class="chart-card">
+      <div class="chart-header"><div><div class="chart-title">Altas por Dependencia Administrativa</div><div class="chart-sub">Municipal vs. Servicio de Salud vs. Otra</div></div><div class="chart-badge">Dependencia</div></div>
+      <div class="cw t"><canvas id="a-c-dep"></canvas></div>
+    </div>
+  </div>
+
+  <div class="sec-title" style="margin-top:22px">🌆 Análisis Comunal y por Establecimiento</div><div class="sec-sep"></div>
+  <div class="charts-grid g2c">
+    <div class="chart-card">
+      <div class="chart-header"><div><div class="chart-title">Top 20 Comunas con Mayor Número de Altas Clínicas SM</div><div class="chart-sub">Ordenadas por total acumulado</div></div><div class="chart-badge">Top 20</div></div>
+      <div class="cw xxxl"><canvas id="a-c-comunas"></canvas></div>
+    </div>
+    <div class="chart-card">
+      <div class="chart-header"><div><div class="chart-title">Top 10 Establecimientos</div><div class="chart-sub">Centros con mayor número de altas</div></div><div class="chart-badge">Ranking</div></div>
+      <div class="cw xxxl"><canvas id="a-c-top-estab"></canvas></div>
+    </div>
+  </div>
+
+  <div class="sec-title" style="margin-top:22px">🔥 Distribución Temporal por Servicio de Salud</div><div class="sec-sep"></div>
+  <div class="charts-grid g1">
+    <div class="chart-card">
+      <div class="chart-header"><div><div class="chart-title">Altas Clínicas SM por Servicio de Salud y Año — Barras Apiladas</div><div class="chart-sub">Comparación multianual de todos los SS</div></div><div class="chart-badge">2014–2025</div></div>
+      <div class="cw xxxl"><canvas id="a-c-ss-anio"></canvas></div>
+    </div>
+  </div>
+
+  <div class="sec-title" style="margin-top:22px">🗺️ Georeferenciación de Establecimientos</div><div class="sec-sep"></div>
+  <div class="charts-grid g1">
+    <div class="chart-card">
+      <div class="chart-header"><div><div class="chart-title">Mapa de Altas Clínicas SM por Centro de Salud APS</div><div class="chart-sub">Tamaño proporcional al número de altas · Clic en cada punto para ver detalle</div></div><div class="chart-badge">Georreferenciado</div></div>
+      <div class="map-ctrl">
+        <label style="font-size:11px;font-weight:600;color:var(--texto-s)">Año mapa:</label>
+        <select class="map-sel" id="a-map-year" onchange="actualizarMapaAltas()"><option value="total">Total 2014–2025</option></select>
+        <label style="font-size:11px;font-weight:600;color:var(--texto-s);margin-left:10px">Color por:</label>
+        <select class="map-sel" id="a-map-color" onchange="actualizarMapaAltas()">
+          <option value="tipo">Tipo Establecimiento</option>
+          <option value="dependencia">Dependencia</option>
+          <option value="ss">Servicio de Salud</option>
+        </select>
+      </div>
+      <div id="a-mapa" class="mapa"></div>
+      <div class="map-leg" id="a-map-leg"></div>
+    </div>
+  </div>
+
+  <div class="sec-title" style="margin-top:22px">📋 Tabla de Establecimientos</div><div class="sec-sep"></div>
+  <div class="charts-grid g1">
+    <div class="chart-card">
+      <div class="chart-header"><div><div class="chart-title">Detalle por Establecimiento — Altas Clínicas SM</div><div class="chart-sub">Top 100 · Haga clic en encabezados para ordenar</div></div><div class="chart-badge" id="a-badge-tabla">Top 100</div></div>
+      <div class="tabla-wrap">
+        <table><thead><tr>
+          <th onclick="sortTab('a-tabla-body',0)">#</th>
+          <th onclick="sortTab('a-tabla-body',1)">Establecimiento ↕</th>
+          <th onclick="sortTab('a-tabla-body',2)">Comuna ↕</th>
+          <th onclick="sortTab('a-tabla-body',3)">Servicio de Salud ↕</th>
+          <th onclick="sortTab('a-tabla-body',4)">Tipo ↕</th>
+          <th onclick="sortTab('a-tabla-body',5)">Dependencia ↕</th>
+          <th onclick="sortTab('a-tabla-body',6)">Total Altas ↕</th>
+          <th>Barra</th>
+        </tr></thead>
+        <tbody id="a-tabla-body"></tbody></table>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- ===== TAB 2: PBC ===== -->
+<div id="tab-pbc" class="tab-content">
+<div class="main">
+  <div class="kpi-row">
+    <div class="kpi-card"><div class="kpi-icon">👥</div><div class="kpi-label">Total Personas Bajo Control</div><div class="kpi-value sm" id="p-kpi-total">—</div><div class="kpi-sub" id="p-kpi-total-sub">—</div></div>
+    <div class="kpi-card verde"><div class="kpi-icon">🏥</div><div class="kpi-label">Establecimientos activos</div><div class="kpi-value" id="p-kpi-estab">—</div><div class="kpi-sub">Con registro PBC</div></div>
+    <div class="kpi-card naranja"><div class="kpi-icon">📊</div><div class="kpi-label">Promedio anual / estab.</div><div class="kpi-value sm" id="p-kpi-prom">—</div><div class="kpi-sub">PBC por centro por año</div></div>
+    <div class="kpi-card rojo"><div class="kpi-icon">📈</div><div class="kpi-label">Año con más PBC</div><div class="kpi-value sm" id="p-kpi-best-yr">—</div><div class="kpi-sub" id="p-kpi-best-yr-val">—</div></div>
+    <div class="kpi-card morado"><div class="kpi-icon">🥇</div><div class="kpi-label">SS líder</div><div class="kpi-value xs" id="p-kpi-top-ss">—</div><div class="kpi-sub" id="p-kpi-top-ss-val">—</div></div>
+  </div>
+
+  <div class="sec-title">📈 Tendencia Temporal</div><div class="sec-sep"></div>
+  <div class="charts-grid g1" style="margin-bottom:18px">
+    <div class="chart-card">
+      <div class="chart-header">
+        <div><div class="chart-title">Evolución de la Población Bajo Control SM por Año (2014–2025)</div><div class="chart-sub">Personas en tratamiento de salud mental registradas en diciembre de cada año</div></div>
+        <div class="chart-badge" id="p-badge-tend">Nacional</div>
+      </div>
+      <div class="cw t"><canvas id="p-c-tend"></canvas></div>
+    </div>
+  </div>
+
+  <div class="charts-grid g2">
+    <div class="chart-card">
+      <div class="chart-header"><div><div class="chart-title">Población Bajo Control por Servicio de Salud</div><div class="chart-sub">Comparación entre los 29 SS</div></div><div class="chart-badge">SS</div></div>
+      <div class="cw xt"><canvas id="p-c-ss"></canvas></div>
+    </div>
+    <div class="chart-card">
+      <div class="chart-header"><div><div class="chart-title">Variación % Año a Año — PBC</div><div class="chart-sub">Cambio porcentual respecto al año anterior</div></div><div class="chart-badge">Δ% anual</div></div>
+      <div class="cw t"><canvas id="p-c-var"></canvas></div>
+    </div>
+  </div>
+
+  <div class="sec-title" style="margin-top:22px">🏥 Análisis por Tipo y Dependencia</div><div class="sec-sep"></div>
+  <div class="charts-grid g3">
+    <div class="chart-card">
+      <div class="chart-header"><div><div class="chart-title">Distribución PBC por Tipo de Establecimiento</div><div class="chart-sub">Participación en el total de personas bajo control</div></div><div class="chart-badge">Tipo</div></div>
+      <div class="cw t"><canvas id="p-c-tipo-dona"></canvas></div>
+    </div>
+    <div class="chart-card">
+      <div class="chart-header"><div><div class="chart-title">Evolución PBC por Tipo de Establecimiento</div><div class="chart-sub">Tendencia por CESFAM, CECOSF, Posta, Hospital</div></div><div class="chart-badge">Tendencia</div></div>
+      <div class="cw t"><canvas id="p-c-tipo-linea"></canvas></div>
+    </div>
+    <div class="chart-card">
+      <div class="chart-header"><div><div class="chart-title">PBC por Dependencia Administrativa</div><div class="chart-sub">Municipal vs. Servicio de Salud vs. Otra</div></div><div class="chart-badge">Dependencia</div></div>
+      <div class="cw t"><canvas id="p-c-dep"></canvas></div>
+    </div>
+  </div>
+
+  <div class="sec-title" style="margin-top:22px">🌆 Análisis Comunal y por Establecimiento</div><div class="sec-sep"></div>
+  <div class="charts-grid g2c">
+    <div class="chart-card">
+      <div class="chart-header"><div><div class="chart-title">Top 20 Comunas — Población Bajo Control SM</div><div class="chart-sub">Ordenadas por total acumulado</div></div><div class="chart-badge">Top 20</div></div>
+      <div class="cw xxxl"><canvas id="p-c-comunas"></canvas></div>
+    </div>
+    <div class="chart-card">
+      <div class="chart-header"><div><div class="chart-title">Top 10 Establecimientos — PBC</div><div class="chart-sub">Centros con mayor población bajo control</div></div><div class="chart-badge">Ranking</div></div>
+      <div class="cw xxxl"><canvas id="p-c-top-estab"></canvas></div>
+    </div>
+  </div>
+
+  <div class="sec-title" style="margin-top:22px">🔥 Distribución Temporal por Servicio de Salud</div><div class="sec-sep"></div>
+  <div class="charts-grid g1">
+    <div class="chart-card">
+      <div class="chart-header"><div><div class="chart-title">PBC por Servicio de Salud y Año — Barras Apiladas</div><div class="chart-sub">Comparación multianual</div></div><div class="chart-badge">2014–2025</div></div>
+      <div class="cw xxxl"><canvas id="p-c-ss-anio"></canvas></div>
+    </div>
+  </div>
+
+  <div class="sec-title" style="margin-top:22px">🗺️ Georeferenciación — Población Bajo Control</div><div class="sec-sep"></div>
+  <div class="charts-grid g1">
+    <div class="chart-card">
+      <div class="chart-header"><div><div class="chart-title">Mapa de Población Bajo Control SM por Centro de Salud APS</div><div class="chart-sub">Tamaño proporcional al PBC · Clic en cada punto para ver detalle</div></div><div class="chart-badge">Georreferenciado</div></div>
+      <div class="map-ctrl">
+        <label style="font-size:11px;font-weight:600;color:var(--texto-s)">Año mapa:</label>
+        <select class="map-sel" id="p-map-year" onchange="actualizarMapaPBC()"><option value="total">Total 2014–2025</option></select>
+        <label style="font-size:11px;font-weight:600;color:var(--texto-s);margin-left:10px">Color por:</label>
+        <select class="map-sel" id="p-map-color" onchange="actualizarMapaPBC()">
+          <option value="tipo">Tipo Establecimiento</option>
+          <option value="dependencia">Dependencia</option>
+          <option value="ss">Servicio de Salud</option>
+        </select>
+      </div>
+      <div id="p-mapa" class="mapa"></div>
+      <div class="map-leg" id="p-map-leg"></div>
+    </div>
+  </div>
+
+  <div class="sec-title" style="margin-top:22px">📋 Tabla de Establecimientos — PBC</div><div class="sec-sep"></div>
+  <div class="charts-grid g1">
+    <div class="chart-card">
+      <div class="chart-header"><div><div class="chart-title">Detalle por Establecimiento — Población Bajo Control SM</div><div class="chart-sub">Top 100 · Haga clic en encabezados para ordenar</div></div><div class="chart-badge" id="p-badge-tabla">Top 100</div></div>
+      <div class="tabla-wrap">
+        <table><thead><tr>
+          <th onclick="sortTab('p-tabla-body',0)">#</th>
+          <th onclick="sortTab('p-tabla-body',1)">Establecimiento ↕</th>
+          <th onclick="sortTab('p-tabla-body',2)">Comuna ↕</th>
+          <th onclick="sortTab('p-tabla-body',3)">Servicio de Salud ↕</th>
+          <th onclick="sortTab('p-tabla-body',4)">Tipo ↕</th>
+          <th onclick="sortTab('p-tabla-body',5)">Dependencia ↕</th>
+          <th onclick="sortTab('p-tabla-body',6)">Total PBC ↕</th>
+          <th>Barra</th>
+        </tr></thead>
+        <tbody id="p-tabla-body"></tbody></table>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- ===== TAB 3: INDICADOR ===== -->
+<div id="tab-ind" class="tab-content">
+<div class="main">
+  <div class="ind-note">
+    <strong>📌 Definición del indicador:</strong> El <strong>Porcentaje de Altas Clínicas de personas en tratamiento por salud mental</strong> se calcula como <strong>Altas Clínicas SM ÷ Población Bajo Control (PBC) × 100</strong>. Expresa qué proporción de las personas en tratamiento recibió un alta durante el período. Un valor más alto indica mayor capacidad de resolución clínica y rotación del cupo de tratamiento. Se excluyen establecimientos con PBC = 0 para evitar divisiones indefinidas.
+  </div>
+
+  <div class="kpi-row">
+    <div class="kpi-card"><div class="kpi-icon">📊</div><div class="kpi-label">% Promedio Nacional</div><div class="kpi-value sm" id="i-kpi-pct">—</div><div class="kpi-sub" id="i-kpi-pct-sub">Altas / PBC × 100</div></div>
+    <div class="kpi-card verde"><div class="kpi-icon">📈</div><div class="kpi-label">Año con mayor %</div><div class="kpi-value sm" id="i-kpi-best-yr">—</div><div class="kpi-sub" id="i-kpi-best-yr-val">—</div></div>
+    <div class="kpi-card naranja"><div class="kpi-icon">📉</div><div class="kpi-label">Año con menor %</div><div class="kpi-value sm" id="i-kpi-worst-yr">—</div><div class="kpi-sub" id="i-kpi-worst-yr-val">—</div></div>
+    <div class="kpi-card rojo"><div class="kpi-icon">🏆</div><div class="kpi-label">SS con mayor %</div><div class="kpi-value xs" id="i-kpi-top-ss">—</div><div class="kpi-sub" id="i-kpi-top-ss-val">—</div></div>
+    <div class="kpi-card morado"><div class="kpi-icon">⚠️</div><div class="kpi-label">SS con menor %</div><div class="kpi-value xs" id="i-kpi-bot-ss">—</div><div class="kpi-sub" id="i-kpi-bot-ss-val">—</div></div>
+  </div>
+
+  <div class="sec-title">📈 Tendencia del Indicador</div><div class="sec-sep"></div>
+  <div class="charts-grid g1" style="margin-bottom:18px">
+    <div class="chart-card">
+      <div class="chart-header">
+        <div><div class="chart-title">Evolución del % de Altas Clínicas sobre PBC (2014–2025)</div><div class="chart-sub">Porcentaje anual nacional · Total Altas ÷ Total PBC × 100</div></div>
+        <div class="chart-badge">% Indicador</div>
+      </div>
+      <div class="cw t"><canvas id="i-c-tend"></canvas></div>
+    </div>
+  </div>
+
+  <div class="charts-grid g2">
+    <div class="chart-card">
+      <div class="chart-header"><div><div class="chart-title">% Altas / PBC por Servicio de Salud</div><div class="chart-sub">Comparación del indicador entre todos los SS</div></div><div class="chart-badge">SS</div></div>
+      <div class="cw xt"><canvas id="i-c-ss"></canvas></div>
+    </div>
+    <div class="chart-card">
+      <div class="chart-header"><div><div class="chart-title">Comparativa Altas vs PBC por Año</div><div class="chart-sub">Doble eje — volumen y relación entre ambas variables</div></div><div class="chart-badge">Dual</div></div>
+      <div class="cw t"><canvas id="i-c-dual"></canvas></div>
+    </div>
+  </div>
+
+  <div class="sec-title" style="margin-top:22px">🏥 Indicador por Tipo y Dependencia</div><div class="sec-sep"></div>
+  <div class="charts-grid g2">
+    <div class="chart-card">
+      <div class="chart-header"><div><div class="chart-title">% Altas / PBC por Tipo de Establecimiento</div><div class="chart-sub">Eficiencia clínica comparada según tipo de centro</div></div><div class="chart-badge">Tipo</div></div>
+      <div class="cw t"><canvas id="i-c-tipo"></canvas></div>
+    </div>
+    <div class="chart-card">
+      <div class="chart-header"><div><div class="chart-title">% Altas / PBC por Dependencia Administrativa</div><div class="chart-sub">Municipal vs. Servicio de Salud vs. Otra</div></div><div class="chart-badge">Dependencia</div></div>
+      <div class="cw t"><canvas id="i-c-dep"></canvas></div>
+    </div>
+  </div>
+
+  <div class="sec-title" style="margin-top:22px">🌆 Indicador por SS y Año — Evolución Detallada</div><div class="sec-sep"></div>
+  <div class="charts-grid g1">
+    <div class="chart-card">
+      <div class="chart-header"><div><div class="chart-title">% Altas / PBC por Servicio de Salud y Año</div><div class="chart-sub">Líneas múltiples — permite comparar la trayectoria de cada SS en el tiempo</div></div><div class="chart-badge">2014–2025</div></div>
+      <div class="cw xxxl"><canvas id="i-c-ss-linea"></canvas></div>
+    </div>
+  </div>
+
+  <div class="sec-title" style="margin-top:22px">📋 Tabla del Indicador por Establecimiento</div><div class="sec-sep"></div>
+  <div class="charts-grid g1">
+    <div class="chart-card">
+      <div class="chart-header"><div><div class="chart-title">% Altas / PBC por Establecimiento</div><div class="chart-sub">Ordenado por indicador · Solo establecimientos con PBC > 0</div></div><div class="chart-badge" id="i-badge-tabla">—</div></div>
+      <div class="tabla-wrap">
+        <table><thead><tr>
+          <th onclick="sortTab('i-tabla-body',0)">#</th>
+          <th onclick="sortTab('i-tabla-body',1)">Establecimiento ↕</th>
+          <th onclick="sortTab('i-tabla-body',2)">Comuna ↕</th>
+          <th onclick="sortTab('i-tabla-body',3)">Servicio de Salud ↕</th>
+          <th onclick="sortTab('i-tabla-body',4)">Tipo ↕</th>
+          <th onclick="sortTab('i-tabla-body',5)">Altas ↕</th>
+          <th onclick="sortTab('i-tabla-body',6)">PBC ↕</th>
+          <th onclick="sortTab('i-tabla-body',7)">% Altas/PBC ↕</th>
+          <th>Barra</th>
+        </tr></thead>
+        <tbody id="i-tabla-body"></tbody></table>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- ===== TAB 4: CATEGORIZACIÓN ===== -->
+<div id="tab-cat" class="tab-content">
+<div class="main">
+  <div class="ind-note" id="cat-note-general">
+    <strong>📌 Categorización de Salud Mental en APS (2025):</strong> El modelo clasifica a las personas bajo control según nivel de complejidad: <strong>N0</strong> Sin diagnóstico SM / Sin riesgo · <strong>N1</strong> Sospecha SM / Riesgo bajo · <strong>N2</strong> Sospecha SM / Riesgo moderado · <strong>N3</strong> Sospecha SM / Riesgo moderado-alto (resolutivo APS) · <strong>N4</strong> SM grave / Riesgo alto (derivar especialidad). Solo se muestran los <strong id="cat-n-estab">436</strong> centros con categorización implementada. Año: <strong>2025</strong>.
+  </div>
+  <div class="ind-note" id="cat-note-filtered" style="display:none;border-color:#E67E22;background:#FEF3E8">
+    <strong id="cat-note-title">—</strong><br><span id="cat-note-body">—</span>
+  </div>
+
+  <div class="kpi-row">
+    <div class="kpi-card"><div class="kpi-icon">🗂️</div><div class="kpi-label">Total categorizados</div><div class="kpi-value" id="c-kpi-total">—</div><div class="kpi-sub">Todas las categorías</div></div>
+    <div class="kpi-card verde"><div class="kpi-icon">🏥</div><div class="kpi-label">Centros con categorización</div><div class="kpi-value" id="c-kpi-estab">—</div><div class="kpi-sub">Han implementado el modelo</div></div>
+    <div class="kpi-card naranja"><div class="kpi-icon">📊</div><div class="kpi-label">Promedio por establecimiento</div><div class="kpi-value sm" id="c-kpi-prom">—</div><div class="kpi-sub">Categorizados por centro</div></div>
+    <div class="kpi-card rojo"><div class="kpi-icon">🏆</div><div class="kpi-label">Categoría más frecuente</div><div class="kpi-value sm" id="c-kpi-top-cat">—</div><div class="kpi-sub" id="c-kpi-top-cat-val">—</div></div>
+    <div class="kpi-card morado"><div class="kpi-icon">🌎</div><div class="kpi-label">SS líder en categorización</div><div class="kpi-value xs" id="c-kpi-top-ss">—</div><div class="kpi-sub" id="c-kpi-top-ss-val">—</div></div>
+  </div>
+
+  <div class="sec-title">🗂️ Distribución por Categoría</div><div class="sec-sep"></div>
+  <div class="charts-grid g2">
+    <div class="chart-card">
+      <div class="chart-header"><div><div class="chart-title">Total de Personas por Categoría (N0–N4)</div><div class="chart-sub">Distribución absoluta de categorizados según nivel de complejidad</div></div><div class="chart-badge">Categoría</div></div>
+      <div class="cw t"><canvas id="c-c-barras"></canvas></div>
+    </div>
+    <div class="chart-card">
+      <div class="chart-header"><div><div class="chart-title">Distribución Porcentual por Categoría</div><div class="chart-sub">Participación de cada nivel en el total de categorizados</div></div><div class="chart-badge">% Dona</div></div>
+      <div class="cw t"><canvas id="c-c-dona"></canvas></div>
+    </div>
+  </div>
+
+  <div class="sec-title" style="margin-top:22px">🗺️ Análisis por Servicio de Salud</div><div class="sec-sep"></div>
+  <div class="charts-grid g2">
+    <div class="chart-card">
+      <div class="chart-header"><div><div class="chart-title">Total Categorizados por Servicio de Salud</div><div class="chart-sub">Comparación entre los SS con implementación</div></div><div class="chart-badge">SS</div></div>
+      <div class="cw xt"><canvas id="c-c-ss"></canvas></div>
+    </div>
+    <div class="chart-card">
+      <div class="chart-header"><div><div class="chart-title">Distribución N0–N4 por Servicio de Salud</div><div class="chart-sub">Barras apiladas con composición de categorías por SS</div></div><div class="chart-badge">Apilado</div></div>
+      <div class="cw xt"><canvas id="c-c-ss-apilado"></canvas></div>
+    </div>
+  </div>
+
+  <div class="sec-title" style="margin-top:22px">🏥 Análisis por Tipo y Dependencia</div><div class="sec-sep"></div>
+  <div class="charts-grid g2">
+    <div class="chart-card">
+      <div class="chart-header"><div><div class="chart-title">Categorizados por Tipo de Establecimiento</div><div class="chart-sub">CESFAM, CECOSF, Posta, Hospital Comunitario</div></div><div class="chart-badge">Tipo</div></div>
+      <div class="cw t"><canvas id="c-c-tipo"></canvas></div>
+    </div>
+    <div class="chart-card">
+      <div class="chart-header"><div><div class="chart-title">Categorizados por Dependencia Administrativa</div><div class="chart-sub">Municipal vs. Servicio de Salud vs. Otra</div></div><div class="chart-badge">Dependencia</div></div>
+      <div class="cw t"><canvas id="c-c-dep"></canvas></div>
+    </div>
+  </div>
+
+  <div class="sec-title" style="margin-top:22px">🗺️ Mapa de Categorización por Establecimiento</div><div class="sec-sep"></div>
+  <div class="charts-grid g1">
+    <div class="chart-card">
+      <div class="chart-header"><div><div class="chart-title">Mapa de Establecimientos con Categorización SM 2025</div><div class="chart-sub">Solo centros que han implementado la categorización · Tamaño proporcional al total categorizado</div></div><div class="chart-badge">Georreferenciado</div></div>
+      <div class="map-ctrl">
+        <label style="font-size:11px;font-weight:600;color:var(--texto-s)">Color por:</label>
+        <select class="map-sel" id="c-map-color" onchange="actualizarMapaCat()">
+          <option value="tipo">Tipo Establecimiento</option>
+          <option value="dependencia">Dependencia</option>
+          <option value="ss">Servicio de Salud</option>
+          <option value="topcat">Categoría predominante</option>
+        </select>
+      </div>
+      <div id="c-mapa" class="mapa"></div>
+      <div class="map-leg" id="c-map-leg"></div>
+    </div>
+  </div>
+
+  <div class="sec-title" style="margin-top:22px">📋 Tabla de Establecimientos con Categorización</div><div class="sec-sep"></div>
+  <div class="charts-grid g1">
+    <div class="chart-card">
+      <div class="chart-header"><div><div class="chart-title">Detalle por Establecimiento — Categorización SM 2025</div><div class="chart-sub">Ordenado por total categorizado · Clic en encabezados para ordenar</div></div><div class="chart-badge" id="c-badge-tabla">—</div></div>
+      <div class="tabla-wrap">
+        <table><thead><tr>
+          <th onclick="sortTab('c-tabla-body',0)">#</th>
+          <th onclick="sortTab('c-tabla-body',1)">Establecimiento ↕</th>
+          <th onclick="sortTab('c-tabla-body',2)">Comuna ↕</th>
+          <th onclick="sortTab('c-tabla-body',3)">Servicio de Salud ↕</th>
+          <th onclick="sortTab('c-tabla-body',4)">Tipo ↕</th>
+          <th onclick="sortTab('c-tabla-body',5)" style="text-align:right">N0 ↕</th>
+          <th onclick="sortTab('c-tabla-body',6)" style="text-align:right">N1 ↕</th>
+          <th onclick="sortTab('c-tabla-body',7)" style="text-align:right">N2 ↕</th>
+          <th onclick="sortTab('c-tabla-body',8)" style="text-align:right">N3 ↕</th>
+          <th onclick="sortTab('c-tabla-body',9)" style="text-align:right">N4 ↕</th>
+          <th onclick="sortTab('c-tabla-body',10)" style="text-align:right">Total ↕</th>
+          <th>Barra</th>
+        </tr></thead>
+        <tbody id="c-tabla-body"></tbody></table>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+
+<div class="footer">
+  División de Atención Primaria (DIVAP) · Departamento de Salud Mental · Ministerio de Salud de Chile &nbsp;|&nbsp; Datos DEIS MINSAL · Altas Clínicas SM y Población Bajo Control APS 2014–2025
+</div>
+
+<script src="datos.js"></script>
+<script>
+// ============================================================
+// CÓDIGO
+// ============================================================
+const YEARS = ['2014','2015','2016','2017','2018','2019','2020','2021','2022','2023','2024','2025'];
+function ga(d,y){const i=YEARS.indexOf(String(y));return i>=0?(d.a[i]||0):0;}
+function gp(d,y){const i=YEARS.indexOf(String(y));return i>=0?(d.p[i]||0):0;}
+
+const TIPO_C = {
+  'CESFAM':'#005F9E','CECOSF':'#2E8B57','Posta de Salud':'#E67E22',
+  'Hospital Comunitario':'#D0222A','CGR':'#7c3aed','CGU':'#0090D0','Centro de Salud':'#888'
+};
+const DEP_C = {
+  'Municipal':'#005F9E','Servicio de Salud':'#2E8B57',
+  'Otra Institución':'#E67E22','Delegados ':'#D0222A'
+};
+const PAL = ['#005F9E','#0090D0','#2E8B57','#E67E22','#D0222A','#7c3aed','#16a085','#f39c12','#8e44ad','#c0392b','#27ae60','#2980b9','#d35400','#1abc9c','#e74c3c','#3498db','#e91e63','#ff5722','#607d8b','#795548','#009688','#673ab7','#ff9800','#9c27b0','#03a9f4','#cddc39','#f44336','#4caf50','#ff6f00'];
+
+// ============================================================
+// ESTADO
+// ============================================================
+let F = {anio:'total', ss:'', comuna:'', estab:'', tipo:'', dep:'', cat:''};
+let charts = {};
+let maps = {a:null, p:null, c:null};
+let mapMarkers = {a:[], p:[], c:[]};
+let sortDir = {};
+
+// ============================================================
+// TABS
+// ============================================================
+function switchTab(name, btn) {
+  document.querySelectorAll('.tab-content').forEach(t=>t.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
+  document.getElementById('tab-'+name).classList.add('active');
+  btn.classList.add('active');
+  // Show cat filter only on categorización tab
+  const catGroup = document.getElementById('filtro-cat-group');
+  if(catGroup) catGroup.classList.toggle('visible', name==='cat');
+  setTimeout(()=>{
+    if(name==='altas' && maps.a) maps.a.invalidateSize();
+    if(name==='pbc' && maps.p) maps.p.invalidateSize();
+    if(name==='cat' && maps.c) maps.c.invalidateSize();
+  }, 50);
+}
+
+// ============================================================
+// INIT
+// ============================================================
+function init() {
+  const ss = [...new Set(DATA.map(d=>d.s))].filter(Boolean).sort();
+  const tipos = [...new Set(DATA.map(d=>d.t))].filter(Boolean).sort();
+  const deps = [...new Set(DATA.map(d=>d.dep.trim()))].filter(Boolean).sort();
+
+  ss.forEach(s=>addOpt('f-ss',s,s));
+  tipos.forEach(t=>addOpt('f-tipo',t,t));
+  deps.forEach(d=>addOpt('f-dep',d,d));
+  YEARS.forEach(y=>{
+    addOpt('f-anio',y,y);
+    addOpt('a-map-year',y,y);
+    addOpt('p-map-year',y,y);
+  });
+
+  // Fill comunas initially
+  rebuiltComunas();
+
+  document.getElementById('f-anio').addEventListener('change',e=>{F.anio=e.target.value;actualizarTodo()});
+  document.getElementById('f-ss').addEventListener('change',e=>{F.ss=e.target.value;F.comuna='';F.estab='';rebuiltComunas();rebuiltEstabs();actualizarTodo()});
+  document.getElementById('f-comuna').addEventListener('change',e=>{F.comuna=e.target.value;F.estab='';rebuiltEstabs();actualizarTodo()});
+  document.getElementById('f-estab').addEventListener('change',e=>{F.estab=e.target.value;actualizarTodo()});
+  document.getElementById('f-tipo').addEventListener('change',e=>{F.tipo=e.target.value;actualizarTodo()});
+  document.getElementById('f-dep').addEventListener('change',e=>{F.dep=e.target.value;actualizarTodo()});
+  document.getElementById('f-cat').addEventListener('change',e=>{F.cat=e.target.value;actualizarTodo();});
+
+  initMapaAltas();
+  initMapaPBC();
+  initMapaCat();
+  updateHomeKPIs();
+  initTerrSelectors();
+  actualizarTodo();
+}
+
+function addOpt(selId, val, label) {
+  document.getElementById(selId).insertAdjacentHTML('beforeend',`<option value="${val}">${label}</option>`);
+}
+
+function rebuiltComunas() {
+  const sel = document.getElementById('f-comuna');
+  const cur = F.comuna;
+  sel.innerHTML = '<option value="">Todas las comunas</option>';
+  const base = F.ss ? DATA.filter(d=>d.s===F.ss) : DATA;
+  const comunas = [...new Set(base.map(d=>d.c))].filter(Boolean).sort();
+  comunas.forEach(c=>sel.insertAdjacentHTML('beforeend',`<option value="${c}">${c}</option>`));
+  if(comunas.includes(cur)) { sel.value=cur; } else { F.comuna=''; }
+}
+
+function rebuiltEstabs() {
+  const sel = document.getElementById('f-estab');
+  const cur = F.estab;
+  sel.innerHTML = '<option value="">Todos</option>';
+  let base = DATA;
+  if(F.ss) base = base.filter(d=>d.s===F.ss);
+  if(F.comuna) base = base.filter(d=>d.c===F.comuna);
+  const estabs = base.map(d=>({id:d.id,nombre:d.n})).sort((a,b)=>a.nombre.localeCompare(b.nombre,'es'));
+  estabs.forEach(e=>sel.insertAdjacentHTML('beforeend',`<option value="${e.id}">${e.nombre}</option>`));
+  if(estabs.find(e=>e.id===parseInt(cur))) { sel.value=cur; } else { F.estab=''; }
+}
+
+function filteredData() {
+  return DATA.filter(d=>{
+    if(F.ss && d.s!==F.ss) return false;
+    if(F.comuna && d.c!==F.comuna) return false;
+    if(F.estab && d.id!==parseInt(F.estab)) return false;
+    if(F.tipo && d.t!==F.tipo) return false;
+    if(F.dep && d.dep.trim()!==F.dep) return false;
+    return true;
+  });
+}
+
+function getAltas(d,anio){return anio==='total'?d.ta:ga(d,anio);}
+function getPBC(d,anio){return anio==='total'?d.tp:gp(d,anio);}
+function fmt(n) { return Math.round(n).toLocaleString('es-CL'); }
+function fmtPct(n) { return n.toFixed(1)+'%'; }
+
+function resetFiltros() {
+  F={anio:'total',ss:'',comuna:'',estab:'',tipo:'',dep:''};
+  ['f-anio','f-ss','f-tipo','f-dep','f-cat'].forEach(id=>{
+    const sel=document.getElementById(id); sel.value=id==='f-anio'?'total':'';
+  });
+  F.cat='';
+  rebuiltComunas(); rebuiltEstabs();
+  actualizarTodo();
+}
+
+// ============================================================
+// ACTUALIZAR TODO
+// ============================================================
+function actualizarTodo() {
+  const fd = filteredData();
+  document.getElementById('filtros-count').textContent = fd.length.toLocaleString('es-CL')+' establecimientos activos';
+
+  // Sync map year selectors with global year filter
+  ['a-map-year','p-map-year'].forEach(id=>{
+    const sel=document.getElementById(id);
+    if(sel) sel.value=F.anio;
+  });
+  // Update cat filter note
+  const CAT_DEFS = {
+    'N0': ['N0 — Sin diagnóstico de Salud Mental / Sin riesgo o riesgo bajo',
+           'Personas sin diagnóstico de salud mental activo y sin factores de riesgo significativos. No requieren intervención especializada en salud mental.'],
+    'N1': ['N1 — Con sospecha de trastorno de salud mental / Riesgo bajo',
+           'Personas con sospecha de trastorno de salud mental y riesgo bajo. Pueden ser abordadas en APS con intervenciones breves y seguimiento.'],
+    'N2': ['N2 — Con sospecha de trastorno de salud mental / Riesgo moderado',
+           'Personas con sospecha de trastorno y riesgo moderado. Requieren evaluación más detallada y manejo activo en APS con apoyo del equipo de salud mental.'],
+    'N3': ['N3 — Con sospecha de trastorno de salud mental / Riesgo moderado-alto (resolutivo APS)',
+           'Personas con riesgo moderado a alto, pero cuya condición puede ser resuelta en el nivel de Atención Primaria con intervención especializada del COSAM o equivalente.'],
+    'N4': ['N4 — Con sospecha de trastorno de salud mental grave / Riesgo alto (derivar a especialidad)',
+           'Personas con sospecha de trastorno mental grave y riesgo alto que requieren derivación a nivel de especialidad secundaria o terciaria por complejidad clínica.'],
+  };
+  const noteGen = document.getElementById('cat-note-general');
+  const noteFilt = document.getElementById('cat-note-filtered');
+  if(noteGen && noteFilt) {
+    if(F.cat && CAT_DEFS[F.cat]) {
+      noteGen.style.display='none';
+      noteFilt.style.display='block';
+      document.getElementById('cat-note-title').textContent = '📌 Filtro activo: '+CAT_DEFS[F.cat][0];
+      document.getElementById('cat-note-body').textContent = CAT_DEFS[F.cat][1];
+    } else {
+      noteGen.style.display='block';
+      noteFilt.style.display='none';
+    }
+  }
+
+  // Tab Altas
+  kpisAltas(fd);
+  grafAltas(fd);
+  tablaAltas(fd);
+  actualizarMapaAltas();
+
+  // Tab PBC
+  kpisPBC(fd);
+  grafPBC(fd);
+  tablaPBC(fd);
+  actualizarMapaPBC();
+
+  // Tab Indicador
+  kpisInd(fd);
+  grafInd(fd);
+  tablaInd(fd);
+
+  // Tab Categorización
+  const fcd=filteredCatData();
+  kpisCat(fcd);
+  grafCat(fcd);
+  tablaCat(fcd);
+  actualizarMapaCat();
+}
+
+// ============================================================
+// CHART HELPERS
+// ============================================================
+function mkChart(id,cfg) {
+  if(charts[id]) charts[id].destroy();
+  charts[id]=new Chart(document.getElementById(id).getContext('2d'),cfg);
+  return charts[id];
+}
+
+// ============================================================
+// ===== ALTAS: KPIs =====
+// ============================================================
+function kpisAltas(fd) {
+  const anio=F.anio;
+  const total=fd.reduce((s,d)=>s+getAltas(d,anio),0);
+  document.getElementById('a-kpi-total').textContent=fmt(total);
+  document.getElementById('a-kpi-total-sub').textContent=anio==='total'?'Período 2014–2025':'Año '+anio;
+  document.getElementById('a-kpi-estab').textContent=fd.filter(d=>getAltas(d,anio)>0).length.toLocaleString('es-CL');
+  const con=fd.filter(d=>getAltas(d,anio)>0).length;
+  let promAnual;
+  if(anio==='total'){
+    // Sum of (altas_estab / años_con_datos_estab) across all estabs, divided by num estabs
+    const totalEstabProms=fd.reduce((s,d)=>{
+      const anosConDatos=YEARS.filter(y=>(ga(d,y)||0)>0).length;
+      return s+(anosConDatos>0?d.ta/anosConDatos:0);
+    },0);
+    promAnual=con>0?totalEstabProms/con:0;
+  } else {
+    promAnual=con>0?total/con:0;
+  }
+  document.getElementById('a-kpi-prom').textContent=con>0?fmt(promAnual):'—';
+  let bY='',bV=0;
+  YEARS.forEach(y=>{const s=fd.reduce((a,d)=>a+(ga(d,y)||0),0);if(s>bV){bV=s;bY=y;}});
+  document.getElementById('a-kpi-best-yr').textContent=bY;
+  document.getElementById('a-kpi-best-yr-val').textContent=fmt(bV)+' altas ese año';
+  const bySS={};fd.forEach(d=>{bySS[d.s]=(bySS[d.s]||0)+getAltas(d,anio);});
+  const top=Object.entries(bySS).sort((a,b)=>b[1]-a[1])[0];
+  if(top){document.getElementById('a-kpi-top-ss').textContent=top[0].split(' ')[0];document.getElementById('a-kpi-top-ss-val').textContent=fmt(top[1])+' altas';}
+}
+
+// ============================================================
+// ===== ALTAS: GRÁFICOS =====
+// ============================================================
+function grafAltas(fd) {
+  const anio=F.anio;
+
+  // Tendencia
+  const tendVals=YEARS.map(y=>fd.reduce((s,d)=>s+(ga(d,y)||0),0));
+  mkChart('a-c-tend',{type:'line',data:{labels:YEARS,datasets:[{
+    label:'Altas Clínicas SM',data:tendVals,borderColor:'#005F9E',
+    backgroundColor:'rgba(0,95,158,0.08)',fill:true,tension:0.35,
+    pointRadius:5,pointHoverRadius:8,borderWidth:3,
+    pointBackgroundColor:tendVals.map((v,i)=>i===6?'#D0222A':v===Math.max(...tendVals)?'#2E8B57':'#005F9E'),
+    pointBorderColor:'#fff',pointBorderWidth:2
+  }]},options:barOpts(false,v=>fmt(v),true,tendVals)});
+
+  // SS
+  const ssTot={};fd.forEach(d=>{ssTot[d.s]=(ssTot[d.s]||0)+getAltas(d,anio);});
+  const ssSort=Object.entries(ssTot).sort((a,b)=>b[1]-a[1]);
+  mkChart('a-c-ss',hbarCfg(ssSort.map(x=>x[0]),ssSort.map(x=>x[1]),PAL));
+
+  // Variacion
+  mkChart('a-c-var',varChart(tendVals));
+
+  // Tipo dona
+  mkChart('a-c-tipo-dona',donaCfg(fd,anio,'altas'));
+
+  // Tipo linea
+  mkChart('a-c-tipo-linea',tipoLineaCfg(fd,'altas'));
+
+  // Dependencia
+  mkChart('a-c-dep',depStackedCfg(fd,'altas'));
+
+  // Comunas
+  const comTot={};fd.forEach(d=>{comTot[d.c]=(comTot[d.c]||0)+getAltas(d,anio);});
+  const comSort=Object.entries(comTot).sort((a,b)=>b[1]-a[1]).slice(0,20);
+  mkChart('a-c-comunas',hbarCfg(comSort.map(x=>x[0]),comSort.map(x=>x[1]),PAL));
+
+  // Top estab
+  const topE=fd.slice().sort((a,b)=>getAltas(b,anio)-getAltas(a,anio)).slice(0,10);
+  mkChart('a-c-top-estab',topEstabCfg(topE,anio,'altas'));
+
+  // SS x anio apilado
+  mkChart('a-c-ss-anio',ssAnioCfg(fd,'altas'));
+}
+
+// ============================================================
+// ===== PBC: KPIs =====
+// ============================================================
+function kpisPBC(fd) {
+  const anio=F.anio;
+  const total=fd.reduce((s,d)=>s+getPBC(d,anio),0);
+  document.getElementById('p-kpi-total').textContent=fmt(total);
+  document.getElementById('p-kpi-total-sub').textContent=anio==='total'?'Suma dic. 2014–2025':'Diciembre '+anio;
+  document.getElementById('p-kpi-estab').textContent=fd.filter(d=>getPBC(d,anio)>0).length.toLocaleString('es-CL');
+  const con=fd.filter(d=>getPBC(d,anio)>0).length;
+  let promAnual;
+  if(anio==='total'){
+    const totalEstabProms=fd.reduce((s,d)=>{
+      const anosConDatos=YEARS.filter(y=>(gp(d,y)||0)>0).length;
+      return s+(anosConDatos>0?d.tp/anosConDatos:0);
+    },0);
+    promAnual=con>0?totalEstabProms/con:0;
+  } else {
+    promAnual=con>0?total/con:0;
+  }
+  document.getElementById('p-kpi-prom').textContent=con>0?fmt(promAnual):'—';
+  let bY='',bV=0;
+  YEARS.forEach(y=>{const s=fd.reduce((a,d)=>a+(gp(d,y)||0),0);if(s>bV){bV=s;bY=y;}});
+  document.getElementById('p-kpi-best-yr').textContent=bY;
+  document.getElementById('p-kpi-best-yr-val').textContent=fmt(bV)+' personas';
+  const bySS={};fd.forEach(d=>{bySS[d.s]=(bySS[d.s]||0)+getPBC(d,anio);});
+  const top=Object.entries(bySS).sort((a,b)=>b[1]-a[1])[0];
+  if(top){document.getElementById('p-kpi-top-ss').textContent=top[0].split(' ')[0];document.getElementById('p-kpi-top-ss-val').textContent=fmt(top[1])+' personas';}
+}
+
+// ============================================================
+// ===== PBC: GRÁFICOS =====
+// ============================================================
+function grafPBC(fd) {
+  const anio=F.anio;
+  const tendVals=YEARS.map(y=>fd.reduce((s,d)=>s+(gp(d,y)||0),0));
+  mkChart('p-c-tend',{type:'line',data:{labels:YEARS,datasets:[{
+    label:'Población Bajo Control',data:tendVals,borderColor:'#2E8B57',
+    backgroundColor:'rgba(46,139,87,0.08)',fill:true,tension:0.35,
+    pointRadius:5,pointHoverRadius:8,borderWidth:3,
+    pointBackgroundColor:tendVals.map(v=>v===Math.max(...tendVals)?'#005F9E':'#2E8B57'),
+    pointBorderColor:'#fff',pointBorderWidth:2
+  }]},options:barOpts(false,v=>fmt(v),false,tendVals)});
+
+  const ssTot={};fd.forEach(d=>{ssTot[d.s]=(ssTot[d.s]||0)+getPBC(d,anio);});
+  const ssSort=Object.entries(ssTot).sort((a,b)=>b[1]-a[1]);
+  mkChart('p-c-ss',hbarCfg(ssSort.map(x=>x[0]),ssSort.map(x=>x[1]),PAL,'#2E8B57'));
+
+  mkChart('p-c-var',varChart(tendVals,'#2E8B57'));
+  mkChart('p-c-tipo-dona',donaCfg(fd,anio,'pbc'));
+  mkChart('p-c-tipo-linea',tipoLineaCfg(fd,'pbc'));
+  mkChart('p-c-dep',depStackedCfg(fd,'pbc'));
+
+  const comTot={};fd.forEach(d=>{comTot[d.c]=(comTot[d.c]||0)+getPBC(d,anio);});
+  const comSort=Object.entries(comTot).sort((a,b)=>b[1]-a[1]).slice(0,20);
+  mkChart('p-c-comunas',hbarCfg(comSort.map(x=>x[0]),comSort.map(x=>x[1]),PAL,'#2E8B57'));
+
+  const topE=fd.slice().sort((a,b)=>getPBC(b,anio)-getPBC(a,anio)).slice(0,10);
+  mkChart('p-c-top-estab',topEstabCfg(topE,anio,'pbc'));
+  mkChart('p-c-ss-anio',ssAnioCfg(fd,'pbc'));
+}
+
+// ============================================================
+// ===== INDICADOR: KPIs y GRÁFICOS =====
+// ============================================================
+function kpisInd(fd) {
+  const anio=F.anio;
+  const totA=fd.reduce((s,d)=>s+getAltas(d,anio),0);
+  const totP=fd.reduce((s,d)=>s+getPBC(d,anio),0);
+  const pctNac=totP>0?(totA/totP*100):0;
+  document.getElementById('i-kpi-pct').textContent=fmtPct(pctNac);
+  document.getElementById('i-kpi-pct-sub').textContent=`${fmt(totA)} altas / ${fmt(totP)} PBC`;
+
+  let byA=YEARS.map(y=>({y,a:fd.reduce((s,d)=>s+(ga(d,y)||0),0),p:fd.reduce((s,d)=>s+(gp(d,y)||0),0)}));
+  let bY='',bV=0,wY='',wV=Infinity;
+  byA.forEach(x=>{const pct=x.p>0?x.a/x.p*100:0;if(pct>bV){bV=pct;bY=x.y;}if(pct>0&&pct<wV){wV=pct;wY=x.y;}});
+  document.getElementById('i-kpi-best-yr').textContent=bY;document.getElementById('i-kpi-best-yr-val').textContent=fmtPct(bV);
+  document.getElementById('i-kpi-worst-yr').textContent=wY;document.getElementById('i-kpi-worst-yr-val').textContent=fmtPct(wV);
+
+  const bySS={};
+  fd.forEach(d=>{if(!bySS[d.s])bySS[d.s]={a:0,p:0};bySS[d.s].a+=getAltas(d,anio);bySS[d.s].p+=getPBC(d,anio);});
+  const ssPcts=Object.entries(bySS).map(([ss,v])=>({ss,pct:v.p>0?v.a/v.p*100:0})).filter(x=>x.pct>0).sort((a,b)=>b.pct-a.pct);
+  if(ssPcts.length>0){
+    document.getElementById('i-kpi-top-ss').textContent=ssPcts[0].ss.split(' ')[0];
+    document.getElementById('i-kpi-top-ss-val').textContent=fmtPct(ssPcts[0].pct);
+    const bot=ssPcts[ssPcts.length-1];
+    document.getElementById('i-kpi-bot-ss').textContent=bot.ss.split(' ')[0];
+    document.getElementById('i-kpi-bot-ss-val').textContent=fmtPct(bot.pct);
+  }
+}
+
+function grafInd(fd) {
+  // Tendencia %
+  const pctVals=YEARS.map(y=>{
+    const a=fd.reduce((s,d)=>s+(ga(d,y)||0),0);
+    const p=fd.reduce((s,d)=>s+(gp(d,y)||0),0);
+    return p>0?parseFloat((a/p*100).toFixed(2)):0;
+  });
+  mkChart('i-c-tend',{type:'line',data:{labels:YEARS,datasets:[{
+    label:'% Altas/PBC',data:pctVals,borderColor:'#7c3aed',
+    backgroundColor:'rgba(124,58,237,0.08)',fill:true,tension:0.35,
+    pointRadius:5,pointHoverRadius:8,borderWidth:3,
+    pointBackgroundColor:pctVals.map((v,i)=>i===6?'#D0222A':v===Math.max(...pctVals)?'#005F9E':'#7c3aed'),
+    pointBorderColor:'#fff',pointBorderWidth:2
+  }]},options:{
+    responsive:true,maintainAspectRatio:false,
+    plugins:{legend:{display:false},tooltip:{callbacks:{label:ctx=>` ${ctx.raw.toFixed(2)}%`}}},
+    scales:{x:{ticks:{font:{size:11,weight:'bold'}}},y:{ticks:{callback:v=>v.toFixed(1)+'%',font:{size:10}},beginAtZero:true}}
+  }});
+
+  // SS %
+  const bySS={};
+  fd.forEach(d=>{if(!bySS[d.s])bySS[d.s]={a:0,p:0};bySS[d.s].a+=getAltas(d,F.anio);bySS[d.s].p+=getPBC(d,F.anio);});
+  const ssData=Object.entries(bySS).map(([ss,v])=>({ss,pct:v.p>0?v.a/v.p*100:0})).filter(x=>x.pct>0).sort((a,b)=>b.pct-a.pct);
+  mkChart('i-c-ss',{type:'bar',data:{
+    labels:ssData.map(x=>x.ss),
+    datasets:[{label:'% Altas/PBC',data:ssData.map(x=>parseFloat(x.pct.toFixed(2))),
+      backgroundColor:ssData.map(x=>pctColor(x.pct,ssData)),borderRadius:4}]
+  },options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,
+    plugins:{legend:{display:false},tooltip:{callbacks:{label:ctx=>` ${ctx.raw.toFixed(2)}%`}}},
+    scales:{x:{ticks:{callback:v=>v.toFixed(0)+'%',font:{size:9}}},y:{ticks:{font:{size:9}}}}}});
+
+  // Dual: altas + pbc + %
+  const altasAno=YEARS.map(y=>fd.reduce((s,d)=>s+(ga(d,y)||0),0));
+  const pbcAno=YEARS.map(y=>fd.reduce((s,d)=>s+(gp(d,y)||0),0));
+  mkChart('i-c-dual',{type:'bar',data:{labels:YEARS,datasets:[
+    {label:'Altas Clínicas SM',data:altasAno,backgroundColor:'rgba(0,95,158,0.6)',borderRadius:4,order:2},
+    {label:'Población Bajo Control',data:pbcAno,backgroundColor:'rgba(46,139,87,0.4)',borderRadius:4,order:3},
+    {label:'% Altas/PBC',data:pctVals,type:'line',borderColor:'#7c3aed',backgroundColor:'transparent',
+      pointRadius:4,borderWidth:2.5,yAxisID:'y2',order:1}
+  ]},options:{responsive:true,maintainAspectRatio:false,
+    plugins:{legend:{position:'bottom',labels:{font:{size:10},boxWidth:12}},
+      tooltip:{mode:'index',intersect:false}},
+    scales:{
+      x:{ticks:{font:{size:10}}},
+      y:{ticks:{callback:v=>fmt(v),font:{size:9}},position:'left'},
+      y2:{ticks:{callback:v=>v.toFixed(1)+'%',font:{size:9}},position:'right',grid:{display:false}}
+    }}});
+
+  // Tipo %
+  const byTipo={};
+  fd.forEach(d=>{if(!byTipo[d.t])byTipo[d.t]={a:0,p:0};byTipo[d.t].a+=getAltas(d,F.anio);byTipo[d.t].p+=getPBC(d,F.anio);});
+  const tipoData=Object.entries(byTipo).map(([t,v])=>({t,pct:v.p>0?v.a/v.p*100:0})).filter(x=>x.pct>0).sort((a,b)=>b.pct-a.pct);
+  mkChart('i-c-tipo',{type:'bar',data:{
+    labels:tipoData.map(x=>x.t),
+    datasets:[{label:'% Altas/PBC',data:tipoData.map(x=>parseFloat(x.pct.toFixed(2))),
+      backgroundColor:tipoData.map(x=>(TIPO_C[x.t]||'#999')+'CC'),borderRadius:4}]
+  },options:{responsive:true,maintainAspectRatio:false,
+    plugins:{legend:{display:false},tooltip:{callbacks:{label:ctx=>` ${ctx.raw.toFixed(2)}%`}}},
+    scales:{x:{ticks:{font:{size:10}}},y:{ticks:{callback:v=>v.toFixed(1)+'%',font:{size:10}},beginAtZero:true}}}});
+
+  // Dep %
+  const byDep={};
+  fd.forEach(d=>{const dep=d.dep.trim();if(!byDep[dep])byDep[dep]={a:0,p:0};byDep[dep].a+=getAltas(d,F.anio);byDep[dep].p+=getPBC(d,F.anio);});
+  const depData=Object.entries(byDep).map(([d,v])=>({d,pct:v.p>0?v.a/v.p*100:0})).filter(x=>x.pct>0).sort((a,b)=>b.pct-a.pct);
+  mkChart('i-c-dep',{type:'bar',data:{
+    labels:depData.map(x=>x.d),
+    datasets:[{label:'% Altas/PBC',data:depData.map(x=>parseFloat(x.pct.toFixed(2))),
+      backgroundColor:depData.map(x=>(DEP_C[x.d]||'#999')+'CC'),borderRadius:4}]
+  },options:{responsive:true,maintainAspectRatio:false,
+    plugins:{legend:{display:false},tooltip:{callbacks:{label:ctx=>` ${ctx.raw.toFixed(2)}%`}}},
+    scales:{x:{ticks:{font:{size:10}}},y:{ticks:{callback:v=>v.toFixed(1)+'%',font:{size:10}},beginAtZero:true}}}});
+
+  // SS x Año líneas %
+  const allSS=[...new Set(fd.map(d=>d.s))].filter(Boolean);
+  const ssTotals={};allSS.forEach(ss=>{ssTotals[ss]=fd.filter(d=>d.s===ss).reduce((s,d)=>s+d.ta,0);});
+  const topSS=allSS.sort((a,b)=>ssTotals[b]-ssTotals[a]).slice(0,15);
+  const ssLineDs=topSS.map((ss,i)=>{
+    const vals=YEARS.map(y=>{
+      const a=fd.filter(d=>d.s===ss).reduce((s,d)=>s+(ga(d,y)||0),0);
+      const p=fd.filter(d=>d.s===ss).reduce((s,d)=>s+(gp(d,y)||0),0);
+      return p>0?parseFloat((a/p*100).toFixed(2)):null;
+    });
+    return {label:ss,data:vals,borderColor:PAL[i%PAL.length],backgroundColor:'transparent',
+      tension:0.3,pointRadius:3,borderWidth:2,spanGaps:true};
+  });
+  mkChart('i-c-ss-linea',{type:'line',data:{labels:YEARS,datasets:ssLineDs},options:{
+    responsive:true,maintainAspectRatio:false,
+    plugins:{legend:{position:'bottom',labels:{font:{size:9},boxWidth:10,padding:5}},
+      tooltip:{mode:'index',intersect:false,callbacks:{label:ctx=>ctx.raw!=null?` ${ctx.dataset.label}: ${ctx.raw.toFixed(1)}%`:null}}},
+    scales:{x:{ticks:{font:{size:10}}},y:{ticks:{callback:v=>v!=null?v.toFixed(1)+'%':'',font:{size:10}},beginAtZero:true}}}});
+}
+
+function pctColor(pct,arr) {
+  const vals=arr.map(x=>x.pct);
+  const min=Math.min(...vals),max=Math.max(...vals);
+  const norm=(pct-min)/(max-min||1);
+  const r=Math.round(208-(208-0)*norm);
+  const g=Math.round(34+(139-34)*norm);
+  const b=Math.round(42+(87-42)*norm);
+  return `rgba(${r},${g},${b},0.75)`;
+}
+
+// ============================================================
+// CHART FACTORIES COMPARTIDAS
+// ============================================================
+function barOpts(horizontal, tickCb, hasAnno, vals) {
+  return {responsive:true,maintainAspectRatio:false,
+    plugins:{legend:{display:false},tooltip:{callbacks:{label:ctx=>` ${fmt(ctx.raw)}`}}},
+    scales:{
+      x:{grid:{color:'rgba(0,0,0,0.05)'},ticks:{font:{size:11,weight:'bold'}}},
+      y:{grid:{color:'rgba(0,0,0,0.05)'},ticks:{font:{size:10},callback:tickCb},beginAtZero:false}
+    }};
+}
+
+function hbarCfg(labels,data,pal,baseColor) {
+  return {type:'bar',data:{labels,datasets:[{label:'',data,
+    backgroundColor:baseColor?data.map(()=>baseColor+'CC'):data.map((_,i)=>pal[i%pal.length]+'CC'),
+    borderColor:baseColor?data.map(()=>baseColor):data.map((_,i)=>pal[i%pal.length]),
+    borderWidth:1,borderRadius:4}]},
+  options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,
+    plugins:{legend:{display:false},tooltip:{callbacks:{label:ctx=>` ${fmt(ctx.raw)}`}}},
+    scales:{x:{ticks:{callback:v=>fmt(v),font:{size:9}},grid:{color:'rgba(0,0,0,0.05)'}},
+      y:{ticks:{font:{size:9}},grid:{display:false}}}}};
+}
+
+function varChart(vals,color='#005F9E') {
+  const vars=YEARS.slice(1).map((y,i)=>vals[i]>0?((vals[i+1]-vals[i])/vals[i]*100):0);
+  return {type:'bar',data:{labels:YEARS.slice(1),datasets:[{label:'Δ%',data:vars,
+    backgroundColor:vars.map(v=>v>=0?'rgba(46,139,87,0.8)':'rgba(208,34,42,0.8)'),borderRadius:4}]},
+  options:{responsive:true,maintainAspectRatio:false,
+    plugins:{legend:{display:false},tooltip:{callbacks:{label:ctx=>` ${ctx.raw.toFixed(1)}% vs año anterior`}}},
+    scales:{x:{ticks:{font:{size:10}}},y:{ticks:{callback:v=>v.toFixed(0)+'%',font:{size:10}}}}}};
+}
+
+function donaCfg(fd,anio,campo) {
+  const byT={};
+  fd.forEach(d=>{const v=campo==='altas'?getAltas(d,anio):getPBC(d,anio);byT[d.t]=(byT[d.t]||0)+v;});
+  const items=Object.entries(byT).sort((a,b)=>b[1]-a[1]);
+  return {type:'doughnut',data:{labels:items.map(x=>x[0]),datasets:[{data:items.map(x=>x[1]),
+    backgroundColor:items.map(x=>TIPO_C[x[0]]||'#999'),borderColor:'#fff',borderWidth:2}]},
+  options:{responsive:true,maintainAspectRatio:false,cutout:'60%',
+    plugins:{legend:{position:'bottom',labels:{font:{size:10},padding:8,boxWidth:12}},
+      tooltip:{callbacks:{label:ctx=>{const t=ctx.dataset.data.reduce((a,b)=>a+b,0);return ` ${ctx.label}: ${fmt(ctx.raw)} (${(ctx.raw/t*100).toFixed(1)}%)`;}}}}}};
+}
+
+function tipoLineaCfg(fd,campo) {
+  const tipos=[...new Set(fd.map(d=>d.t))].filter(Boolean);
+  const ds=tipos.map((t,i)=>({label:t,
+    data:YEARS.map(y=>fd.filter(d=>d.t===t).reduce((s,d)=>s+(campo==='altas'?(ga(d,y)||0):(gp(d,y)||0)),0)),
+    borderColor:TIPO_C[t]||PAL[i],backgroundColor:(TIPO_C[t]||PAL[i])+'22',
+    tension:0.3,fill:false,pointRadius:3,borderWidth:2}));
+  return {type:'line',data:{labels:YEARS,datasets:ds},
+  options:{responsive:true,maintainAspectRatio:false,
+    plugins:{legend:{position:'bottom',labels:{font:{size:10},boxWidth:10,padding:6}},
+      tooltip:{mode:'index',intersect:false,callbacks:{label:ctx=>` ${ctx.dataset.label}: ${fmt(ctx.raw)}`}}},
+    scales:{x:{ticks:{font:{size:10}}},y:{ticks:{callback:v=>fmt(v),font:{size:10}}}}}};
+}
+
+function depStackedCfg(fd,campo) {
+  const deps=[...new Set(fd.map(d=>d.dep.trim()))].filter(Boolean);
+  const ds=deps.map((dep,i)=>({label:dep,
+    data:YEARS.map(y=>fd.filter(d=>d.dep.trim()===dep).reduce((s,d)=>s+(campo==='altas'?(ga(d,y)||0):(gp(d,y)||0)),0)),
+    backgroundColor:(DEP_C[dep]||PAL[i])+'CC',borderColor:DEP_C[dep]||PAL[i],borderWidth:1,borderRadius:2}));
+  return {type:'bar',data:{labels:YEARS,datasets:ds},
+  options:{responsive:true,maintainAspectRatio:false,
+    plugins:{legend:{position:'bottom',labels:{font:{size:10},boxWidth:10,padding:6}},
+      tooltip:{mode:'index',intersect:false}},
+    scales:{x:{stacked:true,ticks:{font:{size:10}}},y:{stacked:true,ticks:{callback:v=>fmt(v),font:{size:10}}}}}};
+}
+
+function topEstabCfg(topE,anio,campo) {
+  const labels=topE.map(d=>{let n=d.n.replace(/Centro de Salud Familiar/i,'CESFAM').replace(/Centro Comunitario de Salud Familiar/i,'CECOSF');return n.length>38?n.slice(0,36)+'…':n;});
+  const vals=topE.map(d=>campo==='altas'?getAltas(d,anio):getPBC(d,anio));
+  return {type:'bar',data:{labels,datasets:[{label:'',data:vals,
+    backgroundColor:topE.map(d=>(TIPO_C[d.t]||'#005F9E')+'CC'),
+    borderColor:topE.map(d=>TIPO_C[d.t]||'#005F9E'),borderWidth:1,borderRadius:4}]},
+  options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,
+    plugins:{legend:{display:false},tooltip:{callbacks:{label:(ctx)=>{const d=topE[ctx.dataIndex];return [` ${fmt(ctx.raw)}`,` ${d.c} — ${d.s}`];} }}},
+    scales:{x:{ticks:{callback:v=>fmt(v),font:{size:9}}},y:{ticks:{font:{size:9}}}}}};
+}
+
+function ssAnioCfg(fd,campo) {
+  const allSS=[...new Set(fd.map(d=>d.s))].filter(Boolean);
+  const ssTots={};allSS.forEach(ss=>{ssTots[ss]=fd.filter(d=>d.s===ss).reduce((s,d)=>s+(campo==='altas'?d.ta:d.tp),0);});
+  const sortedSS=allSS.sort((a,b)=>ssTots[b]-ssTots[a]);
+  const ds=YEARS.map((y,i)=>{
+    const hue=Math.round(i*(220/11));
+    const color=`hsl(${200+hue},70%,45%)`;
+    return {label:y,data:sortedSS.map(ss=>fd.filter(d=>d.s===ss).reduce((s,d)=>s+(campo==='altas'?(ga(d,y)||0):(gp(d,y)||0)),0)),
+      backgroundColor:color+'99',borderColor:color,borderWidth:1,borderRadius:2};
+  });
+  return {type:'bar',data:{labels:sortedSS,datasets:ds},
+  options:{responsive:true,maintainAspectRatio:false,
+    plugins:{legend:{position:'bottom',labels:{font:{size:9},boxWidth:10,padding:5}},
+      tooltip:{mode:'index',intersect:false,callbacks:{label:ctx=>` ${ctx.dataset.label}: ${fmt(ctx.raw)}`}}},
+    scales:{x:{stacked:true,ticks:{font:{size:9},maxRotation:45},grid:{display:false}},
+      y:{stacked:true,ticks:{callback:v=>fmt(v),font:{size:9}}}}}};
+}
+
+// ============================================================
+// TABLAS
+// ============================================================
+function tablaAltas(fd) {
+  const anio=F.anio;
+  const sorted=fd.slice().sort((a,b)=>getAltas(b,anio)-getAltas(a,anio)).slice(0,100);
+  const maxV=sorted.length>0?getAltas(sorted[0],anio):1;
+  document.getElementById('a-tabla-body').innerHTML=sorted.map((d,i)=>`<tr>
+    <td class="rank">${i+1}</td><td>${d.n}</td><td>${d.c}</td><td>${d.s}</td>
+    <td><span style="background:${TIPO_C[d.t]||'#999'}22;color:${TIPO_C[d.t]||'#999'};font-weight:700;padding:2px 6px;border-radius:8px;font-size:10px">${d.t}</span></td>
+    <td>${d.dep.trim()}</td><td class="num">${fmt(getAltas(d,anio))}</td>
+    <td><div class="prog"><div class="prog-fill" style="width:${(getAltas(d,anio)/maxV*100).toFixed(1)}%;background:${TIPO_C[d.t]||'#005F9E'}"></div></div></td>
+  </tr>`).join('');
+}
+
+function tablaPBC(fd) {
+  const anio=F.anio;
+  const sorted=fd.slice().sort((a,b)=>getPBC(b,anio)-getPBC(a,anio)).slice(0,100);
+  const maxV=sorted.length>0?getPBC(sorted[0],anio):1;
+  document.getElementById('p-tabla-body').innerHTML=sorted.map((d,i)=>`<tr>
+    <td class="rank">${i+1}</td><td>${d.n}</td><td>${d.c}</td><td>${d.s}</td>
+    <td><span style="background:${TIPO_C[d.t]||'#999'}22;color:${TIPO_C[d.t]||'#999'};font-weight:700;padding:2px 6px;border-radius:8px;font-size:10px">${d.t}</span></td>
+    <td>${d.dep.trim()}</td><td class="num">${fmt(getPBC(d,anio))}</td>
+    <td><div class="prog"><div class="prog-fill" style="width:${(getPBC(d,anio)/maxV*100).toFixed(1)}%;background:${TIPO_C[d.t]||'#2E8B57'}"></div></div></td>
+  </tr>`).join('');
+}
+
+function tablaInd(fd) {
+  const anio=F.anio;
+  const conPBC=fd.filter(d=>getPBC(d,anio)>0);
+  const sorted=conPBC.map(d=>({...d,pct:getAltas(d,anio)/getPBC(d,anio)*100})).sort((a,b)=>b.pct-a.pct).slice(0,100);
+  const maxPct=sorted.length>0?sorted[0].pct:1;
+  document.getElementById('i-badge-tabla').textContent=`${sorted.length} establecimientos con PBC > 0`;
+  document.getElementById('i-tabla-body').innerHTML=sorted.map((d,i)=>`<tr>
+    <td class="rank">${i+1}</td><td>${d.n}</td><td>${d.c}</td><td>${d.s}</td>
+    <td><span style="background:${TIPO_C[d.t]||'#999'}22;color:${TIPO_C[d.t]||'#999'};font-weight:700;padding:2px 6px;border-radius:8px;font-size:10px">${d.t}</span></td>
+    <td class="num">${fmt(getAltas(d,anio))}</td><td class="num">${fmt(getPBC(d,anio))}</td>
+    <td class="num" style="font-weight:800;color:${d.pct>=20?'#2E8B57':d.pct>=10?'#E67E22':'#D0222A'}">${fmtPct(d.pct)}</td>
+    <td><div class="prog"><div class="prog-fill" style="width:${(d.pct/maxPct*100).toFixed(1)}%;background:#7c3aed"></div></div></td>
+  </tr>`).join('');
+}
+
+function sortTab(tbodyId,col) {
+  const tbody=document.getElementById(tbodyId);
+  const rows=Array.from(tbody.querySelectorAll('tr'));
+  const key=tbodyId+col;
+  sortDir[key]=!sortDir[key];
+  rows.sort((a,b)=>{
+    const av=a.cells[col].textContent.replace(/[.\s]/g,'').replace(',','.').trim();
+    const bv=b.cells[col].textContent.replace(/[.\s]/g,'').replace(',','.').trim();
+    const an=parseFloat(av),bn=parseFloat(bv);
+    if(!isNaN(an)&&!isNaN(bn))return sortDir[key]?an-bn:bn-an;
+    return sortDir[key]?av.localeCompare(bv,'es'):bv.localeCompare(av,'es');
+  });
+  rows.forEach(r=>tbody.appendChild(r));
+  rows.forEach((r,i)=>r.cells[0].textContent=i+1);
+}
+
+// ============================================================
+// MAPAS
+// ============================================================
+function initMapaAltas() {
+  maps.a=L.map('a-mapa').setView([-35.5,-71.0],5);
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{attribution:'© OpenStreetMap',maxZoom:18}).addTo(maps.a);
+  actualizarMapaAltas();
+}
+
+function initMapaPBC() {
+  maps.p=L.map('p-mapa').setView([-35.5,-71.0],5);
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{attribution:'© OpenStreetMap',maxZoom:18}).addTo(maps.p);
+  actualizarMapaPBC();
+}
+
+function actualizarMapaAltas() { actualizarMapa('a','altas'); }
+function actualizarMapaPBC() { actualizarMapa('p','pbc'); }
+
+function actualizarMapa(prefix, campo) {
+  const m=maps[prefix];
+  if(!m) return;
+  const fd=filteredData();
+  // Use global year filter; map year selector only overrides when changed manually
+  const mapYearSel=document.getElementById(prefix+'-map-year');
+  const mapAnio=mapYearSel.value;
+  const colorBy=document.getElementById(prefix+'-map-color').value;
+  mapMarkers[prefix].forEach(mk=>m.removeLayer(mk));
+  mapMarkers[prefix]=[];
+  const withC=fd.filter(d=>d.lat&&d.lon);
+  const vals=withC.map(d=>campo==='altas'?getAltas(d,mapAnio):getPBC(d,mapAnio));
+  const maxV=Math.max(...vals,1);
+  const ssColorMap={};
+  if(colorBy==='ss'){[...new Set(withC.map(d=>d.s))].forEach((ss,i)=>ssColorMap[ss]=PAL[i%PAL.length]);}
+  withC.forEach(d=>{
+    const val=campo==='altas'?getAltas(d,mapAnio):getPBC(d,mapAnio);
+    if(val<=0)return;
+    const color=colorBy==='tipo'?(TIPO_C[d.t]||'#999'):colorBy==='dependencia'?(DEP_C[d.dep.trim()]||'#999'):(ssColorMap[d.s]||'#005F9E');
+    const r=Math.max(4,Math.min(28,4+Math.sqrt(val/maxV)*22));
+    const mk=L.circleMarker([d.lat,d.lon],{radius:r,fillColor:color,color:'#fff',weight:1.5,opacity:1,fillOpacity:0.75});
+    const etiq=campo==='altas'?'Altas Clínicas SM':'Población Bajo Control';
+    mk.bindPopup(`<div style="font-family:Segoe UI,Arial;font-size:12px;min-width:220px">
+      <div style="font-weight:800;font-size:13px;color:#003F6B;margin-bottom:6px">${d.n}</div>
+      <div style="display:grid;grid-template-columns:auto 1fr;gap:3px 8px;font-size:11px">
+        <span style="color:#4A6080;font-weight:600">Comuna:</span><span>${d.c}</span>
+        <span style="color:#4A6080;font-weight:600">SS:</span><span>${d.s}</span>
+        <span style="color:#4A6080;font-weight:600">Tipo:</span><span>${d.tc}</span>
+        <span style="color:#4A6080;font-weight:600">Dependencia:</span><span>${d.dep.trim()}</span>
+        <span style="color:#4A6080;font-weight:600">${etiq} ${mapAnio==='total'?'2014–2025':mapAnio}:</span>
+        <span style="font-weight:800;color:#005F9E;font-size:13px">${fmt(val)}</span>
+      </div></div>`);
+    mk.addTo(m);mapMarkers[prefix].push(mk);
+  });
+  const entries=colorBy==='tipo'?Object.entries(TIPO_C):colorBy==='dependencia'?Object.entries(DEP_C):Object.entries(ssColorMap).slice(0,14);
+  document.getElementById(prefix+'-map-leg').innerHTML=entries.map(([k,v])=>`<div class="leg-item"><div class="leg-dot" style="background:${v}"></div>${k}</div>`).join('');
+}
+
+
+// ============================================================
+// CATEGORIZACIÓN
+// ============================================================
+const CAT_KEYS = ['N0','N1','N2','N3','N4'];
+const CAT_COLORS = {
+  'N0':'#94a3b8','N1':'#005F9E','N2':'#E67E22','N3':'#D0222A','N4':'#7c3aed'
+};
+const CAT_LABELS = {
+  'N0':'N0 - Sin diagnóstico activo',
+  'N1':'N1 - Baja complejidad',
+  'N2':'N2 - Complejidad moderada',
+  'N3':'N3 - Alta complejidad',
+  'N4':'N4 - Muy alta complejidad'
+};
+
+function catData(fd) {
+  return fd.filter(d=>d.cat && d.cat.total>0);
+}
+
+function filteredCatData() {
+  const fd = filteredData();
+  const cd = catData(fd);
+  if(!F.cat) return cd;
+  // Filter: only estabs with >0 in selected N, and compute virtual cat.total as that N only
+  return cd.filter(d=>(d.cat[F.cat]||0)>0).map(d=>({
+    ...d,
+    cat: {...d.cat, total: d.cat[F.cat]||0, _filtered: F.cat}
+  }));
+}
+
+function kpisCat(fcd) {
+  const total = fcd.reduce((s,d)=>s+d.cat.total,0);
+  document.getElementById('c-kpi-total').textContent = fmt(total);
+  document.getElementById('c-kpi-estab').textContent = fcd.length.toLocaleString('es-CL');
+  document.getElementById('c-kpi-prom').textContent = fcd.length>0?fmt(total/fcd.length):'—';
+  // Top category
+  if(F.cat) {
+    document.getElementById('c-kpi-top-cat').textContent = F.cat;
+    document.getElementById('c-kpi-top-cat-val').textContent = fmt(total)+' personas';
+  } else {
+    let topCat='', topVal=0;
+    CAT_KEYS.forEach(k=>{
+      const s=fcd.reduce((a,d)=>a+(d.cat[k]||0),0);
+      if(s>topVal){topVal=s;topCat=k;}
+    });
+    document.getElementById('c-kpi-top-cat').textContent = topCat;
+    document.getElementById('c-kpi-top-cat-val').textContent = fmt(topVal)+' personas';
+  }
+  // Top SS
+  const bySS={};
+  fcd.forEach(d=>{bySS[d.s]=(bySS[d.s]||0)+d.cat.total;});
+  const topSS=Object.entries(bySS).sort((a,b)=>b[1]-a[1])[0];
+  if(topSS){
+    document.getElementById('c-kpi-top-ss').textContent=topSS[0].split(' ')[0];
+    document.getElementById('c-kpi-top-ss-val').textContent=fmt(topSS[1])+' categorizados';
+  }
+}
+
+function grafCat(fcd) {
+  // Barras por categoría (highlight selected N)
+  const totByCat = CAT_KEYS.map(k=>fcd.reduce((s,d)=>s+(F.cat?((d.cat._filtered===k?d.cat.total:0)||(d.cat[k]||0)):d.cat[k]||0),0));
+  const barBG = CAT_KEYS.map(k=>F.cat?(k===F.cat?CAT_COLORS[k]+'FF':CAT_COLORS[k]+'33'):CAT_COLORS[k]+'CC');
+  mkChart('c-c-barras',{type:'bar',data:{
+    labels:CAT_KEYS.map(k=>CAT_LABELS[k]),
+    datasets:[{label:'Categorizados',data:totByCat,
+      backgroundColor:barBG,
+      borderColor:CAT_KEYS.map(k=>CAT_COLORS[k]),
+      borderWidth:F.cat?CAT_KEYS.map(k=>k===F.cat?3:1):[1,1,1,1,1],borderRadius:6}]
+  },options:{responsive:true,maintainAspectRatio:false,
+    plugins:{legend:{display:false},tooltip:{callbacks:{label:ctx=>` ${fmt(ctx.raw)} personas`}}},
+    scales:{x:{ticks:{font:{size:10}}},y:{ticks:{callback:v=>fmt(v),font:{size:10}}}}}});
+
+  // Dona
+  mkChart('c-c-dona',{type:'doughnut',data:{
+    labels:CAT_KEYS.map(k=>CAT_LABELS[k]),
+    datasets:[{data:totByCat,backgroundColor:CAT_KEYS.map(k=>CAT_COLORS[k]),borderColor:'#fff',borderWidth:2}]
+  },options:{responsive:true,maintainAspectRatio:false,cutout:'58%',
+    plugins:{legend:{position:'bottom',labels:{font:{size:10},padding:8,boxWidth:12}},
+      tooltip:{callbacks:{label:ctx=>{const t=ctx.dataset.data.reduce((a,b)=>a+b,0);return ` ${ctx.label}: ${fmt(ctx.raw)} (${(ctx.raw/t*100).toFixed(1)}%)`;}}}}}});
+
+  // SS totals
+  const ssList=[...new Set(fcd.map(d=>d.s))].filter(Boolean);
+  const ssTots={};ssList.forEach(ss=>{ssTots[ss]=fcd.filter(d=>d.s===ss).reduce((s,d)=>s+d.cat.total,0);});
+  const sortedSS=ssList.sort((a,b)=>ssTots[b]-ssTots[a]);
+  mkChart('c-c-ss',{type:'bar',data:{
+    labels:sortedSS,
+    datasets:[{label:'Total categorizados',data:sortedSS.map(ss=>ssTots[ss]),
+      backgroundColor:sortedSS.map((_,i)=>PAL[i%PAL.length]+'CC'),
+      borderColor:sortedSS.map((_,i)=>PAL[i%PAL.length]),borderWidth:1,borderRadius:4}]
+  },options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,
+    plugins:{legend:{display:false},tooltip:{callbacks:{label:ctx=>` ${fmt(ctx.raw)}`}}},
+    scales:{x:{ticks:{callback:v=>fmt(v),font:{size:9}}},y:{ticks:{font:{size:9}}}}}});
+
+  // SS apilado por categoría
+  const dsApilado = CAT_KEYS.map(k=>({
+    label:k,data:sortedSS.map(ss=>fcd.filter(d=>d.s===ss).reduce((s,d)=>s+(d.cat[k]||0),0)),
+    backgroundColor:CAT_COLORS[k]+'CC',borderColor:CAT_COLORS[k],borderWidth:1
+  }));
+  mkChart('c-c-ss-apilado',{type:'bar',data:{labels:sortedSS,datasets:dsApilado},
+  options:{responsive:true,maintainAspectRatio:false,
+    plugins:{legend:{position:'bottom',labels:{font:{size:10},boxWidth:10,padding:5}},
+      tooltip:{mode:'index',intersect:false,callbacks:{label:ctx=>` ${ctx.dataset.label}: ${fmt(ctx.raw)}`}}},
+    scales:{x:{stacked:true,ticks:{font:{size:9},maxRotation:45}},y:{stacked:true,ticks:{callback:v=>fmt(v),font:{size:9}}}}}});
+
+  // Tipo
+  const tipos=[...new Set(fcd.map(d=>d.t))].filter(Boolean);
+  const tipoTots=tipos.map(t=>({t,v:fcd.filter(d=>d.t===t).reduce((s,d)=>s+d.cat.total,0)})).sort((a,b)=>b.v-a.v);
+  mkChart('c-c-tipo',{type:'bar',data:{
+    labels:tipoTots.map(x=>x.t),
+    datasets:[{label:'Categorizados',data:tipoTots.map(x=>x.v),
+      backgroundColor:tipoTots.map(x=>(TIPO_C[x.t]||'#999')+'CC'),borderRadius:4}]
+  },options:{responsive:true,maintainAspectRatio:false,
+    plugins:{legend:{display:false},tooltip:{callbacks:{label:ctx=>` ${fmt(ctx.raw)}`}}},
+    scales:{x:{ticks:{font:{size:10}}},y:{ticks:{callback:v=>fmt(v),font:{size:10}}}}}});
+
+  // Dependencia
+  const deps=[...new Set(fcd.map(d=>d.dep.trim()))].filter(Boolean);
+  const depTots=deps.map(dep=>({dep,v:fcd.filter(d=>d.dep.trim()===dep).reduce((s,d)=>s+d.cat.total,0)})).sort((a,b)=>b.v-a.v);
+  mkChart('c-c-dep',{type:'bar',data:{
+    labels:depTots.map(x=>x.dep),
+    datasets:[{label:'Categorizados',data:depTots.map(x=>x.v),
+      backgroundColor:depTots.map(x=>(DEP_C[x.dep]||'#999')+'CC'),borderRadius:4}]
+  },options:{responsive:true,maintainAspectRatio:false,
+    plugins:{legend:{display:false},tooltip:{callbacks:{label:ctx=>` ${fmt(ctx.raw)}`}}},
+    scales:{x:{ticks:{font:{size:10}}},y:{ticks:{callback:v=>fmt(v),font:{size:10}}}}}});
+}
+
+function tablaCat(fcd) {
+  const sorted=fcd.slice().sort((a,b)=>b.cat.total-a.cat.total);
+  const maxV=sorted.length>0?sorted[0].cat.total:1;
+  document.getElementById('c-badge-tabla').textContent=`${sorted.length} establecimientos categorizados`;
+  document.getElementById('cat-n-estab').textContent=sorted.length;
+  document.getElementById('c-tabla-body').innerHTML=sorted.map((d,i)=>`<tr>
+    <td class="rank">${i+1}</td><td>${d.n}</td><td>${d.c}</td><td>${d.s}</td>
+    <td><span style="background:${TIPO_C[d.t]||'#999'}22;color:${TIPO_C[d.t]||'#999'};font-weight:700;padding:2px 6px;border-radius:8px;font-size:10px">${d.t}</span></td>
+    <td class="num">${fmt(d.cat.N0)}</td><td class="num">${fmt(d.cat.N1)}</td>
+    <td class="num">${fmt(d.cat.N2)}</td><td class="num">${fmt(d.cat.N3)}</td>
+    <td class="num">${fmt(d.cat.N4)}</td>
+    <td class="num" style="font-weight:800;color:#E67E22">${fmt(d.cat.total)}</td>
+    <td><div class="prog"><div class="prog-fill" style="width:${(d.cat.total/maxV*100).toFixed(1)}%;background:#E67E22"></div></div></td>
+  </tr>`).join('');
+}
+
+function initMapaCat() {
+  maps.c=L.map('c-mapa').setView([-35.5,-71.0],5);
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{attribution:'© OpenStreetMap',maxZoom:18}).addTo(maps.c);
+  actualizarMapaCat();
+}
+
+function actualizarMapaCat() {
+  const m=maps.c;
+  if(!m) return;
+  const fcd=filteredCatData();
+  const colorBy=document.getElementById('c-map-color').value;
+  (mapMarkers.c||[]).forEach(mk=>m.removeLayer(mk));
+  mapMarkers.c=[];
+  const maxV=Math.max(...fcd.map(d=>d.cat.total),1);
+  const ssColorMap={};
+  if(colorBy==='ss'){[...new Set(fcd.map(d=>d.s))].forEach((ss,i)=>ssColorMap[ss]=PAL[i%PAL.length]);}
+  const topCatColor={'N0':'#94a3b8','N1':'#005F9E','N2':'#E67E22','N3':'#D0222A','N4':'#7c3aed'};
+  fcd.forEach(d=>{
+    if(!d.lat||!d.lon||d.cat.total<=0) return;
+    let color;
+    if(colorBy==='tipo') color=TIPO_C[d.t]||'#999';
+    else if(colorBy==='dependencia') color=DEP_C[d.dep.trim()]||'#999';
+    else if(colorBy==='ss') color=ssColorMap[d.s]||'#E67E22';
+    else { // topcat
+      let maxK='N0',maxV2=0;
+      CAT_KEYS.forEach(k=>{if((d.cat[k]||0)>maxV2){maxV2=d.cat[k];maxK=k;}});
+      color=topCatColor[maxK]||'#E67E22';
+    }
+    const r=Math.max(4,Math.min(28,4+Math.sqrt(d.cat.total/maxV)*22));
+    const mk=L.circleMarker([d.lat,d.lon],{radius:r,fillColor:color,color:'#fff',weight:1.5,opacity:1,fillOpacity:0.8});
+    mk.bindPopup(`<div style="font-family:Segoe UI,Arial;font-size:12px;min-width:220px">
+      <div style="font-weight:800;font-size:13px;color:#003F6B;margin-bottom:6px">${d.n}</div>
+      <div style="display:grid;grid-template-columns:auto 1fr;gap:3px 8px;font-size:11px">
+        <span style="color:#4A6080;font-weight:600">Comuna:</span><span>${d.c}</span>
+        <span style="color:#4A6080;font-weight:600">SS:</span><span>${d.s}</span>
+        <span style="color:#4A6080;font-weight:600">Tipo:</span><span>${d.tc}</span>
+        <span style="color:#4A6080;font-weight:600">N0:</span><span>${fmt(d.cat.N0)}</span>
+        <span style="color:#4A6080;font-weight:600">N1:</span><span>${fmt(d.cat.N1)}</span>
+        <span style="color:#4A6080;font-weight:600">N2:</span><span>${fmt(d.cat.N2)}</span>
+        <span style="color:#4A6080;font-weight:600">N3:</span><span>${fmt(d.cat.N3)}</span>
+        <span style="color:#4A6080;font-weight:600">N4:</span><span>${fmt(d.cat.N4)}</span>
+        <span style="color:#4A6080;font-weight:600">Total:</span><span style="font-weight:800;color:#E67E22;font-size:13px">${fmt(d.cat.total)}</span>
+      </div></div>`);
+    mk.addTo(m);mapMarkers.c.push(mk);
+  });
+  const entries=colorBy==='tipo'?Object.entries(TIPO_C):colorBy==='dependencia'?Object.entries(DEP_C):colorBy==='ss'?Object.entries(ssColorMap).slice(0,14):Object.entries(topCatColor);
+  document.getElementById('c-map-leg').innerHTML=entries.map(([k,v])=>`<div class="leg-item"><div class="leg-dot" style="background:${v}"></div>${k}</div>`).join('');
+}
+
+// ── switchTabByName (for home cards) ──────────────────────────────────────
+function switchTabByName(name) {
+  const btns = document.querySelectorAll('.tab-btn');
+  const tabNames = ['home','altas','pbc','ind','cat'];
+  const idx = tabNames.indexOf(name);
+  if(idx>=0) switchTab(name, btns[idx]);
+}
+
+// ── Home KPIs ─────────────────────────────────────────────────────────────
+function updateHomeKPIs() {
+  const totalAltas = DATA.reduce((s,d)=>s+d.ta,0);
+  const pbc2025 = DATA.reduce((s,d)=>s+(gp(d,'2025')||0),0);
+  const catTotal = DATA.filter(d=>d.cat).reduce((s,d)=>s+d.cat.total,0);
+  const altasPBC_a2025 = DATA.reduce((s,d)=>s+(ga(d,'2025')||0),0);
+  const altasPBC_p2025 = DATA.reduce((s,d)=>s+(gp(d,'2025')||0),0);
+  const pct2025 = altasPBC_p2025>0?(altasPBC_a2025/altasPBC_p2025*100):0;
+  document.getElementById('home-total-altas').textContent=fmt(totalAltas);
+  document.getElementById('home-pbc-2025').textContent=fmt(pbc2025);
+  document.getElementById('home-cat-total').textContent=fmt(catTotal);
+  document.getElementById('home-ind-2025').textContent=pct2025.toFixed(1)+'%';
+}
+
+// ============================================================
+// PANTALLA INICIO — TERRITORIO
+
+// ============================================================
+// PANTALLA INICIO — MODO TERRITORIO
+// ============================================================
+let fichaCharts={};
+function setModo(modo){
+  document.getElementById('modo-var').style.display=modo==='var'?'block':'none';
+  document.getElementById('modo-terr').style.display=modo==='terr'?'block':'none';
+  const bv=document.getElementById('modo-btn-var'),bt=document.getElementById('modo-btn-terr');
+  bv.style.background=modo==='var'?'#005F9E':'transparent';bv.style.color=modo==='var'?'white':'#4A6080';
+  bt.style.background=modo==='terr'?'#005F9E':'transparent';bt.style.color=modo==='terr'?'white':'#4A6080';
+}
+function initTerrSelectors(){
+  const sel=document.getElementById('terr-ss');if(!sel)return;
+  while(sel.options.length>1)sel.remove(1);
+  [...new Set(DATA.map(d=>d.s))].filter(Boolean).sort().forEach(ss=>{
+    const o=document.createElement('option');o.value=ss;o.textContent=ss;sel.appendChild(o);
+  });
+}
+function terrCascade(){
+  const ss=document.getElementById('terr-ss').value;
+  const selCom=document.getElementById('terr-comuna');
+  const selE=document.getElementById('terr-estab');
+  selCom.innerHTML='<option value="">— Todas —</option>';
+  const base=ss?DATA.filter(d=>d.s===ss):DATA;
+  [...new Set(base.map(d=>d.c))].filter(Boolean).sort().forEach(c=>{
+    const o=document.createElement('option');o.value=c;o.textContent=c;selCom.appendChild(o);
+  });
+  selE.innerHTML='<option value="">— Todos —</option>';
+  base.slice().sort((a,b)=>a.n.localeCompare(b.n,'es')).forEach(d=>{
+    const o=document.createElement('option');o.value=d.id;o.textContent=d.n;selE.appendChild(o);
+  });
+  renderFicha();
+}
+function terrFiltraComunaChange(){
+  const ss=document.getElementById('terr-ss').value;
+  const com=document.getElementById('terr-comuna').value;
+  const selE=document.getElementById('terr-estab');
+  selE.innerHTML='<option value="">— Todos —</option>';
+  let base=ss?DATA.filter(d=>d.s===ss):DATA;
+  if(com)base=base.filter(d=>d.c===com);
+  base.slice().sort((a,b)=>a.n.localeCompare(b.n,'es')).forEach(d=>{
+    const o=document.createElement('option');o.value=d.id;o.textContent=d.n;selE.appendChild(o);
+  });
+  renderFicha();
+}
+function renderFicha(){
+  const ss=document.getElementById('terr-ss').value;
+  const com=document.getElementById('terr-comuna').value;
+  const eid=document.getElementById('terr-estab').value;
+  const empty=document.getElementById('ficha-empty');
+  const ficha=document.getElementById('ficha-territorio');
+  if(!ss&&!com&&!eid){empty.style.display='block';ficha.style.display='none';return;}
+  empty.style.display='none';ficha.style.display='block';
+  let fd=DATA;
+  if(eid)fd=fd.filter(d=>String(d.id)===String(eid));
+  else if(com)fd=fd.filter(d=>d.c===com);
+  else fd=fd.filter(d=>d.s===ss);
+  let nombre,sub,icon;
+  if(eid){const d=fd[0]||{};nombre=d.n||'—';sub=d.c+' · '+d.s+' · '+d.tc;icon='🏥';}
+  else if(com){nombre=com;icon='🏙️';sub=fd.length+' establecimientos · '+[...new Set(fd.map(d=>d.s))].join(', ');}
+  else{nombre=ss;icon='🗺️';sub=fd.length+' establecimientos · '+[...new Set(fd.map(d=>d.c))].length+' comunas';}
+  document.getElementById('ficha-icon').textContent=icon;
+  document.getElementById('ficha-nombre').textContent=nombre;
+  document.getElementById('ficha-sub').textContent=sub;
+  const totalAltas=fd.reduce((s,d)=>s+d.ta,0);
+  const pbc2025=fd.reduce((s,d)=>s+gp(d,'2025'),0);
+  const a2025=fd.reduce((s,d)=>s+ga(d,'2025'),0);
+  const pct2025=pbc2025>0?(a2025/pbc2025*100):0;
+  const catTot=fd.filter(d=>d.cat).reduce((s,d)=>s+d.cat.total,0);
+  document.getElementById('ficha-kpi-altas').textContent=fmt(totalAltas);
+  document.getElementById('ficha-kpi-pbc').textContent=fmt(pbc2025);
+  document.getElementById('ficha-kpi-pct').textContent=pct2025.toFixed(1)+'%';
+  document.getElementById('ficha-kpi-cat').textContent=catTot>0?fmt(catTot):'Sin datos';
+  const aV=YEARS.map(y=>fd.reduce((s,d)=>s+ga(d,y),0));
+  const pV=YEARS.map(y=>fd.reduce((s,d)=>s+gp(d,y),0));
+  const pctV=YEARS.map((y,i)=>pV[i]>0?parseFloat((aV[i]/pV[i]*100).toFixed(2)):0);
+  const mOpts=(isPct)=>({responsive:true,maintainAspectRatio:false,
+    plugins:{legend:{display:false},tooltip:{callbacks:{label:ctx=>isPct?' '+ctx.raw.toFixed(1)+'%':' '+fmt(ctx.raw)}}},
+    scales:{x:{ticks:{font:{size:8},maxRotation:0},grid:{display:false}},
+            y:{ticks:{font:{size:8},callback:v=>isPct?v.toFixed(0)+'%':fmt(v)},grid:{color:'rgba(0,0,0,0.05)'}}}});
+  if(fichaCharts.altas)fichaCharts.altas.destroy();
+  fichaCharts.altas=new Chart(document.getElementById('ficha-c-altas').getContext('2d'),{
+    type:'bar',data:{labels:YEARS,datasets:[{data:aV,backgroundColor:aV.map((_,i)=>i===6?'rgba(208,34,42,.7)':'rgba(0,95,158,.7)'),borderRadius:2}]},options:mOpts(false)});
+  if(fichaCharts.pbc)fichaCharts.pbc.destroy();
+  fichaCharts.pbc=new Chart(document.getElementById('ficha-c-pbc').getContext('2d'),{
+    type:'bar',data:{labels:YEARS,datasets:[{data:pV,backgroundColor:'rgba(46,139,87,.7)',borderRadius:2}]},options:mOpts(false)});
+  if(fichaCharts.pct)fichaCharts.pct.destroy();
+  fichaCharts.pct=new Chart(document.getElementById('ficha-c-pct').getContext('2d'),{
+    type:'line',data:{labels:YEARS,datasets:[{data:pctV,borderColor:'#7c3aed',backgroundColor:'rgba(124,58,237,.08)',fill:true,tension:0.35,pointRadius:3,borderWidth:2,pointBackgroundColor:pctV.map((_,i)=>i===6?'#D0222A':'#7c3aed')}]},options:mOpts(true)});
+  const catDiv=document.getElementById('ficha-cat-content');
+  if(catTot>0){
+    catDiv.innerHTML='<div style="position:relative;height:120px"><canvas id="ficha-c-cat"></canvas></div>';
+    const CK=['N0','N1','N2','N3','N4'],CC={'N0':'#94a3b8','N1':'#005F9E','N2':'#E67E22','N3':'#D0222A','N4':'#7c3aed'};
+    const cv=CK.map(k=>fd.filter(d=>d.cat).reduce((s,d)=>s+(d.cat[k]||0),0));
+    if(fichaCharts.cat)fichaCharts.cat.destroy();
+    fichaCharts.cat=new Chart(document.getElementById('ficha-c-cat').getContext('2d'),{
+      type:'doughnut',data:{labels:CK.map((k,i)=>k+': '+fmt(cv[i])),datasets:[{data:cv,backgroundColor:CK.map(k=>CC[k]),borderColor:'#fff',borderWidth:2}]},
+      options:{responsive:true,maintainAspectRatio:false,cutout:'55%',
+        plugins:{legend:{position:'right',labels:{font:{size:9},padding:4,boxWidth:10}},
+          tooltip:{callbacks:{label:ctx=>{const t=ctx.dataset.data.reduce((a,b)=>a+b,0);return ' '+ctx.label.split(':')[0]+': '+fmt(ctx.raw)+' ('+( ctx.raw/t*100).toFixed(1)+'%)';}}}}}});
+  } else {
+    catDiv.innerHTML='<div style="display:flex;align-items:center;justify-content:center;height:120px;flex-direction:column;gap:8px;color:#4A6080"><div style="font-size:24px">⚠️</div><div style="font-size:11px;text-align:center">Sin datos de categorización<br>para este territorio</div></div>';
+  }
+}
+function verFichaCompleta(){
+  F.ss=document.getElementById('terr-ss').value;
+  F.comuna=document.getElementById('terr-comuna').value;
+  F.estab=document.getElementById('terr-estab').value;
+  F.anio='total';
+  document.getElementById('f-ss').value=F.ss;
+  rebuiltComunas();
+  document.getElementById('f-comuna').value=F.comuna;
+  rebuiltEstabs();
+  if(F.estab)document.getElementById('f-estab').value=F.estab;
+  document.getElementById('f-anio').value='total';
+  actualizarTodo();
+  switchTab('altas',document.querySelectorAll('.tab-btn')[1]);
+}
+// ============================================================
+
+
+// ============================================================
+// START
+// ============================================================
+window.addEventListener('load',function(){
+  init();
+  const ov=document.getElementById('loading-overlay');
+  if(ov){ov.style.opacity='0';ov.style.transition='opacity .3s';setTimeout(()=>ov.remove(),300);}
+});
+</script>
+</body>
+</html>
