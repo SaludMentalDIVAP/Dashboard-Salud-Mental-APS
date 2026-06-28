@@ -198,6 +198,10 @@ tbody td.rank{font-weight:800;color:var(--az2);text-align:center}
         <div style="font-size:10px;opacity:.7;margin-top:2px">Altas clínicas 2014–2025</div>
         <div style="font-size:22px;font-weight:800;color:#90EE90;margin-top:8px" id="home-pbc-2025">—</div>
         <div style="font-size:10px;opacity:.7;margin-top:2px">Bajo control dic. 2025</div>
+        <div style="font-size:18px;font-weight:800;color:#FFD700;margin-top:8px" id="home-ind-2025">—</div>
+        <div style="font-size:10px;opacity:.7;margin-top:2px">% Altas/PBC 2025</div>
+        <div style="font-size:18px;font-weight:800;color:#FFA07A;margin-top:8px" id="home-cat-total">—</div>
+        <div style="font-size:10px;opacity:.7;margin-top:2px">Categorizados 2025</div>
       </div>
     </div>
 
@@ -247,7 +251,7 @@ tbody td.rank{font-weight:800;color:var(--az2);text-align:center}
     <div id="modo-terr" style="display:none">
       <div style="background:white;border-radius:12px;box-shadow:0 2px 12px rgba(0,60,120,.10);padding:18px 22px;margin-bottom:16px">
         <div style="font-size:12px;font-weight:700;color:#005F9E;text-transform:uppercase;letter-spacing:.8px;margin-bottom:12px">🔍 Seleccionar territorio</div>
-        <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;align-items:end">
+        <div style="display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:12px;align-items:end">
           <div>
             <label style="font-size:10px;font-weight:700;color:#4A6080;text-transform:uppercase;letter-spacing:.5px;display:block;margin-bottom:5px">Servicio de Salud</label>
             <select id="terr-ss" class="filtro" style="width:100%" onchange="terrCascade()"><option value="">— Nacional —</option></select>
@@ -260,6 +264,24 @@ tbody td.rank{font-weight:800;color:var(--az2);text-align:center}
             <label style="font-size:10px;font-weight:700;color:#4A6080;text-transform:uppercase;letter-spacing:.5px;display:block;margin-bottom:5px">Establecimiento</label>
             <select id="terr-estab" class="filtro" style="width:100%" onchange="renderFicha()"><option value="">— Todos —</option></select>
           </div>
+          <div>
+            <label style="font-size:10px;font-weight:700;color:#E67E22;text-transform:uppercase;letter-spacing:.5px;display:block;margin-bottom:5px">Año KPIs</label>
+            <select id="terr-anio" class="filtro" style="width:100%;border-color:#E67E22" onchange="renderFicha()">
+              <option value="total">Total 2014–2025</option>
+              <option value="2025" selected>2025</option>
+              <option value="2024">2024</option>
+              <option value="2023">2023</option>
+              <option value="2022">2022</option>
+              <option value="2021">2021</option>
+              <option value="2020">2020</option>
+              <option value="2019">2019</option>
+              <option value="2018">2018</option>
+              <option value="2017">2017</option>
+              <option value="2016">2016</option>
+              <option value="2015">2015</option>
+              <option value="2014">2014</option>
+            </select>
+          </div>
         </div>
       </div>
 
@@ -269,9 +291,9 @@ tbody td.rank{font-weight:800;color:var(--az2);text-align:center}
           <div><div style="font-size:16px;font-weight:800" id="ficha-nombre">—</div><div style="font-size:11px;opacity:.75;margin-top:3px" id="ficha-sub">—</div></div>
         </div>
         <div style="display:grid;grid-template-columns:repeat(4,1fr);background:white;border-left:1.5px solid #D0DCE8;border-right:1.5px solid #D0DCE8">
-          <div style="padding:14px 16px;border-right:1px solid #D0DCE8;text-align:center"><div style="font-size:10px;color:#4A6080;font-weight:600;text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px">Altas SM 2014–2025</div><div style="font-size:22px;font-weight:800;color:#005F9E" id="ficha-kpi-altas">—</div></div>
-          <div style="padding:14px 16px;border-right:1px solid #D0DCE8;text-align:center"><div style="font-size:10px;color:#4A6080;font-weight:600;text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px">Bajo Control dic. 2025</div><div style="font-size:22px;font-weight:800;color:#2E8B57" id="ficha-kpi-pbc">—</div></div>
-          <div style="padding:14px 16px;border-right:1px solid #D0DCE8;text-align:center"><div style="font-size:10px;color:#4A6080;font-weight:600;text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px">% Altas/PBC 2025</div><div style="font-size:22px;font-weight:800;color:#7c3aed" id="ficha-kpi-pct">—</div></div>
+          <div style="padding:14px 16px;border-right:1px solid #D0DCE8;text-align:center"><div style="font-size:10px;color:#4A6080;font-weight:600;text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px" id="ficha-lbl-altas">Altas SM</div><div style="font-size:22px;font-weight:800;color:#005F9E" id="ficha-kpi-altas">—</div></div>
+          <div style="padding:14px 16px;border-right:1px solid #D0DCE8;text-align:center"><div style="font-size:10px;color:#4A6080;font-weight:600;text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px" id="ficha-lbl-pbc">Bajo Control</div><div style="font-size:22px;font-weight:800;color:#2E8B57" id="ficha-kpi-pbc">—</div></div>
+          <div style="padding:14px 16px;border-right:1px solid #D0DCE8;text-align:center"><div style="font-size:10px;color:#4A6080;font-weight:600;text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px" id="ficha-lbl-pct">% Altas/PBC</div><div style="font-size:22px;font-weight:800;color:#7c3aed" id="ficha-kpi-pct">—</div></div>
           <div style="padding:14px 16px;text-align:center"><div style="font-size:10px;color:#4A6080;font-weight:600;text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px">Categorizados 2025</div><div style="font-size:22px;font-weight:800;color:#E67E22" id="ficha-kpi-cat">—</div></div>
         </div>
         <div style="display:grid;grid-template-columns:1fr 1fr;background:white;border:1.5px solid #D0DCE8;border-top:none;border-radius:0 0 12px 12px;overflow:hidden">
@@ -883,6 +905,11 @@ function switchTab(name, btn) {
 // ============================================================
 // INIT
 // ============================================================
+function safeGet(id){
+  const el=document.getElementById(id);
+  if(!el) console.warn('Element not found:',id);
+  return el;
+}
 function init() {
   const ss = [...new Set(DATA.map(d=>d.s))].filter(Boolean).sort();
   const tipos = [...new Set(DATA.map(d=>d.t))].filter(Boolean).sort();
@@ -1887,15 +1914,21 @@ function renderFicha(){
   document.getElementById('ficha-icon').textContent=icon;
   document.getElementById('ficha-nombre').textContent=nombre;
   document.getElementById('ficha-sub').textContent=sub;
-  const totalAltas=fd.reduce((s,d)=>s+d.ta,0);
-  const pbc2025=fd.reduce((s,d)=>s+gp(d,'2025'),0);
-  const a2025=fd.reduce((s,d)=>s+ga(d,'2025'),0);
-  const pct2025=pbc2025>0?(a2025/pbc2025*100):0;
+  const fAnio=(document.getElementById('terr-anio')||{}).value||'2025';
+  const anioLabel=fAnio==='total'?'2014–2025':fAnio;
+  const totalAltas=fAnio==='total'?fd.reduce((s,d)=>s+d.ta,0):fd.reduce((s,d)=>s+ga(d,fAnio),0);
+  const pbcVal=fAnio==='total'?fd.reduce((s,d)=>s+d.tp,0):fd.reduce((s,d)=>s+gp(d,fAnio),0);
+  const altasVal=fAnio==='total'?totalAltas:fd.reduce((s,d)=>s+ga(d,fAnio),0);
+  const pctVal=pbcVal>0?(altasVal/pbcVal*100):0;
   const catTot=fd.filter(d=>d.cat).reduce((s,d)=>s+d.cat.total,0);
-  document.getElementById('ficha-kpi-altas').textContent=fmt(totalAltas);
-  document.getElementById('ficha-kpi-pbc').textContent=fmt(pbc2025);
-  document.getElementById('ficha-kpi-pct').textContent=pct2025.toFixed(1)+'%';
-  document.getElementById('ficha-kpi-cat').textContent=catTot>0?fmt(catTot):'Sin datos';
+  const set=(id,v)=>{const el=document.getElementById(id);if(el)el.textContent=v;};
+  set('ficha-lbl-altas','Altas SM '+anioLabel);
+  set('ficha-lbl-pbc','Bajo Control '+anioLabel);
+  set('ficha-lbl-pct','% Altas/PBC '+anioLabel);
+  set('ficha-kpi-altas',fmt(totalAltas));
+  set('ficha-kpi-pbc',fmt(pbcVal));
+  set('ficha-kpi-pct',pctVal.toFixed(1)+'%');
+  set('ficha-kpi-cat',catTot>0?fmt(catTot):'Sin datos');
   const aV=YEARS.map(y=>fd.reduce((s,d)=>s+ga(d,y),0));
   const pV=YEARS.map(y=>fd.reduce((s,d)=>s+gp(d,y),0));
   const pctV=YEARS.map((y,i)=>pV[i]>0?parseFloat((aV[i]/pV[i]*100).toFixed(2)):0);
