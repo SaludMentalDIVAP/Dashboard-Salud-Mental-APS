@@ -149,6 +149,7 @@ tbody td.rank{font-weight:800;color:var(--az2);text-align:center}
     <button class="tab-btn" onclick="switchTab('ind',this)">📊 % Altas / PBC</button>
     <button class="tab-btn" onclick="switchTab('cat',this)">🗂️ Categorización SM</button>
     <button class="tab-btn" onclick="switchTab('ing',this)">📥 Ingresos SM</button>
+    <button class="tab-btn" onclick="switchTab('catind',this)">🔢 % Categ./Ingresos</button>
   </div>
 </div>
 
@@ -237,6 +238,12 @@ tbody td.rank{font-weight:800;color:var(--az2);text-align:center}
           <div style="font-size:13px;font-weight:800;color:#003F6B;margin-bottom:5px">Ingresos SM</div>
           <div style="font-size:11px;color:#4A6080;line-height:1.5">Personas que ingresaron a tratamiento de salud mental en APS. Evolución 2014–2025 por SS, tipo y establecimiento.</div>
           <div style="margin-top:10px;font-size:10px;font-weight:700;color:#16a085;text-transform:uppercase;letter-spacing:.5px">10 gráficos + mapa + tabla →</div>
+        </div>
+        <div onclick="switchTabByName('catind')" style="background:white;border-radius:12px;box-shadow:0 2px 12px rgba(0,60,120,.10);padding:20px 22px;cursor:pointer;border-left:5px solid #8e44ad;transition:all .2s" onmouseover="this.style.transform='translateY(-2px)';this.style.boxShadow='0 6px 24px rgba(0,60,120,.18)'" onmouseout="this.style.transform='none';this.style.boxShadow='0 2px 12px rgba(0,60,120,.10)'">
+          <div style="font-size:26px;margin-bottom:8px">🔢</div>
+          <div style="font-size:13px;font-weight:800;color:#003F6B;margin-bottom:5px">% Categ. / Ingresos</div>
+          <div style="font-size:11px;color:#4A6080;line-height:1.5">Cobertura de categorización N0–N4 sobre ingresos SM 2025. Solo establecimientos con ambos datos disponibles.</div>
+          <div style="margin-top:10px;font-size:10px;font-weight:700;color:#8e44ad;text-transform:uppercase;letter-spacing:.5px">5 gráficos + tabla →</div>
         </div>
         <div onclick="switchTabByName('cat')" style="background:white;border-radius:12px;box-shadow:0 2px 12px rgba(0,60,120,.10);padding:20px 22px;cursor:pointer;border-left:5px solid #E67E22;transition:all .2s" onmouseover="this.style.transform='translateY(-2px)';this.style.boxShadow='0 6px 24px rgba(0,60,120,.18)'" onmouseout="this.style.transform='none';this.style.boxShadow='0 2px 12px rgba(0,60,120,.10)'">
           <div style="font-size:26px;margin-bottom:8px">🗂️</div>
@@ -835,6 +842,76 @@ tbody td.rank{font-weight:800;color:var(--az2);text-align:center}
 </div>
 </div>
 
+<!-- ===== TAB % CATEGORIZADOS / INGRESOS ===== -->
+<div id="tab-catind" class="tab-content">
+<div class="main">
+  <div class="ind-note">
+    <strong>📌 Definición del indicador:</strong> El <strong>Porcentaje de Categorizados en relación a los Ingresos</strong> se calcula como <strong>Total Categorizados (N0–N4) ÷ Ingresos SM × 100</strong>, ambos del año <strong>2025</strong>. Indica qué proporción de las personas que ingresaron a tratamiento SM en APS fueron además categorizadas según el modelo N0–N4. Solo se incluyen los <strong id="catind-n-estab">—</strong> establecimientos con ambos datos disponibles en 2025. Un valor mayor indica mayor cobertura de categorización sobre los ingresos.
+  </div>
+
+  <div class="kpi-row">
+    <div class="kpi-card"><div class="kpi-icon">📊</div><div class="kpi-label">% Promedio Nacional</div><div class="kpi-value sm" id="ci-kpi-pct">—</div><div class="kpi-sub" id="ci-kpi-pct-sub">Cat. / Ingresos × 100</div></div>
+    <div class="kpi-card verde"><div class="kpi-icon">🏥</div><div class="kpi-label">Establecimientos</div><div class="kpi-value" id="ci-kpi-estab">—</div><div class="kpi-sub">Con ambos datos 2025</div></div>
+    <div class="kpi-card naranja"><div class="kpi-icon">🗂️</div><div class="kpi-label">Total categorizados</div><div class="kpi-value sm" id="ci-kpi-cat">—</div><div class="kpi-sub">Año 2025</div></div>
+    <div class="kpi-card rojo"><div class="kpi-icon">📥</div><div class="kpi-label">Total ingresos</div><div class="kpi-value sm" id="ci-kpi-ing">—</div><div class="kpi-sub">Año 2025</div></div>
+    <div class="kpi-card morado"><div class="kpi-icon">🥇</div><div class="kpi-label">SS con mayor %</div><div class="kpi-value xs" id="ci-kpi-top-ss">—</div><div class="kpi-sub" id="ci-kpi-top-ss-val">—</div></div>
+  </div>
+
+  <div class="sec-title">📈 Indicador por Servicio de Salud</div><div class="sec-sep"></div>
+  <div class="charts-grid g2">
+    <div class="chart-card">
+      <div class="chart-header"><div><div class="chart-title">% Categorizados / Ingresos por Servicio de Salud</div><div class="chart-sub">Ordenado de mayor a menor · Solo SS con ambos datos en 2025</div></div><div class="chart-badge">SS</div></div>
+      <div class="cw xt"><canvas id="ci-c-ss"></canvas></div>
+    </div>
+    <div class="chart-card">
+      <div class="chart-header"><div><div class="chart-title">Comparativa Categorizados vs Ingresos 2025</div><div class="chart-sub">Volumen absoluto de ambas variables con % superpuesto</div></div><div class="chart-badge">Dual</div></div>
+      <div class="cw t"><canvas id="ci-c-dual"></canvas></div>
+    </div>
+  </div>
+
+  <div class="sec-title" style="margin-top:22px">🏥 Indicador por Tipo y Dependencia</div><div class="sec-sep"></div>
+  <div class="charts-grid g2">
+    <div class="chart-card">
+      <div class="chart-header"><div><div class="chart-title">% Categ./Ingresos por Tipo de Establecimiento</div><div class="chart-sub">Cobertura de categorización según tipo de centro</div></div><div class="chart-badge">Tipo</div></div>
+      <div class="cw t"><canvas id="ci-c-tipo"></canvas></div>
+    </div>
+    <div class="chart-card">
+      <div class="chart-header"><div><div class="chart-title">% Categ./Ingresos por Dependencia Administrativa</div><div class="chart-sub">Municipal vs. Servicio de Salud vs. Otra</div></div><div class="chart-badge">Dependencia</div></div>
+      <div class="cw t"><canvas id="ci-c-dep"></canvas></div>
+    </div>
+  </div>
+
+  <div class="sec-title" style="margin-top:22px">🌆 Indicador por Comunas — Top 20</div><div class="sec-sep"></div>
+  <div class="charts-grid g1">
+    <div class="chart-card">
+      <div class="chart-header"><div><div class="chart-title">% Categ./Ingresos por Comuna</div><div class="chart-sub">Top 20 comunas con mayor porcentaje · Solo comunas con ambos datos</div></div><div class="chart-badge">Top 20</div></div>
+      <div class="cw xt"><canvas id="ci-c-comunas"></canvas></div>
+    </div>
+  </div>
+
+  <div class="sec-title" style="margin-top:22px">📋 Tabla por Establecimiento</div><div class="sec-sep"></div>
+  <div class="charts-grid g1">
+    <div class="chart-card">
+      <div class="chart-header"><div><div class="chart-title">% Categ./Ingresos por Establecimiento — 2025</div><div class="chart-sub">Solo establecimientos con categorización e ingresos · Ordenar haciendo clic en encabezados</div></div><div class="chart-badge" id="ci-badge-tabla">—</div></div>
+      <div class="tabla-wrap">
+        <table><thead><tr>
+          <th onclick="sortTab('ci-tabla-body',0)">#</th>
+          <th onclick="sortTab('ci-tabla-body',1)">Establecimiento ↕</th>
+          <th onclick="sortTab('ci-tabla-body',2)">Comuna ↕</th>
+          <th onclick="sortTab('ci-tabla-body',3)">Servicio de Salud ↕</th>
+          <th onclick="sortTab('ci-tabla-body',4)">Tipo ↕</th>
+          <th onclick="sortTab('ci-tabla-body',5)">Categorizados ↕</th>
+          <th onclick="sortTab('ci-tabla-body',6)">Ingresos 2025 ↕</th>
+          <th onclick="sortTab('ci-tabla-body',7)">% Categ./Ing. ↕</th>
+          <th>Barra</th>
+        </tr></thead>
+        <tbody id="ci-tabla-body"></tbody></table>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+
 <div class="footer">
   División de Atención Primaria (DIVAP) · Departamento de Salud Mental · Ministerio de Salud de Chile &nbsp;|&nbsp; Datos DEIS MINSAL · Altas Clínicas SM y Población Bajo Control APS 2014–2025
 </div>
@@ -1057,6 +1134,12 @@ function actualizarTodo() {
   grafIng(fd);
   tablaIng(fd);
   actualizarMapaIng();
+
+  // Tab % Categ./Ingresos
+  const fci=filteredCatIndData();
+  kpisCatInd(fci);
+  grafCatInd(fci);
+  tablaCatInd(fci);
 
   // Tab Categorización
   const fcd=filteredCatData();
@@ -1753,7 +1836,7 @@ function actualizarMapaCat() {
 // ── switchTabByName (for home cards) ──────────────────────────────────────
 function switchTabByName(name) {
   const btns = document.querySelectorAll('.tab-btn');
-  const tabNames = ['home','altas','pbc','ind','cat','ing'];
+  const tabNames = ['home','altas','pbc','ind','cat','ing','catind'];
   const idx = tabNames.indexOf(name);
   if(idx>=0) switchTab(name, btns[idx]);
 }
@@ -1846,6 +1929,187 @@ function initMapaIng(){
   actualizarMapaIng();
 }
 function actualizarMapaIng(){actualizarMapa('i2','ing');}
+
+
+// ============================================================
+// % CATEGORIZADOS / INGRESOS 2025
+// ============================================================
+function filteredCatIndData() {
+  // Only establishments with cat AND ingresos 2025 > 0, respecting global filters
+  return filteredData().filter(d => d.cat && d.cat.total > 0 && gi(d,'2025') > 0);
+}
+
+function pctCatInd(cat_total, ing) {
+  return ing > 0 ? (cat_total / ing * 100) : 0;
+}
+
+function kpisCatInd(fci) {
+  const totCat = fci.reduce((s,d)=>s+d.cat.total, 0);
+  const totIng = fci.reduce((s,d)=>s+gi(d,'2025'), 0);
+  const pctNac = pctCatInd(totCat, totIng);
+  const set=(id,v)=>{const el=document.getElementById(id);if(el)el.textContent=v;};
+  set('ci-kpi-pct',    pctNac.toFixed(1)+'%');
+  set('ci-kpi-pct-sub', fmt(totCat)+' cat / '+fmt(totIng)+' ing');
+  set('ci-kpi-estab',  fci.length.toLocaleString('es-CL'));
+  set('ci-kpi-cat',    fmt(totCat));
+  set('ci-kpi-ing',    fmt(totIng));
+  set('catind-n-estab', fci.length.toLocaleString('es-CL'));
+  // Top SS
+  const bySS={};
+  fci.forEach(d=>{
+    if(!bySS[d.s]) bySS[d.s]={cat:0,ing:0};
+    bySS[d.s].cat+=d.cat.total;
+    bySS[d.s].ing+=gi(d,'2025');
+  });
+  const ssPcts=Object.entries(bySS)
+    .map(([ss,v])=>({ss,pct:pctCatInd(v.cat,v.ing)}))
+    .filter(x=>x.pct>0).sort((a,b)=>b.pct-a.pct);
+  if(ssPcts.length>0){
+    set('ci-kpi-top-ss', ssPcts[0].ss.split(' ')[0]);
+    set('ci-kpi-top-ss-val', ssPcts[0].pct.toFixed(1)+'% cobertura');
+  }
+}
+
+function grafCatInd(fci) {
+  // SS chart
+  const bySS={};
+  fci.forEach(d=>{
+    if(!bySS[d.s]) bySS[d.s]={cat:0,ing:0};
+    bySS[d.s].cat+=d.cat.total;
+    bySS[d.s].ing+=gi(d,'2025');
+  });
+  const ssData=Object.entries(bySS)
+    .map(([ss,v])=>({ss,pct:pctCatInd(v.cat,v.ing),cat:v.cat,ing:v.ing}))
+    .filter(x=>x.ing>0).sort((a,b)=>b.pct-a.pct);
+
+  // Color scale: green (high) to red (low)
+  const colorScale=(pct,arr)=>{
+    const vals=arr.map(x=>x.pct);
+    const min=Math.min(...vals), max=Math.max(...vals);
+    const norm=(pct-min)/(max-min||1);
+    const r=Math.round(208-(208-46)*norm);
+    const g=Math.round(34+(139-34)*norm);
+    const b=Math.round(42+(87-42)*norm);
+    return `rgba(${r},${g},${b},0.8)`;
+  };
+
+  mkChart('ci-c-ss',{type:'bar',data:{
+    labels:ssData.map(x=>x.ss),
+    datasets:[{label:'% Categ./Ingresos',data:ssData.map(x=>parseFloat(x.pct.toFixed(1))),
+      backgroundColor:ssData.map(x=>colorScale(x.pct,ssData)),borderRadius:4}]
+  },options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,
+    plugins:{legend:{display:false},tooltip:{callbacks:{label:ctx=>{
+      const d=ssData[ctx.dataIndex];
+      return [` ${ctx.raw.toFixed(1)}%`,` ${fmt(d.cat)} categorizados / ${fmt(d.ing)} ingresos`];
+    }}}},
+    scales:{x:{ticks:{callback:v=>v.toFixed(0)+'%',font:{size:9}},max:100},
+            y:{ticks:{font:{size:9}}}}}});
+
+  // Dual: cat + ing bars + % line
+  const totCat=fci.reduce((s,d)=>s+d.cat.total,0);
+  const totIng=fci.reduce((s,d)=>s+gi(d,'2025'),0);
+  const pctNac=pctCatInd(totCat,totIng);
+  // By SS for dual
+  mkChart('ci-c-dual',{type:'bar',data:{
+    labels:ssData.map(x=>x.ss),
+    datasets:[
+      {label:'Categorizados',data:ssData.map(x=>x.cat),backgroundColor:'rgba(230,126,34,0.7)',borderRadius:3,order:2},
+      {label:'Ingresos 2025',data:ssData.map(x=>x.ing),backgroundColor:'rgba(22,160,133,0.4)',borderRadius:3,order:3},
+      {label:'% Categ./Ing.',data:ssData.map(x=>parseFloat(x.pct.toFixed(1))),type:'line',
+        borderColor:'#7c3aed',backgroundColor:'transparent',pointRadius:4,borderWidth:2.5,
+        yAxisID:'y2',order:1}
+    ]
+  },options:{responsive:true,maintainAspectRatio:false,
+    plugins:{legend:{position:'bottom',labels:{font:{size:10},boxWidth:12}},
+      tooltip:{mode:'index',intersect:false}},
+    scales:{
+      x:{ticks:{font:{size:9},maxRotation:45},grid:{display:false}},
+      y:{ticks:{callback:v=>fmt(v),font:{size:9}},position:'left'},
+      y2:{ticks:{callback:v=>v.toFixed(0)+'%',font:{size:9}},position:'right',
+          grid:{display:false},max:100}
+    }}});
+
+  // By tipo
+  const byTipo={};
+  fci.forEach(d=>{
+    if(!byTipo[d.t]) byTipo[d.t]={cat:0,ing:0};
+    byTipo[d.t].cat+=d.cat.total; byTipo[d.t].ing+=gi(d,'2025');
+  });
+  const tipoData=Object.entries(byTipo)
+    .map(([t,v])=>({t,pct:pctCatInd(v.cat,v.ing)}))
+    .filter(x=>x.ing>0||x.pct>0).sort((a,b)=>b.pct-a.pct);
+  mkChart('ci-c-tipo',{type:'bar',data:{
+    labels:tipoData.map(x=>x.t),
+    datasets:[{label:'% Categ./Ingresos',data:tipoData.map(x=>parseFloat(x.pct.toFixed(1))),
+      backgroundColor:tipoData.map(x=>(TIPO_C[x.t]||'#999')+'CC'),borderRadius:4}]
+  },options:{responsive:true,maintainAspectRatio:false,
+    plugins:{legend:{display:false},tooltip:{callbacks:{label:ctx=>` ${ctx.raw.toFixed(1)}%`}}},
+    scales:{x:{ticks:{font:{size:10}}},y:{ticks:{callback:v=>v.toFixed(0)+'%',font:{size:10}},max:100,beginAtZero:true}}}});
+
+  // By dependencia
+  const byDep={};
+  fci.forEach(d=>{
+    const dep=d.dep.trim();
+    if(!byDep[dep]) byDep[dep]={cat:0,ing:0};
+    byDep[dep].cat+=d.cat.total; byDep[dep].ing+=gi(d,'2025');
+  });
+  const depData=Object.entries(byDep)
+    .map(([dep,v])=>({dep,pct:pctCatInd(v.cat,v.ing)}))
+    .filter(x=>x.pct>0).sort((a,b)=>b.pct-a.pct);
+  mkChart('ci-c-dep',{type:'bar',data:{
+    labels:depData.map(x=>x.dep),
+    datasets:[{label:'% Categ./Ingresos',data:depData.map(x=>parseFloat(x.pct.toFixed(1))),
+      backgroundColor:depData.map(x=>(DEP_C[x.dep]||'#999')+'CC'),borderRadius:4}]
+  },options:{responsive:true,maintainAspectRatio:false,
+    plugins:{legend:{display:false},tooltip:{callbacks:{label:ctx=>` ${ctx.raw.toFixed(1)}%`}}},
+    scales:{x:{ticks:{font:{size:10}}},y:{ticks:{callback:v=>v.toFixed(0)+'%',font:{size:10}},max:100,beginAtZero:true}}}});
+
+  // By comuna top 20
+  const byCom={};
+  fci.forEach(d=>{
+    if(!byCom[d.c]) byCom[d.c]={cat:0,ing:0};
+    byCom[d.c].cat+=d.cat.total; byCom[d.c].ing+=gi(d,'2025');
+  });
+  const comData=Object.entries(byCom)
+    .map(([c,v])=>({c,pct:pctCatInd(v.cat,v.ing)}))
+    .filter(x=>x.pct>0).sort((a,b)=>b.pct-a.pct).slice(0,20);
+  mkChart('ci-c-comunas',{type:'bar',data:{
+    labels:comData.map(x=>x.c),
+    datasets:[{label:'% Categ./Ingresos',data:comData.map(x=>parseFloat(x.pct.toFixed(1))),
+      backgroundColor:comData.map(x=>colorScale(x.pct,comData)),borderRadius:4}]
+  },options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,
+    plugins:{legend:{display:false},tooltip:{callbacks:{label:ctx=>` ${ctx.raw.toFixed(1)}%`}}},
+    scales:{x:{ticks:{callback:v=>v.toFixed(0)+'%',font:{size:9}},max:100},
+            y:{ticks:{font:{size:9}}}}}});
+}
+
+function tablaCatInd(fci) {
+  const sorted=fci.map(d=>({
+    ...d,
+    ing2025: gi(d,'2025'),
+    pct: pctCatInd(d.cat.total, gi(d,'2025'))
+  })).sort((a,b)=>b.pct-a.pct);
+
+  const maxPct=sorted.length>0?sorted[0].pct:1;
+  const el=document.getElementById('ci-badge-tabla');
+  if(el) el.textContent=sorted.length+' establecimientos con ambos datos';
+  const elN=document.getElementById('catind-n-estab');
+  if(elN) elN.textContent=sorted.length.toLocaleString('es-CL');
+
+  const tbody=document.getElementById('ci-tabla-body');
+  if(!tbody) return;
+  tbody.innerHTML=sorted.map((d,i)=>`<tr>
+    <td class="rank">${i+1}</td>
+    <td>${d.n}</td>
+    <td>${d.c}</td>
+    <td>${d.s}</td>
+    <td><span style="background:${TIPO_C[d.t]||'#999'}22;color:${TIPO_C[d.t]||'#999'};font-weight:700;padding:2px 6px;border-radius:8px;font-size:10px">${d.t}</span></td>
+    <td class="num">${fmt(d.cat.total)}</td>
+    <td class="num">${fmt(d.ing2025)}</td>
+    <td class="num" style="font-weight:800;color:${d.pct>=75?'#2E8B57':d.pct>=50?'#E67E22':'#D0222A'}">${d.pct.toFixed(1)}%</td>
+    <td><div class="prog"><div class="prog-fill" style="width:${Math.min(d.pct,100).toFixed(1)}%;background:${d.pct>=75?'#2E8B57':d.pct>=50?'#E67E22':'#D0222A'}"></div></div></td>
+  </tr>`).join('');
+}
 
 // ============================================================
 // PANTALLA INICIO — TERRITORIO
