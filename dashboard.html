@@ -1736,13 +1736,14 @@ function updateHomeKPIs() {
   const totalAltas = DATA.reduce((s,d)=>s+d.ta,0);
   const pbc2025 = DATA.reduce((s,d)=>s+(gp(d,'2025')||0),0);
   const catTotal = DATA.filter(d=>d.cat).reduce((s,d)=>s+d.cat.total,0);
-  const altasPBC_a2025 = DATA.reduce((s,d)=>s+(ga(d,'2025')||0),0);
-  const altasPBC_p2025 = DATA.reduce((s,d)=>s+(gp(d,'2025')||0),0);
-  const pct2025 = altasPBC_p2025>0?(altasPBC_a2025/altasPBC_p2025*100):0;
-  document.getElementById('home-total-altas').textContent=fmt(totalAltas);
-  document.getElementById('home-pbc-2025').textContent=fmt(pbc2025);
-  document.getElementById('home-cat-total').textContent=fmt(catTotal);
-  document.getElementById('home-ind-2025').textContent=pct2025.toFixed(1)+'%';
+  const a2025 = DATA.reduce((s,d)=>s+(ga(d,'2025')||0),0);
+  const pct2025 = pbc2025>0?(a2025/pbc2025*100):0;
+  // Safe setter - only updates if element exists in current tab
+  const set=(id,v)=>{const el=document.getElementById(id);if(el)el.textContent=v;};
+  set('home-total-altas', fmt(totalAltas));
+  set('home-pbc-2025',    fmt(pbc2025));
+  set('home-cat-total',   fmt(catTotal));
+  set('home-ind-2025',    pct2025.toFixed(1)+'%');
 }
 
 
