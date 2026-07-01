@@ -150,6 +150,7 @@ tbody td.rank{font-weight:800;color:var(--az2);text-align:center}
     <button class="tab-btn" onclick="switchTab('cat',this)">🗂️ Categorización SM</button>
     <button class="tab-btn" onclick="switchTab('ing',this)">📥 Ingresos SM</button>
     <button class="tab-btn" onclick="switchTab('catind',this)">🔢 % Categ./Ingresos</button>
+    <button class="tab-btn" onclick="switchTab('ipg',this)">🤝 IPG</button>
   </div>
 </div>
 
@@ -238,6 +239,12 @@ tbody td.rank{font-weight:800;color:var(--az2);text-align:center}
           <div style="font-size:13px;font-weight:800;color:#003F6B;margin-bottom:5px">Ingresos SM</div>
           <div style="font-size:11px;color:#4A6080;line-height:1.5">Personas que ingresaron a tratamiento de salud mental en APS. Evolución 2014–2025 por SS, tipo y establecimiento.</div>
           <div style="margin-top:10px;font-size:10px;font-weight:700;color:#16a085;text-transform:uppercase;letter-spacing:.5px">10 gráficos + mapa + tabla →</div>
+        </div>
+        <div onclick="switchTabByName('ipg')" style="background:white;border-radius:12px;box-shadow:0 2px 12px rgba(0,60,120,.10);padding:20px 22px;cursor:pointer;border-left:5px solid #1abc9c;transition:all .2s" onmouseover="this.style.transform='translateY(-2px)';this.style.boxShadow='0 6px 24px rgba(0,60,120,.18)'" onmouseout="this.style.transform='none';this.style.boxShadow='0 2px 12px rgba(0,60,120,.10)'">
+          <div style="font-size:26px;margin-bottom:8px">🤝</div>
+          <div style="font-size:13px;font-weight:800;color:#003F6B;margin-bottom:5px">Intervenciones Psicosociales Grupales</div>
+          <div style="font-size:11px;color:#4A6080;line-height:1.5">IPG realizadas en APS 2014–2025. Análisis por SS, tipo, dependencia y mapa georreferenciado.</div>
+          <div style="margin-top:10px;font-size:10px;font-weight:700;color:#1abc9c;text-transform:uppercase;letter-spacing:.5px">10 gráficos + mapa + tabla →</div>
         </div>
         <div onclick="switchTabByName('catind')" style="background:white;border-radius:12px;box-shadow:0 2px 12px rgba(0,60,120,.10);padding:20px 22px;cursor:pointer;border-left:5px solid #8e44ad;transition:all .2s" onmouseover="this.style.transform='translateY(-2px)';this.style.boxShadow='0 6px 24px rgba(0,60,120,.18)'" onmouseout="this.style.transform='none';this.style.boxShadow='0 2px 12px rgba(0,60,120,.10)'">
           <div style="font-size:26px;margin-bottom:8px">🔢</div>
@@ -912,6 +919,117 @@ tbody td.rank{font-weight:800;color:var(--az2);text-align:center}
 </div>
 </div>
 
+<!-- ===== TAB IPG ===== -->
+<div id="tab-ipg" class="tab-content">
+<div class="main">
+  <div class="ind-note">
+    <strong>📌 Intervenciones Psicosociales Grupales (IPG) en APS:</strong> Las IPG son intervenciones terapéuticas realizadas en formato grupal en los centros de Atención Primaria de Salud, orientadas al tratamiento y rehabilitación de personas con problemas de salud mental. Se registra el número de intervenciones realizadas por año en cada establecimiento. Datos 2014–2025.
+  </div>
+
+  <div class="kpi-row">
+    <div class="kpi-card"><div class="kpi-icon">🤝</div><div class="kpi-label">Total IPG</div><div class="kpi-value" id="ipg-kpi-total">—</div><div class="kpi-sub" id="ipg-kpi-total-sub">—</div></div>
+    <div class="kpi-card verde"><div class="kpi-icon">🏥</div><div class="kpi-label">Establecimientos activos</div><div class="kpi-value" id="ipg-kpi-estab">—</div><div class="kpi-sub">Con registro de IPG</div></div>
+    <div class="kpi-card naranja"><div class="kpi-icon">📊</div><div class="kpi-label">Promedio anual / estab.</div><div class="kpi-value sm" id="ipg-kpi-prom">—</div><div class="kpi-sub">IPG por centro por año</div></div>
+    <div class="kpi-card rojo"><div class="kpi-icon">📈</div><div class="kpi-label">Año con más IPG</div><div class="kpi-value sm" id="ipg-kpi-best-yr">—</div><div class="kpi-sub" id="ipg-kpi-best-yr-val">—</div></div>
+    <div class="kpi-card morado"><div class="kpi-icon">🥇</div><div class="kpi-label">SS líder</div><div class="kpi-value xs" id="ipg-kpi-top-ss">—</div><div class="kpi-sub" id="ipg-kpi-top-ss-val">—</div></div>
+  </div>
+
+  <div class="sec-title">📈 Tendencia Temporal</div><div class="sec-sep"></div>
+  <div class="charts-grid g1" style="margin-bottom:18px">
+    <div class="chart-card">
+      <div class="chart-header"><div><div class="chart-title">Evolución Total de IPG por Año (2014–2025)</div><div class="chart-sub">Total nacional según filtros activos · Impacto COVID-19 visible en 2020–2021</div></div><div class="chart-badge">Nacional</div></div>
+      <div class="cw t"><canvas id="ipg-c-tend"></canvas></div>
+    </div>
+  </div>
+
+  <div class="charts-grid g2">
+    <div class="chart-card">
+      <div class="chart-header"><div><div class="chart-title">IPG por Servicio de Salud</div><div class="chart-sub">Comparación entre los 29 SS</div></div><div class="chart-badge">SS</div></div>
+      <div class="cw xt"><canvas id="ipg-c-ss"></canvas></div>
+    </div>
+    <div class="chart-card">
+      <div class="chart-header"><div><div class="chart-title">Variación % Año a Año</div><div class="chart-sub">Cambio porcentual respecto al año anterior</div></div><div class="chart-badge">Δ%</div></div>
+      <div class="cw t"><canvas id="ipg-c-var"></canvas></div>
+    </div>
+  </div>
+
+  <div class="sec-title" style="margin-top:22px">🏥 Análisis por Tipo y Dependencia</div><div class="sec-sep"></div>
+  <div class="charts-grid g3">
+    <div class="chart-card">
+      <div class="chart-header"><div><div class="chart-title">Distribución por Tipo de Establecimiento</div><div class="chart-sub">Participación en el total de IPG</div></div><div class="chart-badge">Tipo</div></div>
+      <div class="cw t"><canvas id="ipg-c-tipo-dona"></canvas></div>
+    </div>
+    <div class="chart-card">
+      <div class="chart-header"><div><div class="chart-title">Evolución por Tipo de Establecimiento</div><div class="chart-sub">Tendencia 2014–2025</div></div><div class="chart-badge">Tendencia</div></div>
+      <div class="cw t"><canvas id="ipg-c-tipo-linea"></canvas></div>
+    </div>
+    <div class="chart-card">
+      <div class="chart-header"><div><div class="chart-title">IPG por Dependencia</div><div class="chart-sub">Municipal vs SS vs Otra</div></div><div class="chart-badge">Dependencia</div></div>
+      <div class="cw t"><canvas id="ipg-c-dep"></canvas></div>
+    </div>
+  </div>
+
+  <div class="sec-title" style="margin-top:22px">🌆 Análisis Comunal y por Establecimiento</div><div class="sec-sep"></div>
+  <div class="charts-grid g2c">
+    <div class="chart-card">
+      <div class="chart-header"><div><div class="chart-title">Top 20 Comunas — IPG</div><div class="chart-sub">Ordenadas por total acumulado</div></div><div class="chart-badge">Top 20</div></div>
+      <div class="cw xxxl"><canvas id="ipg-c-comunas"></canvas></div>
+    </div>
+    <div class="chart-card">
+      <div class="chart-header"><div><div class="chart-title">Top 10 Establecimientos</div><div class="chart-sub">Centros con más IPG</div></div><div class="chart-badge">Ranking</div></div>
+      <div class="cw xxxl"><canvas id="ipg-c-top-estab"></canvas></div>
+    </div>
+  </div>
+
+  <div class="sec-title" style="margin-top:22px">🔥 Distribución Temporal por Servicio de Salud</div><div class="sec-sep"></div>
+  <div class="charts-grid g1">
+    <div class="chart-card">
+      <div class="chart-header"><div><div class="chart-title">IPG por SS y Año — Barras Apiladas</div><div class="chart-sub">Comparación multianual de todos los SS</div></div><div class="chart-badge">2014–2025</div></div>
+      <div class="cw xxxl"><canvas id="ipg-c-ss-anio"></canvas></div>
+    </div>
+  </div>
+
+  <div class="sec-title" style="margin-top:22px">🗺️ Mapa de IPG por Establecimiento</div><div class="sec-sep"></div>
+  <div class="charts-grid g1">
+    <div class="chart-card">
+      <div class="chart-header"><div><div class="chart-title">Mapa de IPG por Centro de Salud APS</div><div class="chart-sub">Tamaño proporcional al número de IPG · Clic en cada punto para ver detalle</div></div><div class="chart-badge">Georreferenciado</div></div>
+      <div class="map-ctrl">
+        <label style="font-size:11px;font-weight:600;color:var(--texto-s)">Año mapa:</label>
+        <select class="map-sel" id="ipg-map-year" onchange="actualizarMapaIPG()"><option value="total">Total 2014–2025</option></select>
+        <label style="font-size:11px;font-weight:600;color:var(--texto-s);margin-left:10px">Color por:</label>
+        <select class="map-sel" id="ipg-map-color" onchange="actualizarMapaIPG()">
+          <option value="tipo">Tipo Establecimiento</option>
+          <option value="dependencia">Dependencia</option>
+          <option value="ss">Servicio de Salud</option>
+        </select>
+      </div>
+      <div id="ipg-mapa" class="mapa"></div>
+      <div class="map-leg" id="ipg-map-leg"></div>
+    </div>
+  </div>
+
+  <div class="sec-title" style="margin-top:22px">📋 Tabla de Establecimientos — IPG</div><div class="sec-sep"></div>
+  <div class="charts-grid g1">
+    <div class="chart-card">
+      <div class="chart-header"><div><div class="chart-title">Detalle por Establecimiento — IPG</div><div class="chart-sub">Top 100 · Clic en encabezados para ordenar</div></div><div class="chart-badge" id="ipg-badge-tabla">Top 100</div></div>
+      <div class="tabla-wrap">
+        <table><thead><tr>
+          <th onclick="sortTab('ipg-tabla-body',0)">#</th>
+          <th onclick="sortTab('ipg-tabla-body',1)">Establecimiento ↕</th>
+          <th onclick="sortTab('ipg-tabla-body',2)">Comuna ↕</th>
+          <th onclick="sortTab('ipg-tabla-body',3)">Servicio de Salud ↕</th>
+          <th onclick="sortTab('ipg-tabla-body',4)">Tipo ↕</th>
+          <th onclick="sortTab('ipg-tabla-body',5)">Dependencia ↕</th>
+          <th onclick="sortTab('ipg-tabla-body',6)">Total IPG ↕</th>
+          <th>Barra</th>
+        </tr></thead>
+        <tbody id="ipg-tabla-body"></tbody></table>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+
 <div class="footer">
   División de Atención Primaria · Ministerio de Salud de Chile &nbsp;|&nbsp; Datos DEIS MINSAL · Altas Clínicas SM y Población Bajo Control APS 2014–2025
 </div>
@@ -926,10 +1044,10 @@ window._parseDatos = function(pkg){
     window.DATA = pkg.rows.map(r=>({
       id:r[0], n:r[1],
       c:pkg.com[r[2]], s:pkg.ss[r[3]], t:pkg.tip[r[4]], tc:pkg.tc[r[5]], dep:pkg.dep[r[6]],
-      lat:r[7], lon:r[8], ta:r[9], tp:r[10], ti:r[11],
-      a:r.slice(12,24), p:r.slice(24,36), i:r.slice(36,48),
-      cat:r[48]?{N0:r[48][0],N1:r[48][1],N2:r[48][2],N3:r[48][3],N4:r[48][4],
-                  total:r[48][0]+r[48][1]+r[48][2]+r[48][3]+r[48][4]}:null
+      lat:r[7], lon:r[8], ta:r[9], tp:r[10], ti:r[11], tg:r[12],
+      a:r.slice(13,25), p:r.slice(25,37), i:r.slice(37,49), g:r.slice(49,61),
+      cat:r[61]?{N0:r[61][0],N1:r[61][1],N2:r[61][2],N3:r[61][3],N4:r[61][4],
+                  total:r[61][0]+r[61][1]+r[61][2]+r[61][3]+r[61][4]}:null
     }));
   } catch(e) {
     console.error('Error:', e);
@@ -940,6 +1058,7 @@ const YEARS = ['2014','2015','2016','2017','2018','2019','2020','2021','2022','2
 function ga(d,y){const i=YEARS.indexOf(String(y));return i>=0?(d.a[i]||0):0;}
 function gp(d,y){const i=YEARS.indexOf(String(y));return i>=0?(d.p[i]||0):0;}
 function gi(d,y){const i=YEARS.indexOf(String(y));return i>=0?(d.i[i]||0):0;}
+function gg(d,y){const i=YEARS.indexOf(String(y));return i>=0?(d.g[i]||0):0;}
 
 const TIPO_C = {
   'CESFAM':'#005F9E','CECOSF':'#2E8B57','Posta de Salud':'#E67E22',
@@ -956,8 +1075,8 @@ const PAL = ['#005F9E','#0090D0','#2E8B57','#E67E22','#D0222A','#7c3aed','#16a08
 // ============================================================
 let F = {anio:'total', ss:'', comuna:'', estab:'', tipo:'', dep:'', cat:''};
 let charts = {};
-let maps = {a:null, p:null, c:null, i2:null};
-let mapMarkers = {a:[], p:[], c:[], i2:[]};
+let maps = {a:null, p:null, c:null, i2:null, ipg:null};
+let mapMarkers = {a:[], p:[], c:[], i2:[], ipg:[]};
 let sortDir = {};
 
 // ============================================================
@@ -976,6 +1095,7 @@ function switchTab(name, btn) {
     if(name==='pbc' && maps.p) maps.p.invalidateSize();
     if(name==='cat' && maps.c) maps.c.invalidateSize();
     if(name==='ing' && maps.i2) maps.i2.invalidateSize();
+    if(name==='ipg' && maps.ipg) maps.ipg.invalidateSize();
   }, 50);
 }
 
@@ -1016,6 +1136,7 @@ function init() {
   initMapaPBC();
   initMapaCat();
   initMapaIng();
+  initMapaIPG();
   updateHomeKPIs();
   initTerrSelectors();
   actualizarTodo();
@@ -1081,7 +1202,7 @@ function actualizarTodo() {
   document.getElementById('filtros-count').textContent = fd.length.toLocaleString('es-CL')+' establecimientos activos';
 
   // Sync map year selectors with global year filter
-  ['a-map-year','p-map-year','i2-map-year'].forEach(id=>{
+  ['a-map-year','p-map-year','i2-map-year','ipg-map-year'].forEach(id=>{
     const sel=document.getElementById(id);
     if(sel) sel.value=F.anio;
   });
@@ -1128,6 +1249,12 @@ function actualizarTodo() {
   kpisInd(fd);
   grafInd(fd);
   tablaInd(fd);
+
+  // Tab IPG
+  kpisIPG(fd);
+  grafIPG(fd);
+  tablaIPG(fd);
+  actualizarMapaIPG();
 
   // Tab Ingresos
   kpisIng(fd);
@@ -1462,7 +1589,7 @@ function varChart(vals,color='#005F9E') {
 
 function donaCfg(fd,anio,campo) {
   const byT={};
-  fd.forEach(d=>{const v=campo==='altas'?getAltas(d,anio):campo==='pbc'?getPBC(d,anio):getIng(d,anio);byT[d.t]=(byT[d.t]||0)+v;});
+  fd.forEach(d=>{const v=campo==='altas'?getAltas(d,anio):campo==='pbc'?getPBC(d,anio):campo==='ing'?getIng(d,anio):getIPG(d,anio);byT[d.t]=(byT[d.t]||0)+v;});
   const items=Object.entries(byT).sort((a,b)=>b[1]-a[1]);
   return {type:'doughnut',data:{labels:items.map(x=>x[0]),datasets:[{data:items.map(x=>x[1]),
     backgroundColor:items.map(x=>TIPO_C[x[0]]||'#999'),borderColor:'#fff',borderWidth:2}]},
@@ -1498,7 +1625,7 @@ function depStackedCfg(fd,campo) {
 
 function topEstabCfg(topE,anio,campo) {
   const labels=topE.map(d=>{let n=d.n.replace(/Centro de Salud Familiar/i,'CESFAM').replace(/Centro Comunitario de Salud Familiar/i,'CECOSF');return n.length>38?n.slice(0,36)+'…':n;});
-  const vals=topE.map(d=>campo==='altas'?getAltas(d,anio):campo==='pbc'?getPBC(d,anio):getIng(d,anio));
+  const vals=topE.map(d=>campo==='altas'?getAltas(d,anio):campo==='pbc'?getPBC(d,anio):campo==='ing'?getIng(d,anio):getIPG(d,anio));
   return {type:'bar',data:{labels,datasets:[{label:'',data:vals,
     backgroundColor:topE.map(d=>(TIPO_C[d.t]||'#005F9E')+'CC'),
     borderColor:topE.map(d=>TIPO_C[d.t]||'#005F9E'),borderWidth:1,borderRadius:4}]},
@@ -1509,9 +1636,9 @@ function topEstabCfg(topE,anio,campo) {
 
 function ssAnioCfg(fd,campo) {
   const allSS=[...new Set(fd.map(d=>d.s))].filter(Boolean);
-  const ssTots={};allSS.forEach(ss=>{ssTots[ss]=fd.filter(d=>d.s===ss).reduce((s,d)=>s+(campo==='altas'?d.ta:campo==='pbc'?d.tp:d.ti),0);});
+  const ssTots={};allSS.forEach(ss=>{ssTots[ss]=fd.filter(d=>d.s===ss).reduce((s,d)=>s+(campo==='altas'?d.ta:campo==='pbc'?d.tp:campo==='ing'?d.ti:d.tg),0);});
   const sortedSS=allSS.sort((a,b)=>ssTots[b]-ssTots[a]);
-  const _getV=(d,i)=>campo==='altas'?(d.a[i]||0):campo==='pbc'?(d.p[i]||0):(d.i[i]||0);
+  const _getV=(d,i)=>campo==='altas'?(d.a[i]||0):campo==='pbc'?(d.p[i]||0):campo==='ing'?(d.i[i]||0):(d.g[i]||0);
   const ds=YEARS.map((y,i)=>{
     const hue=Math.round(i*(220/11));
     const color=`hsl(${200+hue},70%,45%)`;
@@ -1618,12 +1745,12 @@ function actualizarMapa(prefix, campo) {
   const ssColorMap={};
   if(colorBy==='ss'){[...new Set(withC.map(d=>d.s))].forEach((ss,i)=>ssColorMap[ss]=PAL[i%PAL.length]);}
   withC.forEach(d=>{
-    const val=campo==='altas'?getAltas(d,mapAnio):campo==='pbc'?getPBC(d,mapAnio):campo==='ing'?getIng(d,mapAnio):0;
+    const val=campo==='altas'?getAltas(d,mapAnio):campo==='pbc'?getPBC(d,mapAnio):campo==='ing'?getIng(d,mapAnio):campo==='ipg'?getIPG(d,mapAnio):0;
     if(val<=0)return;
     const color=colorBy==='tipo'?(TIPO_C[d.t]||'#999'):colorBy==='dependencia'?(DEP_C[d.dep.trim()]||'#999'):(ssColorMap[d.s]||'#005F9E');
     const r=Math.max(4,Math.min(28,4+Math.sqrt(val/maxV)*22));
     const mk=L.circleMarker([d.lat,d.lon],{radius:r,fillColor:color,color:'#fff',weight:1.5,opacity:1,fillOpacity:0.75});
-    const etiq=campo==='altas'?'Altas Clínicas SM':campo==='pbc'?'Población Bajo Control':'Ingresos SM';
+    const etiq=campo==='altas'?'Altas Clínicas SM':campo==='pbc'?'Población Bajo Control':campo==='ing'?'Ingresos SM':'IPG';
     mk.bindPopup(`<div style="font-family:Segoe UI,Arial;font-size:12px;min-width:220px">
       <div style="font-weight:800;font-size:13px;color:#003F6B;margin-bottom:6px">${d.n}</div>
       <div style="display:grid;grid-template-columns:auto 1fr;gap:3px 8px;font-size:11px">
@@ -1836,7 +1963,7 @@ function actualizarMapaCat() {
 // ── switchTabByName (for home cards) ──────────────────────────────────────
 function switchTabByName(name) {
   const btns = document.querySelectorAll('.tab-btn');
-  const tabNames = ['home','altas','pbc','ind','cat','ing','catind'];
+  const tabNames = ['home','altas','pbc','ind','cat','ing','catind','ipg'];
   const idx = tabNames.indexOf(name);
   if(idx>=0) switchTab(name, btns[idx]);
 }
@@ -1930,6 +2057,86 @@ function initMapaIng(){
 }
 function actualizarMapaIng(){actualizarMapa('i2','ing');}
 
+
+
+// ============================================================
+// IPG — INTERVENCIONES PSICOSOCIALES GRUPALES
+// ============================================================
+function getIPG(d,anio){return anio==='total'?d.tg:gg(d,anio);}
+
+function kpisIPG(fd){
+  const anio=F.anio;
+  const total=fd.reduce((s,d)=>s+getIPG(d,anio),0);
+  const set=(id,v)=>{const el=document.getElementById(id);if(el)el.textContent=v;};
+  set('ipg-kpi-total',fmt(total));
+  set('ipg-kpi-total-sub',anio==='total'?'Período 2014–2025':'Año '+anio);
+  const con=fd.filter(d=>getIPG(d,anio)>0).length;
+  set('ipg-kpi-estab',con.toLocaleString('es-CL'));
+  let promAnual;
+  if(anio==='total'){
+    const s=fd.reduce((acc,d)=>{const yrs=YEARS.filter((_,i)=>(d.g[i]||0)>0).length;return acc+(yrs>0?d.tg/yrs:0);},0);
+    promAnual=con>0?s/con:0;
+  } else { promAnual=con>0?total/con:0; }
+  set('ipg-kpi-prom',con>0?fmt(promAnual):'—');
+  let bY='',bV=0;
+  YEARS.forEach((y,i)=>{const s=fd.reduce((a,d)=>a+(d.g[i]||0),0);if(s>bV){bV=s;bY=y;}});
+  set('ipg-kpi-best-yr',bY);
+  set('ipg-kpi-best-yr-val',fmt(bV)+' IPG ese año');
+  const bySS={};fd.forEach(d=>{bySS[d.s]=(bySS[d.s]||0)+getIPG(d,anio);});
+  const top=Object.entries(bySS).sort((a,b)=>b[1]-a[1])[0];
+  if(top){set('ipg-kpi-top-ss',top[0].split(' ')[0]);set('ipg-kpi-top-ss-val',fmt(top[1])+' IPG');}
+}
+
+function grafIPG(fd){
+  const anio=F.anio;
+  const tV=YEARS.map((y,i)=>fd.reduce((s,d)=>s+(d.g[i]||0),0));
+  const color='#1abc9c';
+  mkChart('ipg-c-tend',{type:'line',data:{labels:YEARS,datasets:[{
+    label:'IPG',data:tV,borderColor:color,backgroundColor:'rgba(26,188,156,0.08)',
+    fill:true,tension:0.35,pointRadius:5,pointHoverRadius:8,borderWidth:3,
+    pointBackgroundColor:tV.map((v,i)=>i===6||i===7?'#D0222A':v===Math.max(...tV)?'#005F9E':color),
+    pointBorderColor:'#fff',pointBorderWidth:2}]},
+  options:{responsive:true,maintainAspectRatio:false,
+    plugins:{legend:{display:false},tooltip:{callbacks:{label:ctx=>' '+fmt(ctx.raw)+' IPG'}}},
+    scales:{x:{ticks:{font:{size:11,weight:'bold'}}},y:{ticks:{callback:v=>fmt(v),font:{size:10}}}}}});
+
+  const ssTot={};fd.forEach(d=>{ssTot[d.s]=(ssTot[d.s]||0)+getIPG(d,anio);});
+  const ssSort=Object.entries(ssTot).sort((a,b)=>b[1]-a[1]);
+  mkChart('ipg-c-ss',hbarCfg(ssSort.map(x=>x[0]),ssSort.map(x=>x[1]),PAL,color));
+  mkChart('ipg-c-var',varChart(tV,color));
+  mkChart('ipg-c-tipo-dona',donaCfg(fd,anio,'ipg'));
+  mkChart('ipg-c-tipo-linea',tipoLineaCfg(fd,'ipg'));
+  mkChart('ipg-c-dep',depStackedCfg(fd,'ipg'));
+  const comTot={};fd.forEach(d=>{comTot[d.c]=(comTot[d.c]||0)+getIPG(d,anio);});
+  const comSort=Object.entries(comTot).sort((a,b)=>b[1]-a[1]).slice(0,20);
+  mkChart('ipg-c-comunas',hbarCfg(comSort.map(x=>x[0]),comSort.map(x=>x[1]),PAL,color));
+  const topE=fd.slice().sort((a,b)=>getIPG(b,anio)-getIPG(a,anio)).slice(0,10);
+  mkChart('ipg-c-top-estab',topEstabCfg(topE,anio,'ipg'));
+  mkChart('ipg-c-ss-anio',ssAnioCfg(fd,'ipg'));
+}
+
+function tablaIPG(fd){
+  const anio=F.anio;
+  const sorted=fd.slice().sort((a,b)=>getIPG(b,anio)-getIPG(a,anio)).slice(0,100);
+  const maxV=sorted.length>0?getIPG(sorted[0],anio):1;
+  const el=document.getElementById('ipg-tabla-body');
+  if(!el) return;
+  el.innerHTML=sorted.map((d,i)=>`<tr>
+    <td class="rank">${i+1}</td><td>${d.n}</td><td>${d.c}</td><td>${d.s}</td>
+    <td><span style="background:${TIPO_C[d.t]||'#999'}22;color:${TIPO_C[d.t]||'#999'};font-weight:700;padding:2px 6px;border-radius:8px;font-size:10px">${d.t}</span></td>
+    <td>${d.dep.trim()}</td><td class="num">${fmt(getIPG(d,anio))}</td>
+    <td><div class="prog"><div class="prog-fill" style="width:${(getIPG(d,anio)/maxV*100).toFixed(1)}%;background:#1abc9c"></div></div></td>
+  </tr>`).join('');
+  const badge=document.getElementById('ipg-badge-tabla');
+  if(badge) badge.textContent='Top '+sorted.length+' establecimientos';
+}
+
+function initMapaIPG(){
+  maps.ipg=L.map('ipg-mapa').setView([-35.5,-71.0],5);
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{attribution:'© OpenStreetMap',maxZoom:18}).addTo(maps.ipg);
+  actualizarMapaIPG();
+}
+function actualizarMapaIPG(){actualizarMapa('ipg','ipg');}
 
 // ============================================================
 // % CATEGORIZADOS / INGRESOS 2025
