@@ -299,7 +299,7 @@ tbody td.rank{font-weight:800;color:var(--az2);text-align:center}
         </div>
       </div>
 
-      <div id="ficha-territorio" style="display:none">
+      <div id="ficha-territorio" style="display:none;max-width:100%;overflow:hidden">
         <div id="ficha-head" style="background:linear-gradient(135deg,#003F6B,#005F9E);border-radius:12px 12px 0 0;padding:16px 22px;color:white;display:flex;align-items:center;gap:14px">
           <div style="font-size:32px" id="ficha-icon">🗺️</div>
           <div><div style="font-size:16px;font-weight:800" id="ficha-nombre">—</div><div style="font-size:11px;opacity:.75;margin-top:3px" id="ficha-sub">—</div></div>
@@ -313,30 +313,34 @@ tbody td.rank{font-weight:800;color:var(--az2);text-align:center}
           <div style="padding:10px 8px;border-right:1px solid #D0DCE8;text-align:center"><div style="font-size:9px;color:#4A6080;font-weight:600;text-transform:uppercase;letter-spacing:.3px;margin-bottom:3px">% Cat./Ing. 2025</div><div style="font-size:16px;font-weight:800;color:#8e44ad" id="ficha-kpi-catind">—</div></div>
           <div style="padding:10px 8px;text-align:center"><div style="font-size:9px;color:#4A6080;font-weight:600;text-transform:uppercase;letter-spacing:.3px;margin-bottom:3px" id="ficha-lbl-ipg">IPG</div><div style="font-size:16px;font-weight:800;color:#1abc9c" id="ficha-kpi-ipg">—</div></div>
         </div>
-        <div style="display:grid;grid-template-columns:1fr 1fr 1fr;background:white;border:1.5px solid #D0DCE8;border-top:none;border-radius:0 0 12px 12px;overflow:hidden">
-          <div style="padding:12px 14px;border-right:1px solid #D0DCE8;border-bottom:1px solid #D0DCE8">
-            <div style="font-size:10px;font-weight:700;color:#003F6B;margin-bottom:6px">🏆 Altas Clínicas SM por año</div>
-            <div style="position:relative;height:100px"><canvas id="ficha-c-altas"></canvas></div>
+        <div style="background:white;border:1.5px solid #D0DCE8;border-top:none;border-radius:0 0 12px 12px;overflow:hidden">
+          <div style="display:grid;grid-template-columns:1fr 1fr 1fr;border-bottom:1px solid #D0DCE8">
+            <div style="padding:10px 12px;border-right:1px solid #D0DCE8">
+              <div style="font-size:10px;font-weight:700;color:#003F6B;margin-bottom:5px">🏆 Altas Clínicas SM</div>
+              <div style="position:relative;height:90px;width:100%"><canvas id="ficha-c-altas" style="max-width:100%"></canvas></div>
+            </div>
+            <div style="padding:10px 12px;border-right:1px solid #D0DCE8">
+              <div style="font-size:10px;font-weight:700;color:#003F6B;margin-bottom:5px">👥 Población Bajo Control</div>
+              <div style="position:relative;height:90px;width:100%"><canvas id="ficha-c-pbc" style="max-width:100%"></canvas></div>
+            </div>
+            <div style="padding:10px 12px">
+              <div style="font-size:10px;font-weight:700;color:#003F6B;margin-bottom:5px">📊 % Altas/PBC</div>
+              <div style="position:relative;height:90px;width:100%"><canvas id="ficha-c-pct" style="max-width:100%"></canvas></div>
+            </div>
           </div>
-          <div style="padding:12px 14px;border-right:1px solid #D0DCE8;border-bottom:1px solid #D0DCE8">
-            <div style="font-size:10px;font-weight:700;color:#003F6B;margin-bottom:6px">👥 Población Bajo Control por año</div>
-            <div style="position:relative;height:100px"><canvas id="ficha-c-pbc"></canvas></div>
-          </div>
-          <div style="padding:12px 14px;border-bottom:1px solid #D0DCE8">
-            <div style="font-size:10px;font-weight:700;color:#003F6B;margin-bottom:6px">📊 % Altas/PBC por año</div>
-            <div style="position:relative;height:100px"><canvas id="ficha-c-pct"></canvas></div>
-          </div>
-          <div style="padding:12px 14px;border-right:1px solid #D0DCE8">
-            <div style="font-size:10px;font-weight:700;color:#003F6B;margin-bottom:6px">🗂️ Categorías N0–N4 (2025)</div>
-            <div id="ficha-cat-content" style="height:100px"></div>
-          </div>
-          <div style="padding:12px 14px;border-right:1px solid #D0DCE8">
-            <div style="font-size:10px;font-weight:700;color:#003F6B;margin-bottom:6px">📥 Ingresos SM por año</div>
-            <div style="position:relative;height:100px"><canvas id="ficha-c-ing"></canvas></div>
-          </div>
-          <div style="padding:12px 14px">
-            <div style="font-size:10px;font-weight:700;color:#003F6B;margin-bottom:6px">🤝 IPG por año</div>
-            <div style="position:relative;height:100px"><canvas id="ficha-c-ipg"></canvas></div>
+          <div style="display:grid;grid-template-columns:1fr 1fr 1fr">
+            <div style="padding:10px 12px;border-right:1px solid #D0DCE8">
+              <div style="font-size:10px;font-weight:700;color:#003F6B;margin-bottom:5px">🗂️ Categorías N0–N4 (2025)</div>
+              <div id="ficha-cat-content" style="height:90px;position:relative"></div>
+            </div>
+            <div style="padding:10px 12px;border-right:1px solid #D0DCE8">
+              <div style="font-size:10px;font-weight:700;color:#003F6B;margin-bottom:5px">📥 Ingresos SM</div>
+              <div style="position:relative;height:90px;width:100%"><canvas id="ficha-c-ing" style="max-width:100%"></canvas></div>
+            </div>
+            <div style="padding:10px 12px">
+              <div style="font-size:10px;font-weight:700;color:#003F6B;margin-bottom:5px">🤝 IPG</div>
+              <div style="position:relative;height:90px;width:100%"><canvas id="ficha-c-ipg" style="max-width:100%"></canvas></div>
+            </div>
           </div>
         </div>
         <div style="margin-top:10px;text-align:center">
@@ -2432,8 +2436,11 @@ function renderFicha(){
   const pctV=YEARS.map((y,i)=>pV[i]>0?parseFloat((aV[i]/pV[i]*100).toFixed(2)):0);
   const mOpts=(isPct)=>({responsive:true,maintainAspectRatio:false,
     plugins:{legend:{display:false},tooltip:{callbacks:{label:ctx=>isPct?' '+ctx.raw.toFixed(1)+'%':' '+fmt(ctx.raw)}}},
-    scales:{x:{ticks:{font:{size:8},maxRotation:0},grid:{display:false}},
-            y:{ticks:{font:{size:8},callback:v=>isPct?v.toFixed(0)+'%':fmt(v)},grid:{color:'rgba(0,0,0,0.05)'}}}});
+    scales:{
+      x:{ticks:{font:{size:7},maxRotation:0,autoSkip:true,maxTicksLimit:6},grid:{display:false}},
+      y:{ticks:{font:{size:7},callback:v=>isPct?v.toFixed(0)+'%':(v>=1000?(v/1000).toFixed(0)+'k':v)},
+         grid:{color:'rgba(0,0,0,0.04)'}}
+    }});
   if(fichaCharts.altas)fichaCharts.altas.destroy();
   fichaCharts.altas=new Chart(document.getElementById('ficha-c-altas').getContext('2d'),{
     type:'bar',data:{labels:YEARS,datasets:[{data:aV,backgroundColor:aV.map((_,i)=>i===6?'rgba(208,34,42,.7)':'rgba(0,95,158,.7)'),borderRadius:2}]},options:mOpts(false)});
@@ -2445,7 +2452,7 @@ function renderFicha(){
     type:'line',data:{labels:YEARS,datasets:[{data:pctV,borderColor:'#7c3aed',backgroundColor:'rgba(124,58,237,.08)',fill:true,tension:0.35,pointRadius:3,borderWidth:2,pointBackgroundColor:pctV.map((_,i)=>i===6?'#D0222A':'#7c3aed')}]},options:mOpts(true)});
   const catDiv=document.getElementById('ficha-cat-content');
   if(catTot>0){
-    catDiv.innerHTML='<div style="position:relative;height:120px"><canvas id="ficha-c-cat"></canvas></div>';
+    catDiv.innerHTML='<div style="position:relative;height:90px"><canvas id="ficha-c-cat"></canvas></div>';
     const CK=['N0','N1','N2','N3','N4'],CC={'N0':'#94a3b8','N1':'#005F9E','N2':'#E67E22','N3':'#D0222A','N4':'#7c3aed'};
     const cv=CK.map(k=>fd.filter(d=>d.cat).reduce((s,d)=>s+(d.cat[k]||0),0));
     if(fichaCharts.cat)fichaCharts.cat.destroy();
@@ -2455,7 +2462,7 @@ function renderFicha(){
         plugins:{legend:{position:'right',labels:{font:{size:9},padding:4,boxWidth:10}},
           tooltip:{callbacks:{label:ctx=>{const t=ctx.dataset.data.reduce((a,b)=>a+b,0);return ' '+ctx.label.split(':')[0]+': '+fmt(ctx.raw)+' ('+( ctx.raw/t*100).toFixed(1)+'%)';}}}}}});
   } else {
-    catDiv.innerHTML='<div style="display:flex;align-items:center;justify-content:center;height:100%;flex-direction:column;gap:6px;color:#4A6080"><div style="font-size:20px">⚠️</div><div style="font-size:10px;text-align:center">Sin datos<br>de categorización</div></div>';
+    catDiv.innerHTML='<div style="display:flex;align-items:center;justify-content:center;height:90px;flex-direction:column;gap:6px;color:#4A6080"><div style="font-size:20px">⚠️</div><div style="font-size:10px;text-align:center">Sin datos<br>de categorización</div></div>';
   }
 
   // Ingresos mini chart
