@@ -304,28 +304,39 @@ tbody td.rank{font-weight:800;color:var(--az2);text-align:center}
           <div style="font-size:32px" id="ficha-icon">🗺️</div>
           <div><div style="font-size:16px;font-weight:800" id="ficha-nombre">—</div><div style="font-size:11px;opacity:.75;margin-top:3px" id="ficha-sub">—</div></div>
         </div>
-        <div style="display:grid;grid-template-columns:repeat(4,1fr);background:white;border-left:1.5px solid #D0DCE8;border-right:1.5px solid #D0DCE8">
-          <div style="padding:14px 16px;border-right:1px solid #D0DCE8;text-align:center"><div style="font-size:10px;color:#4A6080;font-weight:600;text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px" id="ficha-lbl-altas">Altas SM</div><div style="font-size:22px;font-weight:800;color:#005F9E" id="ficha-kpi-altas">—</div></div>
-          <div style="padding:14px 16px;border-right:1px solid #D0DCE8;text-align:center"><div style="font-size:10px;color:#4A6080;font-weight:600;text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px" id="ficha-lbl-pbc">Bajo Control</div><div style="font-size:22px;font-weight:800;color:#2E8B57" id="ficha-kpi-pbc">—</div></div>
-          <div style="padding:14px 16px;border-right:1px solid #D0DCE8;text-align:center"><div style="font-size:10px;color:#4A6080;font-weight:600;text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px" id="ficha-lbl-pct">% Altas/PBC</div><div style="font-size:22px;font-weight:800;color:#7c3aed" id="ficha-kpi-pct">—</div></div>
-          <div style="padding:14px 16px;text-align:center"><div style="font-size:10px;color:#4A6080;font-weight:600;text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px">Categorizados 2025</div><div style="font-size:22px;font-weight:800;color:#E67E22" id="ficha-kpi-cat">—</div></div>
+        <div style="display:grid;grid-template-columns:repeat(7,1fr);background:white;border-left:1.5px solid #D0DCE8;border-right:1.5px solid #D0DCE8">
+          <div style="padding:10px 8px;border-right:1px solid #D0DCE8;text-align:center"><div style="font-size:9px;color:#4A6080;font-weight:600;text-transform:uppercase;letter-spacing:.3px;margin-bottom:3px" id="ficha-lbl-altas">Altas SM</div><div style="font-size:16px;font-weight:800;color:#005F9E" id="ficha-kpi-altas">—</div></div>
+          <div style="padding:10px 8px;border-right:1px solid #D0DCE8;text-align:center"><div style="font-size:9px;color:#4A6080;font-weight:600;text-transform:uppercase;letter-spacing:.3px;margin-bottom:3px" id="ficha-lbl-pbc">Bajo Control</div><div style="font-size:16px;font-weight:800;color:#2E8B57" id="ficha-kpi-pbc">—</div></div>
+          <div style="padding:10px 8px;border-right:1px solid #D0DCE8;text-align:center"><div style="font-size:9px;color:#4A6080;font-weight:600;text-transform:uppercase;letter-spacing:.3px;margin-bottom:3px" id="ficha-lbl-pct">% Altas/PBC</div><div style="font-size:16px;font-weight:800;color:#7c3aed" id="ficha-kpi-pct">—</div></div>
+          <div style="padding:10px 8px;border-right:1px solid #D0DCE8;text-align:center"><div style="font-size:9px;color:#4A6080;font-weight:600;text-transform:uppercase;letter-spacing:.3px;margin-bottom:3px">Categ. 2025</div><div style="font-size:16px;font-weight:800;color:#E67E22" id="ficha-kpi-cat">—</div></div>
+          <div style="padding:10px 8px;border-right:1px solid #D0DCE8;text-align:center"><div style="font-size:9px;color:#4A6080;font-weight:600;text-transform:uppercase;letter-spacing:.3px;margin-bottom:3px" id="ficha-lbl-ing">Ingresos SM</div><div style="font-size:16px;font-weight:800;color:#16a085" id="ficha-kpi-ing">—</div></div>
+          <div style="padding:10px 8px;border-right:1px solid #D0DCE8;text-align:center"><div style="font-size:9px;color:#4A6080;font-weight:600;text-transform:uppercase;letter-spacing:.3px;margin-bottom:3px">% Cat./Ing. 2025</div><div style="font-size:16px;font-weight:800;color:#8e44ad" id="ficha-kpi-catind">—</div></div>
+          <div style="padding:10px 8px;text-align:center"><div style="font-size:9px;color:#4A6080;font-weight:600;text-transform:uppercase;letter-spacing:.3px;margin-bottom:3px" id="ficha-lbl-ipg">IPG</div><div style="font-size:16px;font-weight:800;color:#1abc9c" id="ficha-kpi-ipg">—</div></div>
         </div>
-        <div style="display:grid;grid-template-columns:1fr 1fr;background:white;border:1.5px solid #D0DCE8;border-top:none;border-radius:0 0 12px 12px;overflow:hidden">
-          <div style="padding:14px 16px;border-right:1px solid #D0DCE8;border-bottom:1px solid #D0DCE8">
-            <div style="font-size:11px;font-weight:700;color:#003F6B;margin-bottom:8px">🏆 Altas Clínicas SM por año</div>
-            <div style="position:relative;height:120px"><canvas id="ficha-c-altas"></canvas></div>
+        <div style="display:grid;grid-template-columns:1fr 1fr 1fr;background:white;border:1.5px solid #D0DCE8;border-top:none;border-radius:0 0 12px 12px;overflow:hidden">
+          <div style="padding:12px 14px;border-right:1px solid #D0DCE8;border-bottom:1px solid #D0DCE8">
+            <div style="font-size:10px;font-weight:700;color:#003F6B;margin-bottom:6px">🏆 Altas Clínicas SM por año</div>
+            <div style="position:relative;height:100px"><canvas id="ficha-c-altas"></canvas></div>
           </div>
-          <div style="padding:14px 16px;border-bottom:1px solid #D0DCE8">
-            <div style="font-size:11px;font-weight:700;color:#003F6B;margin-bottom:8px">👥 Población Bajo Control por año</div>
-            <div style="position:relative;height:120px"><canvas id="ficha-c-pbc"></canvas></div>
+          <div style="padding:12px 14px;border-right:1px solid #D0DCE8;border-bottom:1px solid #D0DCE8">
+            <div style="font-size:10px;font-weight:700;color:#003F6B;margin-bottom:6px">👥 Población Bajo Control por año</div>
+            <div style="position:relative;height:100px"><canvas id="ficha-c-pbc"></canvas></div>
           </div>
-          <div style="padding:14px 16px;border-right:1px solid #D0DCE8">
-            <div style="font-size:11px;font-weight:700;color:#003F6B;margin-bottom:8px">📊 % Altas/PBC por año</div>
-            <div style="position:relative;height:120px"><canvas id="ficha-c-pct"></canvas></div>
+          <div style="padding:12px 14px;border-bottom:1px solid #D0DCE8">
+            <div style="font-size:10px;font-weight:700;color:#003F6B;margin-bottom:6px">📊 % Altas/PBC por año</div>
+            <div style="position:relative;height:100px"><canvas id="ficha-c-pct"></canvas></div>
           </div>
-          <div style="padding:14px 16px">
-            <div style="font-size:11px;font-weight:700;color:#003F6B;margin-bottom:8px">🗂️ Distribución Categorías N0–N4</div>
-            <div id="ficha-cat-content"></div>
+          <div style="padding:12px 14px;border-right:1px solid #D0DCE8">
+            <div style="font-size:10px;font-weight:700;color:#003F6B;margin-bottom:6px">🗂️ Categorías N0–N4 (2025)</div>
+            <div id="ficha-cat-content" style="height:100px"></div>
+          </div>
+          <div style="padding:12px 14px;border-right:1px solid #D0DCE8">
+            <div style="font-size:10px;font-weight:700;color:#003F6B;margin-bottom:6px">📥 Ingresos SM por año</div>
+            <div style="position:relative;height:100px"><canvas id="ficha-c-ing"></canvas></div>
+          </div>
+          <div style="padding:12px 14px">
+            <div style="font-size:10px;font-weight:700;color:#003F6B;margin-bottom:6px">🤝 IPG por año</div>
+            <div style="position:relative;height:100px"><canvas id="ficha-c-ipg"></canvas></div>
           </div>
         </div>
         <div style="margin-top:10px;text-align:center">
@@ -2387,19 +2398,35 @@ function renderFicha(){
   document.getElementById('ficha-sub').textContent=sub;
   const fAnio=(document.getElementById('terr-anio')||{}).value||'2025';
   const anioLabel=fAnio==='total'?'2014–2025':fAnio;
-  const totalAltas=fAnio==='total'?fd.reduce((s,d)=>s+d.ta,0):fd.reduce((s,d)=>s+ga(d,fAnio),0);
-  const pbcVal=fAnio==='total'?fd.reduce((s,d)=>s+d.tp,0):fd.reduce((s,d)=>s+gp(d,fAnio),0);
-  const altasVal=fAnio==='total'?totalAltas:fd.reduce((s,d)=>s+ga(d,fAnio),0);
-  const pctVal=pbcVal>0?(altasVal/pbcVal*100):0;
-  const catTot=fd.filter(d=>d.cat).reduce((s,d)=>s+d.cat.total,0);
   const set=(id,v)=>{const el=document.getElementById(id);if(el)el.textContent=v;};
+  // Altas
+  const altasVal=fAnio==='total'?fd.reduce((s,d)=>s+d.ta,0):fd.reduce((s,d)=>s+ga(d,fAnio),0);
+  // PBC
+  const pbcVal=fAnio==='total'?fd.reduce((s,d)=>s+d.tp,0):fd.reduce((s,d)=>s+gp(d,fAnio),0);
+  // % Altas/PBC
+  const pctVal=pbcVal>0?(altasVal/pbcVal*100):0;
+  // Cat (always 2025)
+  const catTot=fd.filter(d=>d.cat).reduce((s,d)=>s+d.cat.total,0);
+  // Ingresos
+  const ingVal=fAnio==='total'?fd.reduce((s,d)=>s+d.ti,0):fd.reduce((s,d)=>s+gi(d,fAnio),0);
+  // % Cat/Ing (always 2025)
+  const ing2025=fd.reduce((s,d)=>s+gi(d,'2025'),0);
+  const pctCatIng=ing2025>0?(catTot/ing2025*100):0;
+  // IPG
+  const ipgVal=fAnio==='total'?fd.reduce((s,d)=>s+d.tg,0):fd.reduce((s,d)=>s+gg(d,fAnio),0);
+  // Set KPIs
   set('ficha-lbl-altas','Altas SM '+anioLabel);
   set('ficha-lbl-pbc','Bajo Control '+anioLabel);
   set('ficha-lbl-pct','% Altas/PBC '+anioLabel);
-  set('ficha-kpi-altas',fmt(totalAltas));
+  set('ficha-lbl-ing','Ingresos SM '+anioLabel);
+  set('ficha-lbl-ipg','IPG '+anioLabel);
+  set('ficha-kpi-altas',fmt(altasVal));
   set('ficha-kpi-pbc',fmt(pbcVal));
   set('ficha-kpi-pct',pctVal.toFixed(1)+'%');
   set('ficha-kpi-cat',catTot>0?fmt(catTot):'Sin datos');
+  set('ficha-kpi-ing',fmt(ingVal));
+  set('ficha-kpi-catind',ing2025>0?pctCatIng.toFixed(1)+'%':'Sin datos');
+  set('ficha-kpi-ipg',fmt(ipgVal));
   const aV=YEARS.map(y=>fd.reduce((s,d)=>s+ga(d,y),0));
   const pV=YEARS.map(y=>fd.reduce((s,d)=>s+gp(d,y),0));
   const pctV=YEARS.map((y,i)=>pV[i]>0?parseFloat((aV[i]/pV[i]*100).toFixed(2)):0);
@@ -2428,8 +2455,27 @@ function renderFicha(){
         plugins:{legend:{position:'right',labels:{font:{size:9},padding:4,boxWidth:10}},
           tooltip:{callbacks:{label:ctx=>{const t=ctx.dataset.data.reduce((a,b)=>a+b,0);return ' '+ctx.label.split(':')[0]+': '+fmt(ctx.raw)+' ('+( ctx.raw/t*100).toFixed(1)+'%)';}}}}}});
   } else {
-    catDiv.innerHTML='<div style="display:flex;align-items:center;justify-content:center;height:120px;flex-direction:column;gap:8px;color:#4A6080"><div style="font-size:24px">⚠️</div><div style="font-size:11px;text-align:center">Sin datos de categorización<br>para este territorio</div></div>';
+    catDiv.innerHTML='<div style="display:flex;align-items:center;justify-content:center;height:100%;flex-direction:column;gap:6px;color:#4A6080"><div style="font-size:20px">⚠️</div><div style="font-size:10px;text-align:center">Sin datos<br>de categorización</div></div>';
   }
+
+  // Ingresos mini chart
+  const ingV=YEARS.map(y=>fd.reduce((s,d)=>s+gi(d,y),0));
+  if(fichaCharts.ing)fichaCharts.ing.destroy();
+  const cIng=document.getElementById('ficha-c-ing');
+  if(cIng) fichaCharts.ing=new Chart(cIng.getContext('2d'),{
+    type:'bar',data:{labels:YEARS,datasets:[{data:ingV,
+      backgroundColor:'rgba(22,160,133,.7)',borderRadius:2}]},
+    options:mOpts(false)});
+
+  // IPG mini chart
+  const ipgV=YEARS.map(y=>fd.reduce((s,d)=>s+gg(d,y),0));
+  if(fichaCharts.ipg)fichaCharts.ipg.destroy();
+  const cIPG=document.getElementById('ficha-c-ipg');
+  if(cIPG) fichaCharts.ipg=new Chart(cIPG.getContext('2d'),{
+    type:'bar',data:{labels:YEARS,datasets:[{data:ipgV,
+      backgroundColor:ipgV.map((_,i)=>i===6||i===7?'rgba(208,34,42,.7)':'rgba(26,188,156,.7)'),
+      borderRadius:2}]},
+    options:mOpts(false)});
 }
 function verFichaCompleta(){
   F.ss=document.getElementById('terr-ss').value;
