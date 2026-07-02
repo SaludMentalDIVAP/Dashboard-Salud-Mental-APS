@@ -151,6 +151,8 @@ tbody td.rank{font-weight:800;color:var(--az2);text-align:center}
     <button class="tab-btn" onclick="switchTab('ing',this)">📥 Ingresos SM</button>
     <button class="tab-btn" onclick="switchTab('catind',this)">🔢 % Categ./Ingresos</button>
     <button class="tab-btn" onclick="switchTab('ipg',this)">🤝 IPG</button>
+    <button class="tab-btn" onclick="switchTab('act',this)">📋 Actividades SM</button>
+    <button class="tab-btn" onclick="switchTab('conc',this)">🎯 Concentración</button>
   </div>
 </div>
 
@@ -245,6 +247,18 @@ tbody td.rank{font-weight:800;color:var(--az2);text-align:center}
           <div style="font-size:13px;font-weight:800;color:#003F6B;margin-bottom:5px">Intervenciones Psicosociales Grupales</div>
           <div style="font-size:11px;color:#4A6080;line-height:1.5">IPG realizadas en APS 2014–2025. Análisis por SS, tipo, dependencia y mapa georreferenciado.</div>
           <div style="margin-top:10px;font-size:10px;font-weight:700;color:#1abc9c;text-transform:uppercase;letter-spacing:.5px">10 gráficos + mapa + tabla →</div>
+        </div>
+        <div onclick="switchTabByName('act')" style="background:white;border-radius:12px;box-shadow:0 2px 12px rgba(0,60,120,.10);padding:20px 22px;cursor:pointer;border-left:5px solid #e74c3c;transition:all .2s" onmouseover="this.style.transform='translateY(-2px)';this.style.boxShadow='0 6px 24px rgba(0,60,120,.18)'" onmouseout="this.style.transform='none';this.style.boxShadow='0 2px 12px rgba(0,60,120,.10)'">
+          <div style="font-size:26px;margin-bottom:8px">📋</div>
+          <div style="font-size:13px;font-weight:800;color:#003F6B;margin-bottom:5px">Actividades de Tratamiento SM</div>
+          <div style="font-size:11px;color:#4A6080;line-height:1.5">Total actividades de atención en SM por establecimiento 2014–2025. Análisis territorial completo.</div>
+          <div style="margin-top:10px;font-size:10px;font-weight:700;color:#e74c3c;text-transform:uppercase;letter-spacing:.5px">10 gráficos + mapa + tabla →</div>
+        </div>
+        <div onclick="switchTabByName('conc')" style="background:white;border-radius:12px;box-shadow:0 2px 12px rgba(0,60,120,.10);padding:20px 22px;cursor:pointer;border-left:5px solid #e67e22;transition:all .2s" onmouseover="this.style.transform='translateY(-2px)';this.style.boxShadow='0 6px 24px rgba(0,60,120,.18)'" onmouseout="this.style.transform='none';this.style.boxShadow='0 2px 12px rgba(0,60,120,.10)'">
+          <div style="font-size:26px;margin-bottom:8px">🎯</div>
+          <div style="font-size:13px;font-weight:800;color:#003F6B;margin-bottom:5px">Concentración de Actividades SM</div>
+          <div style="font-size:11px;color:#4A6080;line-height:1.5">Actividades ÷ PBC: promedio de atenciones por persona en control. Indicador de intensidad de atención.</div>
+          <div style="margin-top:10px;font-size:10px;font-weight:700;color:#e67e22;text-transform:uppercase;letter-spacing:.5px">6 gráficos + tabla →</div>
         </div>
         <div onclick="switchTabByName('catind')" style="background:white;border-radius:12px;box-shadow:0 2px 12px rgba(0,60,120,.10);padding:20px 22px;cursor:pointer;border-left:5px solid #8e44ad;transition:all .2s" onmouseover="this.style.transform='translateY(-2px)';this.style.boxShadow='0 6px 24px rgba(0,60,120,.18)'" onmouseout="this.style.transform='none';this.style.boxShadow='0 2px 12px rgba(0,60,120,.10)'">
           <div style="font-size:26px;margin-bottom:8px">🔢</div>
@@ -1045,6 +1059,180 @@ tbody td.rank{font-weight:800;color:var(--az2);text-align:center}
 </div>
 </div>
 
+<!-- ===== TAB ACTIVIDADES SM ===== -->
+<div id="tab-act" class="tab-content">
+<div class="main">
+  <div class="ind-note">
+    <strong>📋 Total Actividades de Tratamiento SM APS:</strong> Corresponde al número total de actividades de atención en salud mental realizadas con personas en tratamiento en los centros de APS, incluyendo consultas médicas, de enfermería, psicológicas y de otras disciplinas. Datos 2014–2025.
+  </div>
+  <div class="kpi-row">
+    <div class="kpi-card"><div class="kpi-icon">📋</div><div class="kpi-label">Total Actividades SM</div><div class="kpi-value" id="act-kpi-total">—</div><div class="kpi-sub" id="act-kpi-total-sub">—</div></div>
+    <div class="kpi-card verde"><div class="kpi-icon">🏥</div><div class="kpi-label">Establecimientos activos</div><div class="kpi-value" id="act-kpi-estab">—</div><div class="kpi-sub">Con registro de actividades</div></div>
+    <div class="kpi-card naranja"><div class="kpi-icon">📊</div><div class="kpi-label">Promedio anual / estab.</div><div class="kpi-value sm" id="act-kpi-prom">—</div><div class="kpi-sub">Actividades por centro por año</div></div>
+    <div class="kpi-card rojo"><div class="kpi-icon">📈</div><div class="kpi-label">Año con más actividades</div><div class="kpi-value sm" id="act-kpi-best-yr">—</div><div class="kpi-sub" id="act-kpi-best-yr-val">—</div></div>
+    <div class="kpi-card morado"><div class="kpi-icon">🥇</div><div class="kpi-label">SS líder</div><div class="kpi-value xs" id="act-kpi-top-ss">—</div><div class="kpi-sub" id="act-kpi-top-ss-val">—</div></div>
+  </div>
+  <div class="sec-title">📈 Tendencia Temporal</div><div class="sec-sep"></div>
+  <div class="charts-grid g1" style="margin-bottom:18px">
+    <div class="chart-card">
+      <div class="chart-header"><div><div class="chart-title">Evolución Total de Actividades SM por Año (2014–2025)</div><div class="chart-sub">Total nacional · Caída COVID-19 en 2020 y recuperación sostenida posterior</div></div><div class="chart-badge">Nacional</div></div>
+      <div class="cw t"><canvas id="act-c-tend"></canvas></div>
+    </div>
+  </div>
+  <div class="charts-grid g2">
+    <div class="chart-card">
+      <div class="chart-header"><div><div class="chart-title">Actividades SM por Servicio de Salud</div><div class="chart-sub">Comparación entre los 29 SS</div></div><div class="chart-badge">SS</div></div>
+      <div class="cw xt"><canvas id="act-c-ss"></canvas></div>
+    </div>
+    <div class="chart-card">
+      <div class="chart-header"><div><div class="chart-title">Variación % Año a Año</div><div class="chart-sub">Cambio porcentual respecto al año anterior</div></div><div class="chart-badge">Δ%</div></div>
+      <div class="cw t"><canvas id="act-c-var"></canvas></div>
+    </div>
+  </div>
+  <div class="sec-title" style="margin-top:22px">🏥 Análisis por Tipo y Dependencia</div><div class="sec-sep"></div>
+  <div class="charts-grid g3">
+    <div class="chart-card">
+      <div class="chart-header"><div><div class="chart-title">Distribución por Tipo de Establecimiento</div><div class="chart-sub">Participación en el total de actividades</div></div><div class="chart-badge">Tipo</div></div>
+      <div class="cw t"><canvas id="act-c-tipo-dona"></canvas></div>
+    </div>
+    <div class="chart-card">
+      <div class="chart-header"><div><div class="chart-title">Evolución por Tipo de Establecimiento</div><div class="chart-sub">Tendencia 2014–2025</div></div><div class="chart-badge">Tendencia</div></div>
+      <div class="cw t"><canvas id="act-c-tipo-linea"></canvas></div>
+    </div>
+    <div class="chart-card">
+      <div class="chart-header"><div><div class="chart-title">Actividades por Dependencia</div><div class="chart-sub">Municipal vs SS vs Otra</div></div><div class="chart-badge">Dependencia</div></div>
+      <div class="cw t"><canvas id="act-c-dep"></canvas></div>
+    </div>
+  </div>
+  <div class="sec-title" style="margin-top:22px">🌆 Análisis Comunal y por Establecimiento</div><div class="sec-sep"></div>
+  <div class="charts-grid g2c">
+    <div class="chart-card">
+      <div class="chart-header"><div><div class="chart-title">Top 20 Comunas — Actividades SM</div><div class="chart-sub">Ordenadas por total acumulado</div></div><div class="chart-badge">Top 20</div></div>
+      <div class="cw xxxl"><canvas id="act-c-comunas"></canvas></div>
+    </div>
+    <div class="chart-card">
+      <div class="chart-header"><div><div class="chart-title">Top 10 Establecimientos</div><div class="chart-sub">Centros con más actividades</div></div><div class="chart-badge">Ranking</div></div>
+      <div class="cw xxxl"><canvas id="act-c-top-estab"></canvas></div>
+    </div>
+  </div>
+  <div class="sec-title" style="margin-top:22px">🔥 Distribución Temporal por Servicio de Salud</div><div class="sec-sep"></div>
+  <div class="charts-grid g1">
+    <div class="chart-card">
+      <div class="chart-header"><div><div class="chart-title">Actividades SM por SS y Año — Barras Apiladas</div><div class="chart-sub">Comparación multianual</div></div><div class="chart-badge">2014–2025</div></div>
+      <div class="cw xxxl"><canvas id="act-c-ss-anio"></canvas></div>
+    </div>
+  </div>
+  <div class="sec-title" style="margin-top:22px">🗺️ Mapa de Actividades por Establecimiento</div><div class="sec-sep"></div>
+  <div class="charts-grid g1">
+    <div class="chart-card">
+      <div class="chart-header"><div><div class="chart-title">Mapa de Actividades SM por Centro APS</div><div class="chart-sub">Tamaño proporcional al número de actividades</div></div><div class="chart-badge">Georreferenciado</div></div>
+      <div class="map-ctrl">
+        <label style="font-size:11px;font-weight:600;color:var(--texto-s)">Año mapa:</label>
+        <select class="map-sel" id="act-map-year" onchange="actualizarMapaAct()"><option value="total">Total 2014–2025</option></select>
+        <label style="font-size:11px;font-weight:600;color:var(--texto-s);margin-left:10px">Color por:</label>
+        <select class="map-sel" id="act-map-color" onchange="actualizarMapaAct()">
+          <option value="tipo">Tipo Establecimiento</option>
+          <option value="dependencia">Dependencia</option>
+          <option value="ss">Servicio de Salud</option>
+        </select>
+      </div>
+      <div id="act-mapa" class="mapa"></div>
+      <div class="map-leg" id="act-map-leg"></div>
+    </div>
+  </div>
+  <div class="sec-title" style="margin-top:22px">📋 Tabla de Establecimientos</div><div class="sec-sep"></div>
+  <div class="charts-grid g1">
+    <div class="chart-card">
+      <div class="chart-header"><div><div class="chart-title">Detalle por Establecimiento — Actividades SM</div><div class="chart-sub">Top 100 · Clic en encabezados para ordenar</div></div><div class="chart-badge" id="act-badge-tabla">Top 100</div></div>
+      <div class="tabla-wrap">
+        <table><thead><tr>
+          <th onclick="sortTab('act-tabla-body',0)">#</th>
+          <th onclick="sortTab('act-tabla-body',1)">Establecimiento ↕</th>
+          <th onclick="sortTab('act-tabla-body',2)">Comuna ↕</th>
+          <th onclick="sortTab('act-tabla-body',3)">Servicio de Salud ↕</th>
+          <th onclick="sortTab('act-tabla-body',4)">Tipo ↕</th>
+          <th onclick="sortTab('act-tabla-body',5)">Dependencia ↕</th>
+          <th onclick="sortTab('act-tabla-body',6)">Total Actividades ↕</th>
+          <th>Barra</th>
+        </tr></thead>
+        <tbody id="act-tabla-body"></tbody></table>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- ===== TAB CONCENTRACIÓN ===== -->
+<div id="tab-conc" class="tab-content">
+<div class="main">
+  <div class="ind-note">
+    <strong>🎯 Concentración de Actividades SM APS:</strong> Indicador calculado como <strong>Total Actividades de Tratamiento SM ÷ Población Bajo Control (PBC) de diciembre de cada año</strong>. Expresa el promedio de actividades de tratamiento realizadas por cada persona en control durante el año. Una concentración mayor indica mayor intensidad de atención. Se excluyen establecimientos con PBC = 0.
+  </div>
+  <div class="kpi-row">
+    <div class="kpi-card"><div class="kpi-icon">🎯</div><div class="kpi-label">Concentración Promedio Nacional</div><div class="kpi-value sm" id="conc-kpi-prom">—</div><div class="kpi-sub" id="conc-kpi-prom-sub">Act. / PBC</div></div>
+    <div class="kpi-card verde"><div class="kpi-icon">📈</div><div class="kpi-label">Año con mayor concentración</div><div class="kpi-value sm" id="conc-kpi-best-yr">—</div><div class="kpi-sub" id="conc-kpi-best-yr-val">—</div></div>
+    <div class="kpi-card naranja"><div class="kpi-icon">📉</div><div class="kpi-label">Año con menor concentración</div><div class="kpi-value sm" id="conc-kpi-worst-yr">—</div><div class="kpi-sub" id="conc-kpi-worst-yr-val">—</div></div>
+    <div class="kpi-card rojo"><div class="kpi-icon">🏆</div><div class="kpi-label">SS con mayor concentración</div><div class="kpi-value xs" id="conc-kpi-top-ss">—</div><div class="kpi-sub" id="conc-kpi-top-ss-val">—</div></div>
+    <div class="kpi-card morado"><div class="kpi-icon">⚠️</div><div class="kpi-label">SS con menor concentración</div><div class="kpi-value xs" id="conc-kpi-bot-ss">—</div><div class="kpi-sub" id="conc-kpi-bot-ss-val">—</div></div>
+  </div>
+  <div class="sec-title">📈 Tendencia del Indicador</div><div class="sec-sep"></div>
+  <div class="charts-grid g1" style="margin-bottom:18px">
+    <div class="chart-card">
+      <div class="chart-header"><div><div class="chart-title">Evolución de la Concentración de Actividades SM (2014–2025)</div><div class="chart-sub">Actividades ÷ PBC por año · Nivel nacional según filtros activos</div></div><div class="chart-badge">Concentración</div></div>
+      <div class="cw t"><canvas id="conc-c-tend"></canvas></div>
+    </div>
+  </div>
+  <div class="charts-grid g2">
+    <div class="chart-card">
+      <div class="chart-header"><div><div class="chart-title">Concentración por Servicio de Salud</div><div class="chart-sub">Comparación entre SS · escala de color verde→rojo</div></div><div class="chart-badge">SS</div></div>
+      <div class="cw xt"><canvas id="conc-c-ss"></canvas></div>
+    </div>
+    <div class="chart-card">
+      <div class="chart-header"><div><div class="chart-title">Comparativa Actividades vs PBC por Año</div><div class="chart-sub">Volumen absoluto con concentración superpuesta</div></div><div class="chart-badge">Dual</div></div>
+      <div class="cw t"><canvas id="conc-c-dual"></canvas></div>
+    </div>
+  </div>
+  <div class="sec-title" style="margin-top:22px">🏥 Concentración por Tipo y Dependencia</div><div class="sec-sep"></div>
+  <div class="charts-grid g2">
+    <div class="chart-card">
+      <div class="chart-header"><div><div class="chart-title">Concentración por Tipo de Establecimiento</div><div class="chart-sub">Intensidad de atención según tipo de centro</div></div><div class="chart-badge">Tipo</div></div>
+      <div class="cw t"><canvas id="conc-c-tipo"></canvas></div>
+    </div>
+    <div class="chart-card">
+      <div class="chart-header"><div><div class="chart-title">Concentración por Dependencia Administrativa</div><div class="chart-sub">Municipal vs SS vs Otra</div></div><div class="chart-badge">Dependencia</div></div>
+      <div class="cw t"><canvas id="conc-c-dep"></canvas></div>
+    </div>
+  </div>
+  <div class="sec-title" style="margin-top:22px">📊 Evolución por Servicio de Salud</div><div class="sec-sep"></div>
+  <div class="charts-grid g1">
+    <div class="chart-card">
+      <div class="chart-header"><div><div class="chart-title">Concentración por SS y Año — Líneas Múltiples</div><div class="chart-sub">Trayectoria de cada SS en el tiempo · Top 15 SS</div></div><div class="chart-badge">2014–2025</div></div>
+      <div class="cw xxxl"><canvas id="conc-c-ss-linea"></canvas></div>
+    </div>
+  </div>
+  <div class="sec-title" style="margin-top:22px">📋 Tabla del Indicador por Establecimiento</div><div class="sec-sep"></div>
+  <div class="charts-grid g1">
+    <div class="chart-card">
+      <div class="chart-header"><div><div class="chart-title">Concentración por Establecimiento</div><div class="chart-sub">Solo establecimientos con PBC > 0 · Clic en encabezados para ordenar</div></div><div class="chart-badge" id="conc-badge-tabla">—</div></div>
+      <div class="tabla-wrap">
+        <table><thead><tr>
+          <th onclick="sortTab('conc-tabla-body',0)">#</th>
+          <th onclick="sortTab('conc-tabla-body',1)">Establecimiento ↕</th>
+          <th onclick="sortTab('conc-tabla-body',2)">Comuna ↕</th>
+          <th onclick="sortTab('conc-tabla-body',3)">Servicio de Salud ↕</th>
+          <th onclick="sortTab('conc-tabla-body',4)">Tipo ↕</th>
+          <th onclick="sortTab('conc-tabla-body',5)">Actividades ↕</th>
+          <th onclick="sortTab('conc-tabla-body',6)">PBC ↕</th>
+          <th onclick="sortTab('conc-tabla-body',7)">Concentración ↕</th>
+          <th>Barra</th>
+        </tr></thead>
+        <tbody id="conc-tabla-body"></tbody></table>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+
 <div class="footer">
   División de Atención Primaria · Ministerio de Salud de Chile &nbsp;|&nbsp; Datos DEIS MINSAL · Altas Clínicas SM y Población Bajo Control APS 2014–2025
 </div>
@@ -1059,10 +1247,10 @@ window._parseDatos = function(pkg){
     window.DATA = pkg.rows.map(r=>({
       id:r[0], n:r[1],
       c:pkg.com[r[2]], s:pkg.ss[r[3]], t:pkg.tip[r[4]], tc:pkg.tc[r[5]], dep:pkg.dep[r[6]],
-      lat:r[7], lon:r[8], ta:r[9], tp:r[10], ti:r[11], tg:r[12],
-      a:r.slice(13,25), p:r.slice(25,37), i:r.slice(37,49), g:r.slice(49,61),
-      cat:r[61]?{N0:r[61][0],N1:r[61][1],N2:r[61][2],N3:r[61][3],N4:r[61][4],
-                  total:r[61][0]+r[61][1]+r[61][2]+r[61][3]+r[61][4]}:null
+      lat:r[7], lon:r[8], ta:r[9], tp:r[10], ti:r[11], tg:r[12], tv:r[13],
+      a:r.slice(14,26), p:r.slice(26,38), i:r.slice(38,50), g:r.slice(50,62), v:r.slice(62,74),
+      cat:r[74]?{N0:r[74][0],N1:r[74][1],N2:r[74][2],N3:r[74][3],N4:r[74][4],
+                  total:r[74][0]+r[74][1]+r[74][2]+r[74][3]+r[74][4]}:null
     }));
   } catch(e) {
     console.error('Error:', e);
@@ -1074,6 +1262,7 @@ function ga(d,y){const i=YEARS.indexOf(String(y));return i>=0?(d.a[i]||0):0;}
 function gp(d,y){const i=YEARS.indexOf(String(y));return i>=0?(d.p[i]||0):0;}
 function gi(d,y){const i=YEARS.indexOf(String(y));return i>=0?(d.i[i]||0):0;}
 function gg(d,y){const i=YEARS.indexOf(String(y));return i>=0?(d.g[i]||0):0;}
+function gv(d,y){const i=YEARS.indexOf(String(y));return i>=0?(d.v[i]||0):0;}
 
 const TIPO_C = {
   'CESFAM':'#005F9E','CECOSF':'#2E8B57','Posta de Salud':'#E67E22',
@@ -1090,8 +1279,8 @@ const PAL = ['#005F9E','#0090D0','#2E8B57','#E67E22','#D0222A','#7c3aed','#16a08
 // ============================================================
 let F = {anio:'total', ss:'', comuna:'', estab:'', tipo:'', dep:'', cat:''};
 let charts = {};
-let maps = {a:null, p:null, c:null, i2:null, ipg:null};
-let mapMarkers = {a:[], p:[], c:[], i2:[], ipg:[]};
+let maps = {a:null, p:null, c:null, i2:null, ipg:null, act:null};
+let mapMarkers = {a:[], p:[], c:[], i2:[], ipg:[], act:[]};
 let sortDir = {};
 
 // ============================================================
@@ -1111,6 +1300,7 @@ function switchTab(name, btn) {
     if(name==='cat' && maps.c) maps.c.invalidateSize();
     if(name==='ing' && maps.i2) maps.i2.invalidateSize();
     if(name==='ipg' && maps.ipg) maps.ipg.invalidateSize();
+    if(name==='act' && maps.act) maps.act.invalidateSize();
   }, 50);
 }
 
@@ -1152,6 +1342,7 @@ function init() {
   initMapaCat();
   initMapaIng();
   initMapaIPG();
+  initMapaAct();
   updateHomeKPIs();
   initTerrSelectors();
   actualizarTodo();
@@ -1217,7 +1408,7 @@ function actualizarTodo() {
   document.getElementById('filtros-count').textContent = fd.length.toLocaleString('es-CL')+' establecimientos activos';
 
   // Sync map year selectors with global year filter
-  ['a-map-year','p-map-year','i2-map-year','ipg-map-year'].forEach(id=>{
+  ['a-map-year','p-map-year','i2-map-year','ipg-map-year','act-map-year'].forEach(id=>{
     const sel=document.getElementById(id);
     if(sel) sel.value=F.anio;
   });
@@ -1264,6 +1455,17 @@ function actualizarTodo() {
   kpisInd(fd);
   grafInd(fd);
   tablaInd(fd);
+
+  // Tab Actividades
+  kpisAct(fd);
+  grafAct(fd);
+  tablaAct(fd);
+  actualizarMapaAct();
+
+  // Tab Concentración
+  kpisConc(fd);
+  grafConc(fd);
+  tablaConc(fd);
 
   // Tab IPG
   kpisIPG(fd);
@@ -1604,7 +1806,7 @@ function varChart(vals,color='#005F9E') {
 
 function donaCfg(fd,anio,campo) {
   const byT={};
-  fd.forEach(d=>{const v=campo==='altas'?getAltas(d,anio):campo==='pbc'?getPBC(d,anio):campo==='ing'?getIng(d,anio):getIPG(d,anio);byT[d.t]=(byT[d.t]||0)+v;});
+  fd.forEach(d=>{const v=campo==='altas'?getAltas(d,anio):campo==='pbc'?getPBC(d,anio):campo==='ing'?getIng(d,anio):campo==='ipg'?getIPG(d,anio):getAct(d,anio);byT[d.t]=(byT[d.t]||0)+v;});
   const items=Object.entries(byT).sort((a,b)=>b[1]-a[1]);
   return {type:'doughnut',data:{labels:items.map(x=>x[0]),datasets:[{data:items.map(x=>x[1]),
     backgroundColor:items.map(x=>TIPO_C[x[0]]||'#999'),borderColor:'#fff',borderWidth:2}]},
@@ -1640,7 +1842,7 @@ function depStackedCfg(fd,campo) {
 
 function topEstabCfg(topE,anio,campo) {
   const labels=topE.map(d=>{let n=d.n.replace(/Centro de Salud Familiar/i,'CESFAM').replace(/Centro Comunitario de Salud Familiar/i,'CECOSF');return n.length>38?n.slice(0,36)+'…':n;});
-  const vals=topE.map(d=>campo==='altas'?getAltas(d,anio):campo==='pbc'?getPBC(d,anio):campo==='ing'?getIng(d,anio):getIPG(d,anio));
+  const vals=topE.map(d=>campo==='altas'?getAltas(d,anio):campo==='pbc'?getPBC(d,anio):campo==='ing'?getIng(d,anio):campo==='ipg'?getIPG(d,anio):getAct(d,anio));
   return {type:'bar',data:{labels,datasets:[{label:'',data:vals,
     backgroundColor:topE.map(d=>(TIPO_C[d.t]||'#005F9E')+'CC'),
     borderColor:topE.map(d=>TIPO_C[d.t]||'#005F9E'),borderWidth:1,borderRadius:4}]},
@@ -1651,9 +1853,9 @@ function topEstabCfg(topE,anio,campo) {
 
 function ssAnioCfg(fd,campo) {
   const allSS=[...new Set(fd.map(d=>d.s))].filter(Boolean);
-  const ssTots={};allSS.forEach(ss=>{ssTots[ss]=fd.filter(d=>d.s===ss).reduce((s,d)=>s+(campo==='altas'?d.ta:campo==='pbc'?d.tp:campo==='ing'?d.ti:d.tg),0);});
+  const ssTots={};allSS.forEach(ss=>{ssTots[ss]=fd.filter(d=>d.s===ss).reduce((s,d)=>s+(campo==='altas'?d.ta:campo==='pbc'?d.tp:campo==='ing'?d.ti:campo==='ipg'?d.tg:d.tv),0);});
   const sortedSS=allSS.sort((a,b)=>ssTots[b]-ssTots[a]);
-  const _getV=(d,i)=>campo==='altas'?(d.a[i]||0):campo==='pbc'?(d.p[i]||0):campo==='ing'?(d.i[i]||0):(d.g[i]||0);
+  const _getV=(d,i)=>campo==='altas'?(d.a[i]||0):campo==='pbc'?(d.p[i]||0):campo==='ing'?(d.i[i]||0):campo==='ipg'?(d.g[i]||0):(d.v[i]||0);
   const ds=YEARS.map((y,i)=>{
     const hue=Math.round(i*(220/11));
     const color=`hsl(${200+hue},70%,45%)`;
@@ -1760,12 +1962,12 @@ function actualizarMapa(prefix, campo) {
   const ssColorMap={};
   if(colorBy==='ss'){[...new Set(withC.map(d=>d.s))].forEach((ss,i)=>ssColorMap[ss]=PAL[i%PAL.length]);}
   withC.forEach(d=>{
-    const val=campo==='altas'?getAltas(d,mapAnio):campo==='pbc'?getPBC(d,mapAnio):campo==='ing'?getIng(d,mapAnio):campo==='ipg'?getIPG(d,mapAnio):0;
+    const val=campo==='altas'?getAltas(d,mapAnio):campo==='pbc'?getPBC(d,mapAnio):campo==='ing'?getIng(d,mapAnio):campo==='ipg'?getIPG(d,mapAnio):campo==='act'?getAct(d,mapAnio):0;
     if(val<=0)return;
     const color=colorBy==='tipo'?(TIPO_C[d.t]||'#999'):colorBy==='dependencia'?(DEP_C[d.dep.trim()]||'#999'):(ssColorMap[d.s]||'#005F9E');
     const r=Math.max(4,Math.min(28,4+Math.sqrt(val/maxV)*22));
     const mk=L.circleMarker([d.lat,d.lon],{radius:r,fillColor:color,color:'#fff',weight:1.5,opacity:1,fillOpacity:0.75});
-    const etiq=campo==='altas'?'Altas Clínicas SM':campo==='pbc'?'Población Bajo Control':campo==='ing'?'Ingresos SM':'IPG';
+    const etiq={'altas':'Altas SM','pbc':'Población Bajo Control','ing':'Ingresos SM','ipg':'IPG','act':'Actividades SM'}[campo]||campo;
     mk.bindPopup(`<div style="font-family:Segoe UI,Arial;font-size:12px;min-width:220px">
       <div style="font-weight:800;font-size:13px;color:#003F6B;margin-bottom:6px">${d.n}</div>
       <div style="display:grid;grid-template-columns:auto 1fr;gap:3px 8px;font-size:11px">
@@ -1978,7 +2180,7 @@ function actualizarMapaCat() {
 // ── switchTabByName (for home cards) ──────────────────────────────────────
 function switchTabByName(name) {
   const btns = document.querySelectorAll('.tab-btn');
-  const tabNames = ['home','altas','pbc','ind','cat','ing','catind','ipg'];
+  const tabNames = ['home','altas','pbc','ind','cat','ing','catind','ipg','act','conc'];
   const idx = tabNames.indexOf(name);
   if(idx>=0) switchTab(name, btns[idx]);
 }
@@ -2073,6 +2275,239 @@ function initMapaIng(){
 function actualizarMapaIng(){actualizarMapa('i2','ing');}
 
 
+
+
+// ============================================================
+// ACTIVIDADES SM
+// ============================================================
+function getAct(d,anio){return anio==='total'?d.tv:gv(d,anio);}
+
+function kpisAct(fd){
+  const anio=F.anio;
+  const total=fd.reduce((s,d)=>s+getAct(d,anio),0);
+  const set=(id,v)=>{const el=document.getElementById(id);if(el)el.textContent=v;};
+  set('act-kpi-total',fmt(total));
+  set('act-kpi-total-sub',anio==='total'?'Período 2014–2025':'Año '+anio);
+  const con=fd.filter(d=>getAct(d,anio)>0).length;
+  set('act-kpi-estab',con.toLocaleString('es-CL'));
+  let promAnual;
+  if(anio==='total'){
+    const s=fd.reduce((acc,d)=>{const yrs=YEARS.filter((_,i)=>(d.v[i]||0)>0).length;return acc+(yrs>0?d.tv/yrs:0);},0);
+    promAnual=con>0?s/con:0;
+  } else {promAnual=con>0?total/con:0;}
+  set('act-kpi-prom',con>0?fmt(promAnual):'—');
+  let bY='',bV=0;
+  YEARS.forEach((y,i)=>{const s=fd.reduce((a,d)=>a+(d.v[i]||0),0);if(s>bV){bV=s;bY=y;}});
+  set('act-kpi-best-yr',bY);
+  set('act-kpi-best-yr-val',fmt(bV)+' actividades ese año');
+  const bySS={};fd.forEach(d=>{bySS[d.s]=(bySS[d.s]||0)+getAct(d,anio);});
+  const top=Object.entries(bySS).sort((a,b)=>b[1]-a[1])[0];
+  if(top){set('act-kpi-top-ss',top[0].split(' ')[0]);set('act-kpi-top-ss-val',fmt(top[1])+' actividades');}
+}
+
+function grafAct(fd){
+  const anio=F.anio;
+  const color='#e74c3c';
+  const tV=YEARS.map((y,i)=>fd.reduce((s,d)=>s+(d.v[i]||0),0));
+  mkChart('act-c-tend',{type:'line',data:{labels:YEARS,datasets:[{
+    label:'Actividades SM',data:tV,borderColor:color,backgroundColor:'rgba(231,76,60,0.08)',
+    fill:true,tension:0.35,pointRadius:5,pointHoverRadius:8,borderWidth:3,
+    pointBackgroundColor:tV.map((v,i)=>i===6?'#7c3aed':v===Math.max(...tV)?'#2E8B57':color),
+    pointBorderColor:'#fff',pointBorderWidth:2}]},
+  options:{responsive:true,maintainAspectRatio:false,
+    plugins:{legend:{display:false},tooltip:{callbacks:{label:ctx=>' '+fmt(ctx.raw)+' actividades'}}},
+    scales:{x:{ticks:{font:{size:11,weight:'bold'}}},y:{ticks:{callback:v=>fmt(v),font:{size:10}}}}}});
+  const ssTot={};fd.forEach(d=>{ssTot[d.s]=(ssTot[d.s]||0)+getAct(d,anio);});
+  const ssSort=Object.entries(ssTot).sort((a,b)=>b[1]-a[1]);
+  mkChart('act-c-ss',hbarCfg(ssSort.map(x=>x[0]),ssSort.map(x=>x[1]),PAL,color));
+  mkChart('act-c-var',varChart(tV,color));
+  mkChart('act-c-tipo-dona',donaCfg(fd,anio,'act'));
+  mkChart('act-c-tipo-linea',tipoLineaCfg(fd,'act'));
+  mkChart('act-c-dep',depStackedCfg(fd,'act'));
+  const comTot={};fd.forEach(d=>{comTot[d.c]=(comTot[d.c]||0)+getAct(d,anio);});
+  const comSort=Object.entries(comTot).sort((a,b)=>b[1]-a[1]).slice(0,20);
+  mkChart('act-c-comunas',hbarCfg(comSort.map(x=>x[0]),comSort.map(x=>x[1]),PAL,color));
+  const topE=fd.slice().sort((a,b)=>getAct(b,anio)-getAct(a,anio)).slice(0,10);
+  mkChart('act-c-top-estab',topEstabCfg(topE,anio,'act'));
+  mkChart('act-c-ss-anio',ssAnioCfg(fd,'act'));
+}
+
+function tablaAct(fd){
+  const anio=F.anio;
+  const sorted=fd.slice().sort((a,b)=>getAct(b,anio)-getAct(a,anio)).slice(0,100);
+  const maxV=sorted.length>0?getAct(sorted[0],anio):1;
+  const el=document.getElementById('act-tabla-body');if(!el)return;
+  el.innerHTML=sorted.map((d,i)=>`<tr>
+    <td class="rank">${i+1}</td><td>${d.n}</td><td>${d.c}</td><td>${d.s}</td>
+    <td><span style="background:${TIPO_C[d.t]||'#999'}22;color:${TIPO_C[d.t]||'#999'};font-weight:700;padding:2px 6px;border-radius:8px;font-size:10px">${d.t}</span></td>
+    <td>${d.dep.trim()}</td><td class="num">${fmt(getAct(d,anio))}</td>
+    <td><div class="prog"><div class="prog-fill" style="width:${(getAct(d,anio)/maxV*100).toFixed(1)}%;background:#e74c3c"></div></div></td>
+  </tr>`).join('');
+  const badge=document.getElementById('act-badge-tabla');if(badge)badge.textContent='Top '+sorted.length;
+}
+
+function initMapaAct(){
+  maps.act=L.map('act-mapa').setView([-35.5,-71.0],5);
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{attribution:'© OpenStreetMap',maxZoom:18}).addTo(maps.act);
+  actualizarMapaAct();
+}
+function actualizarMapaAct(){actualizarMapa('act','act');}
+
+// ============================================================
+// CONCENTRACIÓN ACTIVIDADES / PBC
+// ============================================================
+function getConc(actArr,pbcArr,idx){
+  // idx = YEARS index, or -1 for total
+  if(idx===-1){
+    const totA=actArr.reduce((s,v)=>s+v,0);
+    const totP=pbcArr.reduce((s,v)=>s+v,0);
+    return totP>0?totA/totP:0;
+  }
+  return pbcArr[idx]>0?actArr[idx]/pbcArr[idx]:0;
+}
+
+function kpisConc(fd){
+  const anio=F.anio;
+  const yi=anio==='total'?-1:YEARS.indexOf(anio);
+  const totA=yi===-1?fd.reduce((s,d)=>s+d.tv,0):fd.reduce((s,d)=>s+(d.v[yi]||0),0);
+  const totP=yi===-1?fd.reduce((s,d)=>s+d.tp,0):fd.reduce((s,d)=>s+(d.p[yi]||0),0);
+  const concNac=totP>0?(totA/totP):0;
+  const set=(id,v)=>{const el=document.getElementById(id);if(el)el.textContent=v;};
+  set('conc-kpi-prom',concNac.toFixed(2));
+  set('conc-kpi-prom-sub',fmt(totA)+' act / '+fmt(totP)+' PBC');
+  // By year
+  const byYr=YEARS.map((y,i)=>{
+    const a=fd.reduce((s,d)=>s+(d.v[i]||0),0);
+    const p=fd.reduce((s,d)=>s+(d.p[i]||0),0);
+    return p>0?a/p:0;
+  }).filter(v=>v>0);
+  const maxC=Math.max(...byYr), minC=Math.min(...byYr);
+  const maxYr=YEARS[YEARS.map((y,i)=>{const a=fd.reduce((s,d)=>s+(d.v[i]||0),0);const p=fd.reduce((s,d)=>s+(d.p[i]||0),0);return p>0?a/p:0;}).indexOf(maxC)];
+  const minYr=YEARS[YEARS.map((y,i)=>{const a=fd.reduce((s,d)=>s+(d.v[i]||0),0);const p=fd.reduce((s,d)=>s+(d.p[i]||0),0);return p>0?a/p:0;}).indexOf(minC)];
+  set('conc-kpi-best-yr',maxYr||'—');set('conc-kpi-best-yr-val',maxC.toFixed(2)+' act/persona');
+  set('conc-kpi-worst-yr',minYr||'—');set('conc-kpi-worst-yr-val',minC.toFixed(2)+' act/persona');
+  // By SS
+  const bySS={};
+  fd.forEach(d=>{
+    if(!bySS[d.s])bySS[d.s]={a:0,p:0};
+    if(yi===-1){bySS[d.s].a+=d.tv;bySS[d.s].p+=d.tp;}
+    else{bySS[d.s].a+=(d.v[yi]||0);bySS[d.s].p+=(d.p[yi]||0);}
+  });
+  const ssPcts=Object.entries(bySS).map(([ss,v])=>({ss,c:v.p>0?v.a/v.p:0})).filter(x=>x.c>0).sort((a,b)=>b.c-a.c);
+  if(ssPcts.length>0){
+    set('conc-kpi-top-ss',ssPcts[0].ss.split(' ')[0]);set('conc-kpi-top-ss-val',ssPcts[0].c.toFixed(2)+' act/persona');
+    const bot=ssPcts[ssPcts.length-1];
+    set('conc-kpi-bot-ss',bot.ss.split(' ')[0]);set('conc-kpi-bot-ss-val',bot.c.toFixed(2)+' act/persona');
+  }
+}
+
+function grafConc(fd){
+  const anio=F.anio;
+  const yi=anio==='total'?-1:YEARS.indexOf(anio);
+  // Tendencia
+  const concVals=YEARS.map((y,i)=>{
+    const a=fd.reduce((s,d)=>s+(d.v[i]||0),0);
+    const p=fd.reduce((s,d)=>s+(d.p[i]||0),0);
+    return p>0?parseFloat((a/p).toFixed(2)):0;
+  });
+  mkChart('conc-c-tend',{type:'line',data:{labels:YEARS,datasets:[{
+    label:'Concentración',data:concVals,borderColor:'#e67e22',
+    backgroundColor:'rgba(230,126,34,0.08)',fill:true,tension:0.35,
+    pointRadius:5,pointHoverRadius:8,borderWidth:3,
+    pointBackgroundColor:concVals.map((v,i)=>i===6?'#D0222A':v===Math.max(...concVals)?'#2E8B57':'#e67e22'),
+    pointBorderColor:'#fff',pointBorderWidth:2}]},
+  options:{responsive:true,maintainAspectRatio:false,
+    plugins:{legend:{display:false},tooltip:{callbacks:{label:ctx=>` ${ctx.raw.toFixed(2)} act/persona`}}},
+    scales:{x:{ticks:{font:{size:11,weight:'bold'}}},y:{ticks:{callback:v=>v.toFixed(1),font:{size:10}},beginAtZero:true}}}});
+
+  // SS concentración
+  const bySS={};
+  fd.forEach(d=>{
+    if(!bySS[d.s])bySS[d.s]={a:0,p:0};
+    if(yi===-1){bySS[d.s].a+=d.tv;bySS[d.s].p+=d.tp;}
+    else{bySS[d.s].a+=(d.v[yi]||0);bySS[d.s].p+=(d.p[yi]||0);}
+  });
+  const ssData=Object.entries(bySS).map(([ss,v])=>({ss,c:v.p>0?parseFloat((v.a/v.p).toFixed(2)):0,a:v.a,p:v.p})).filter(x=>x.p>0).sort((a,b)=>b.c-a.c);
+  const cScale=(c,arr)=>{const vals=arr.map(x=>x.c),mn=Math.min(...vals),mx=Math.max(...vals);const n=(c-mn)/(mx-mn||1);return `rgba(${Math.round(208-(208-46)*n)},${Math.round(34+(139-34)*n)},${Math.round(42+(87-42)*n)},0.8)`;};
+  mkChart('conc-c-ss',{type:'bar',data:{labels:ssData.map(x=>x.ss),datasets:[{
+    label:'Concentración',data:ssData.map(x=>x.c),
+    backgroundColor:ssData.map(x=>cScale(x.c,ssData)),borderRadius:4}]},
+  options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,
+    plugins:{legend:{display:false},tooltip:{callbacks:{label:ctx=>{const d=ssData[ctx.dataIndex];return [` ${ctx.raw.toFixed(2)} act/persona`,` ${fmt(d.a)} act / ${fmt(d.p)} PBC`];}}}},
+    scales:{x:{ticks:{callback:v=>v.toFixed(1),font:{size:9}}},y:{ticks:{font:{size:9}}}}}});
+
+  // Dual
+  const actVals=YEARS.map((y,i)=>fd.reduce((s,d)=>s+(d.v[i]||0),0));
+  const pbcVals=YEARS.map((y,i)=>fd.reduce((s,d)=>s+(d.p[i]||0),0));
+  mkChart('conc-c-dual',{type:'bar',data:{labels:YEARS,datasets:[
+    {label:'Actividades SM',data:actVals,backgroundColor:'rgba(231,76,60,0.6)',borderRadius:3,order:2},
+    {label:'PBC',data:pbcVals,backgroundColor:'rgba(46,139,87,0.4)',borderRadius:3,order:3},
+    {label:'Concentración',data:concVals,type:'line',borderColor:'#e67e22',backgroundColor:'transparent',pointRadius:4,borderWidth:2.5,yAxisID:'y2',order:1}
+  ]},options:{responsive:true,maintainAspectRatio:false,
+    plugins:{legend:{position:'bottom',labels:{font:{size:10},boxWidth:12}},tooltip:{mode:'index',intersect:false}},
+    scales:{x:{ticks:{font:{size:10}}},y:{ticks:{callback:v=>fmt(v),font:{size:9}},position:'left'},
+      y2:{ticks:{callback:v=>v.toFixed(1),font:{size:9}},position:'right',grid:{display:false}}}}});
+
+  // Tipo
+  const byTipo={};
+  fd.forEach(d=>{if(!byTipo[d.t])byTipo[d.t]={a:0,p:0};if(yi===-1){byTipo[d.t].a+=d.tv;byTipo[d.t].p+=d.tp;}else{byTipo[d.t].a+=(d.v[yi]||0);byTipo[d.t].p+=(d.p[yi]||0);}});
+  const tipoData=Object.entries(byTipo).map(([t,v])=>({t,c:v.p>0?parseFloat((v.a/v.p).toFixed(2)):0})).filter(x=>x.c>0).sort((a,b)=>b.c-a.c);
+  mkChart('conc-c-tipo',{type:'bar',data:{labels:tipoData.map(x=>x.t),datasets:[{
+    label:'Concentración',data:tipoData.map(x=>x.c),backgroundColor:tipoData.map(x=>(TIPO_C[x.t]||'#999')+'CC'),borderRadius:4}]},
+  options:{responsive:true,maintainAspectRatio:false,
+    plugins:{legend:{display:false},tooltip:{callbacks:{label:ctx=>` ${ctx.raw.toFixed(2)} act/persona`}}},
+    scales:{x:{ticks:{font:{size:10}}},y:{ticks:{callback:v=>v.toFixed(1),font:{size:10}},beginAtZero:true}}}});
+
+  // Dep
+  const byDep={};
+  fd.forEach(d=>{const dep=d.dep.trim();if(!byDep[dep])byDep[dep]={a:0,p:0};if(yi===-1){byDep[dep].a+=d.tv;byDep[dep].p+=d.tp;}else{byDep[dep].a+=(d.v[yi]||0);byDep[dep].p+=(d.p[yi]||0);}});
+  const depData=Object.entries(byDep).map(([dep,v])=>({dep,c:v.p>0?parseFloat((v.a/v.p).toFixed(2)):0})).filter(x=>x.c>0).sort((a,b)=>b.c-a.c);
+  mkChart('conc-c-dep',{type:'bar',data:{labels:depData.map(x=>x.dep),datasets:[{
+    label:'Concentración',data:depData.map(x=>x.c),backgroundColor:depData.map(x=>(DEP_C[x.dep]||'#999')+'CC'),borderRadius:4}]},
+  options:{responsive:true,maintainAspectRatio:false,
+    plugins:{legend:{display:false},tooltip:{callbacks:{label:ctx=>` ${ctx.raw.toFixed(2)} act/persona`}}},
+    scales:{x:{ticks:{font:{size:10}}},y:{ticks:{callback:v=>v.toFixed(1),font:{size:10}},beginAtZero:true}}}});
+
+  // SS líneas por año
+  const allSS=[...new Set(fd.map(d=>d.s))].filter(Boolean);
+  const ssTots={};allSS.forEach(ss=>{ssTots[ss]=fd.filter(d=>d.s===ss).reduce((s,d)=>s+d.tv,0);});
+  const top15=allSS.sort((a,b)=>ssTots[b]-ssTots[a]).slice(0,15);
+  const ssLineDs=top15.map((ss,i)=>{
+    const vals=YEARS.map((y,j)=>{
+      const a=fd.filter(d=>d.s===ss).reduce((s,d)=>s+(d.v[j]||0),0);
+      const p=fd.filter(d=>d.s===ss).reduce((s,d)=>s+(d.p[j]||0),0);
+      return p>0?parseFloat((a/p).toFixed(2)):null;
+    });
+    return {label:ss,data:vals,borderColor:PAL[i%PAL.length],backgroundColor:'transparent',tension:0.3,pointRadius:3,borderWidth:2,spanGaps:true};
+  });
+  mkChart('conc-c-ss-linea',{type:'line',data:{labels:YEARS,datasets:ssLineDs},options:{
+    responsive:true,maintainAspectRatio:false,
+    plugins:{legend:{position:'bottom',labels:{font:{size:9},boxWidth:10,padding:5}},
+      tooltip:{mode:'index',intersect:false,callbacks:{label:ctx=>ctx.raw!=null?` ${ctx.dataset.label}: ${ctx.raw.toFixed(2)}`:null}}},
+    scales:{x:{ticks:{font:{size:10}}},y:{ticks:{callback:v=>v!=null?v.toFixed(1):'',font:{size:10}},beginAtZero:true}}}});
+}
+
+function tablaConc(fd){
+  const anio=F.anio;
+  const yi=anio==='total'?-1:YEARS.indexOf(anio);
+  const conPBC=fd.filter(d=>yi===-1?d.tp>0:(d.p[yi]||0)>0);
+  const sorted=conPBC.map(d=>{
+    const a=yi===-1?d.tv:(d.v[yi]||0);
+    const p=yi===-1?d.tp:(d.p[yi]||0);
+    return {...d,_a:a,_p:p,_c:p>0?a/p:0};
+  }).sort((a,b)=>b._c-a._c).slice(0,100);
+  const maxC=sorted.length>0?sorted[0]._c:1;
+  const set=(id,v)=>{const el=document.getElementById(id);if(el)el.textContent=v;};
+  set('conc-badge-tabla',sorted.length+' establecimientos con PBC > 0');
+  const el=document.getElementById('conc-tabla-body');if(!el)return;
+  el.innerHTML=sorted.map((d,i)=>`<tr>
+    <td class="rank">${i+1}</td><td>${d.n}</td><td>${d.c}</td><td>${d.s}</td>
+    <td><span style="background:${TIPO_C[d.t]||'#999'}22;color:${TIPO_C[d.t]||'#999'};font-weight:700;padding:2px 6px;border-radius:8px;font-size:10px">${d.t}</span></td>
+    <td class="num">${fmt(d._a)}</td><td class="num">${fmt(d._p)}</td>
+    <td class="num" style="font-weight:800;color:${d._c>=8?'#2E8B57':d._c>=5?'#E67E22':'#D0222A'}">${d._c.toFixed(2)}</td>
+    <td><div class="prog"><div class="prog-fill" style="width:${(d._c/maxC*100).toFixed(1)}%;background:#e67e22"></div></div></td>
+  </tr>`).join('');
+}
 
 // ============================================================
 // IPG — INTERVENCIONES PSICOSOCIALES GRUPALES
