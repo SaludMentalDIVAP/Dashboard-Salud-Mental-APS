@@ -1698,15 +1698,18 @@ tbody td.rank{font-weight:800;color:var(--az2);text-align:center}
 // ============================================================
 window._parseDatos = function(pkg){
   try {
-    window.DATA = pkg.rows.map(r=>({
-      id:r[0], n:r[1],
-      c:pkg.com[r[2]], s:pkg.ss[r[3]], t:pkg.tip[r[4]], tc:pkg.tc[r[5]], dep:pkg.dep[r[6]],
-      lat:r[7], lon:r[8], ta:r[9], tp:r[10], ti:r[11], tg:r[12], tv:r[13], tk:r[14], tb:r[15],
-      a:r.slice(16,28), p:r.slice(28,40), i:r.slice(40,52), g:r.slice(52,64),
-      v:r.slice(64,76), k:r.slice(76,88), b:r.slice(88,100),
-      cat:r[100]?{N0:r[100][0],N1:r[100][1],N2:r[100][2],N3:r[100][3],N4:r[100][4],
-                  total:r[100][0]+r[100][1]+r[100][2]+r[100][3]+r[100][4]}:null
-    }));
+    const ss=pkg.ss,com=pkg.com,tip=pkg.tip,tc2=pkg.tc,dep=pkg.dep;
+    window.DATA = pkg.rows.map(r=>{
+      const cat=r[100];
+      return {
+        id:r[0], n:r[1],
+        c:com[r[2]], s:ss[r[3]], t:tip[r[4]], tc:tc2[r[5]], dep:dep[r[6]],
+        lat:r[7], lon:r[8], ta:r[9], tp:r[10], ti:r[11], tg:r[12], tv:r[13], tk:r[14], tb:r[15],
+        a:r.slice(16,28), p:r.slice(28,40), i:r.slice(40,52), g:r.slice(52,64),
+        v:r.slice(64,76), k:r.slice(76,88), b:r.slice(88,100),
+        cat:cat?{N0:cat[0],N1:cat[1],N2:cat[2],N3:cat[3],N4:cat[4],total:cat[0]+cat[1]+cat[2]+cat[3]+cat[4]}:null
+      };
+    });
   } catch(e) {
     console.error('Error:', e);
     window.DATA = [];
@@ -3965,19 +3968,34 @@ function verFichaCompleta(){
 // START
 // ============================================================
 window.addEventListener('load',function(){
+  // Animate loading indicator
+  const msgEl=document.getElementById('loading-msg');
+  let dots=0;
+  const dotTimer=setInterval(()=>{
+    dots=(dots+1)%4;
+    if(msgEl) msgEl.textContent='Cargando datos'+'.'.repeat(dots);
+  },400);
+
   fetch('datos.json')
     .then(r=>{
       if(!r.ok) throw new Error('HTTP '+r.status);
+      if(msgEl) msgEl.textContent='Procesando datos...';
       return r.json();
     })
     .then(pkg=>{
-      window._parseDatos(pkg);
-      if(!window.DATA || !window.DATA.length) throw new Error('No data');
-      init();
-      const ov=document.getElementById('loading-overlay');
-      if(ov){ov.style.opacity='0';ov.style.transition='opacity .3s';setTimeout(()=>ov.remove(),300);}
+      clearInterval(dotTimer);
+      // Parse in chunks using setTimeout to avoid blocking UI
+      if(msgEl) msgEl.textContent='Inicializando dashboard...';
+      setTimeout(()=>{
+        window._parseDatos(pkg);
+        if(!window.DATA || !window.DATA.length) throw new Error('No data');
+        init();
+        const ov=document.getElementById('loading-overlay');
+        if(ov){ov.style.opacity='0';ov.style.transition='opacity .5s';setTimeout(()=>ov.remove(),500);}
+      },50);
     })
     .catch(e=>{
+      clearInterval(dotTimer);
       console.error(e);
       const ov=document.getElementById('loading-overlay');
       if(ov) ov.innerHTML='<div style="text-align:center;padding:40px;color:white"><div style="font-size:40px;margin-bottom:16px">⚠️</div><div style="font-size:18px;font-weight:700;margin-bottom:8px">Error al cargar los datos</div><div style="font-size:13px;opacity:.75;line-height:1.6">Por favor recargue la página (F5)<br>Si el error persiste, contacte al administrador.</div></div>';
