@@ -153,6 +153,8 @@ tbody td.rank{font-weight:800;color:var(--az2);text-align:center}
     <button class="tab-btn" onclick="switchTab('ipg',this)">🤝 IPG</button>
     <button class="tab-btn" onclick="switchTab('act',this)">📋 Actividades SM</button>
     <button class="tab-btn" onclick="switchTab('conc',this)">🎯 Concentración</button>
+    <button class="tab-btn" onclick="switchTab('ctrl',this)">👤 Controles Individuales</button>
+    <button class="tab-btn" onclick="switchTab('prop',this)">📐 Proporción IPG</button>
   </div>
 </div>
 
@@ -259,6 +261,18 @@ tbody td.rank{font-weight:800;color:var(--az2);text-align:center}
           <div style="font-size:13px;font-weight:800;color:#003F6B;margin-bottom:5px">Concentración de Actividades SM</div>
           <div style="font-size:11px;color:#4A6080;line-height:1.5">Actividades ÷ PBC: promedio de atenciones por persona en control. Indicador de intensidad de atención.</div>
           <div style="margin-top:10px;font-size:10px;font-weight:700;color:#e67e22;text-transform:uppercase;letter-spacing:.5px">6 gráficos + tabla →</div>
+        </div>
+        <div onclick="switchTabByName('ctrl')" style="background:white;border-radius:12px;box-shadow:0 2px 12px rgba(0,60,120,.10);padding:20px 22px;cursor:pointer;border-left:5px solid #3498db;transition:all .2s" onmouseover="this.style.transform='translateY(-2px)';this.style.boxShadow='0 6px 24px rgba(0,60,120,.18)'" onmouseout="this.style.transform='none';this.style.boxShadow='0 2px 12px rgba(0,60,120,.10)'">
+          <div style="font-size:26px;margin-bottom:8px">👤</div>
+          <div style="font-size:13px;font-weight:800;color:#003F6B;margin-bottom:5px">Controles Individuales SM</div>
+          <div style="font-size:11px;color:#4A6080;line-height:1.5">Total de controles individuales de salud mental en APS 2014–2025. Análisis territorial completo.</div>
+          <div style="margin-top:10px;font-size:10px;font-weight:700;color:#3498db;text-transform:uppercase;letter-spacing:.5px">10 gráficos + mapa + tabla →</div>
+        </div>
+        <div onclick="switchTabByName('prop')" style="background:white;border-radius:12px;box-shadow:0 2px 12px rgba(0,60,120,.10);padding:20px 22px;cursor:pointer;border-left:5px solid #9b59b6;transition:all .2s" onmouseover="this.style.transform='translateY(-2px)';this.style.boxShadow='0 6px 24px rgba(0,60,120,.18)'" onmouseout="this.style.transform='none';this.style.boxShadow='0 2px 12px rgba(0,60,120,.10)'">
+          <div style="font-size:26px;margin-bottom:8px">📐</div>
+          <div style="font-size:13px;font-weight:800;color:#003F6B;margin-bottom:5px">Proporción IPG / Total Controles</div>
+          <div style="font-size:11px;color:#4A6080;line-height:1.5">% de controles SM realizados en formato grupal. IPG ÷ (IPG + Controles Individuales) × 100.</div>
+          <div style="margin-top:10px;font-size:10px;font-weight:700;color:#9b59b6;text-transform:uppercase;letter-spacing:.5px">6 gráficos + tabla →</div>
         </div>
         <div onclick="switchTabByName('catind')" style="background:white;border-radius:12px;box-shadow:0 2px 12px rgba(0,60,120,.10);padding:20px 22px;cursor:pointer;border-left:5px solid #8e44ad;transition:all .2s" onmouseover="this.style.transform='translateY(-2px)';this.style.boxShadow='0 6px 24px rgba(0,60,120,.18)'" onmouseout="this.style.transform='none';this.style.boxShadow='0 2px 12px rgba(0,60,120,.10)'">
           <div style="font-size:26px;margin-bottom:8px">🔢</div>
@@ -1233,6 +1247,181 @@ tbody td.rank{font-weight:800;color:var(--az2);text-align:center}
 </div>
 </div>
 
+<!-- ===== TAB CONTROLES INDIVIDUALES ===== -->
+<div id="tab-ctrl" class="tab-content">
+<div class="main">
+  <div class="ind-note">
+    <strong>👤 Total Controles Individuales SM APS:</strong> Corresponde al número de controles individuales de salud mental realizados en APS, es decir, atenciones cara a cara entre un profesional y una persona en tratamiento SM. A diferencia del total de actividades, excluye otras prestaciones como actividades grupales. Datos 2014–2025.
+  </div>
+  <div class="kpi-row">
+    <div class="kpi-card"><div class="kpi-icon">👤</div><div class="kpi-label">Total Controles Individuales</div><div class="kpi-value" id="ctrl-kpi-total">—</div><div class="kpi-sub" id="ctrl-kpi-total-sub">—</div></div>
+    <div class="kpi-card verde"><div class="kpi-icon">🏥</div><div class="kpi-label">Establecimientos activos</div><div class="kpi-value" id="ctrl-kpi-estab">—</div><div class="kpi-sub">Con registro de controles</div></div>
+    <div class="kpi-card naranja"><div class="kpi-icon">📊</div><div class="kpi-label">Promedio anual / estab.</div><div class="kpi-value sm" id="ctrl-kpi-prom">—</div><div class="kpi-sub">Controles por centro por año</div></div>
+    <div class="kpi-card rojo"><div class="kpi-icon">📈</div><div class="kpi-label">Año con más controles</div><div class="kpi-value sm" id="ctrl-kpi-best-yr">—</div><div class="kpi-sub" id="ctrl-kpi-best-yr-val">—</div></div>
+    <div class="kpi-card morado"><div class="kpi-icon">🥇</div><div class="kpi-label">SS líder</div><div class="kpi-value xs" id="ctrl-kpi-top-ss">—</div><div class="kpi-sub" id="ctrl-kpi-top-ss-val">—</div></div>
+  </div>
+  <div class="sec-title">📈 Tendencia Temporal</div><div class="sec-sep"></div>
+  <div class="charts-grid g1" style="margin-bottom:18px">
+    <div class="chart-card">
+      <div class="chart-header"><div><div class="chart-title">Evolución Total de Controles Individuales SM por Año (2014–2025)</div><div class="chart-sub">Total nacional · Impacto COVID-19 en 2020 y recuperación sostenida hasta 2025</div></div><div class="chart-badge">Nacional</div></div>
+      <div class="cw t"><canvas id="ctrl-c-tend"></canvas></div>
+    </div>
+  </div>
+  <div class="charts-grid g2">
+    <div class="chart-card">
+      <div class="chart-header"><div><div class="chart-title">Controles Individuales por Servicio de Salud</div><div class="chart-sub">Comparación entre los 29 SS</div></div><div class="chart-badge">SS</div></div>
+      <div class="cw xt"><canvas id="ctrl-c-ss"></canvas></div>
+    </div>
+    <div class="chart-card">
+      <div class="chart-header"><div><div class="chart-title">Variación % Año a Año</div><div class="chart-sub">Cambio porcentual respecto al año anterior</div></div><div class="chart-badge">Δ%</div></div>
+      <div class="cw t"><canvas id="ctrl-c-var"></canvas></div>
+    </div>
+  </div>
+  <div class="sec-title" style="margin-top:22px">🏥 Análisis por Tipo y Dependencia</div><div class="sec-sep"></div>
+  <div class="charts-grid g3">
+    <div class="chart-card">
+      <div class="chart-header"><div><div class="chart-title">Distribución por Tipo de Establecimiento</div><div class="chart-sub">Participación en el total de controles</div></div><div class="chart-badge">Tipo</div></div>
+      <div class="cw t"><canvas id="ctrl-c-tipo-dona"></canvas></div>
+    </div>
+    <div class="chart-card">
+      <div class="chart-header"><div><div class="chart-title">Evolución por Tipo de Establecimiento</div><div class="chart-sub">Tendencia 2014–2025</div></div><div class="chart-badge">Tendencia</div></div>
+      <div class="cw t"><canvas id="ctrl-c-tipo-linea"></canvas></div>
+    </div>
+    <div class="chart-card">
+      <div class="chart-header"><div><div class="chart-title">Controles por Dependencia</div><div class="chart-sub">Municipal vs SS vs Otra</div></div><div class="chart-badge">Dependencia</div></div>
+      <div class="cw t"><canvas id="ctrl-c-dep"></canvas></div>
+    </div>
+  </div>
+  <div class="sec-title" style="margin-top:22px">🌆 Análisis Comunal y por Establecimiento</div><div class="sec-sep"></div>
+  <div class="charts-grid g2c">
+    <div class="chart-card">
+      <div class="chart-header"><div><div class="chart-title">Top 20 Comunas — Controles Individuales SM</div><div class="chart-sub">Ordenadas por total acumulado</div></div><div class="chart-badge">Top 20</div></div>
+      <div class="cw xxxl"><canvas id="ctrl-c-comunas"></canvas></div>
+    </div>
+    <div class="chart-card">
+      <div class="chart-header"><div><div class="chart-title">Top 10 Establecimientos</div><div class="chart-sub">Centros con más controles individuales</div></div><div class="chart-badge">Ranking</div></div>
+      <div class="cw xxxl"><canvas id="ctrl-c-top-estab"></canvas></div>
+    </div>
+  </div>
+  <div class="sec-title" style="margin-top:22px">🔥 Distribución Temporal por Servicio de Salud</div><div class="sec-sep"></div>
+  <div class="charts-grid g1">
+    <div class="chart-card">
+      <div class="chart-header"><div><div class="chart-title">Controles Individuales por SS y Año — Barras Apiladas</div><div class="chart-sub">Comparación multianual</div></div><div class="chart-badge">2014–2025</div></div>
+      <div class="cw xxxl"><canvas id="ctrl-c-ss-anio"></canvas></div>
+    </div>
+  </div>
+  <div class="sec-title" style="margin-top:22px">🗺️ Mapa de Controles por Establecimiento</div><div class="sec-sep"></div>
+  <div class="charts-grid g1">
+    <div class="chart-card">
+      <div class="chart-header"><div><div class="chart-title">Mapa de Controles Individuales SM por Centro APS</div><div class="chart-sub">Tamaño proporcional al número de controles</div></div><div class="chart-badge">Georreferenciado</div></div>
+      <div class="map-ctrl">
+        <label style="font-size:11px;font-weight:600;color:var(--texto-s)">Año mapa:</label>
+        <select class="map-sel" id="ctrl-map-year" onchange="actualizarMapaCtrl()"><option value="total">Total 2014–2025</option></select>
+        <label style="font-size:11px;font-weight:600;color:var(--texto-s);margin-left:10px">Color por:</label>
+        <select class="map-sel" id="ctrl-map-color" onchange="actualizarMapaCtrl()">
+          <option value="tipo">Tipo Establecimiento</option>
+          <option value="dependencia">Dependencia</option>
+          <option value="ss">Servicio de Salud</option>
+        </select>
+      </div>
+      <div id="ctrl-mapa" class="mapa"></div>
+      <div class="map-leg" id="ctrl-map-leg"></div>
+    </div>
+  </div>
+  <div class="sec-title" style="margin-top:22px">📋 Tabla de Establecimientos</div><div class="sec-sep"></div>
+  <div class="charts-grid g1">
+    <div class="chart-card">
+      <div class="chart-header"><div><div class="chart-title">Detalle por Establecimiento — Controles Individuales SM</div><div class="chart-sub">Top 100 · Clic en encabezados para ordenar</div></div><div class="chart-badge" id="ctrl-badge-tabla">Top 100</div></div>
+      <div class="tabla-wrap">
+        <table><thead><tr>
+          <th onclick="sortTab('ctrl-tabla-body',0)">#</th>
+          <th onclick="sortTab('ctrl-tabla-body',1)">Establecimiento ↕</th>
+          <th onclick="sortTab('ctrl-tabla-body',2)">Comuna ↕</th>
+          <th onclick="sortTab('ctrl-tabla-body',3)">Servicio de Salud ↕</th>
+          <th onclick="sortTab('ctrl-tabla-body',4)">Tipo ↕</th>
+          <th onclick="sortTab('ctrl-tabla-body',5)">Dependencia ↕</th>
+          <th onclick="sortTab('ctrl-tabla-body',6)">Total Controles ↕</th>
+          <th>Barra</th>
+        </tr></thead>
+        <tbody id="ctrl-tabla-body"></tbody></table>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- ===== TAB PROPORCIÓN IPG ===== -->
+<div id="tab-prop" class="tab-content">
+<div class="main">
+  <div class="ind-note">
+    <strong>📐 Proporción de Intervenciones Grupales en relación al total de controles SM en APS:</strong> Se calcula como <strong>IPG ÷ (IPG + Controles Individuales) × 100</strong>. Indica qué porcentaje de los controles de salud mental se realizaron en formato grupal. Un valor mayor refleja mayor uso de la modalidad grupal como estrategia de atención. Solo se incluyen establecimientos con al menos un control registrado (IPG o individual).
+  </div>
+  <div class="kpi-row">
+    <div class="kpi-card"><div class="kpi-icon">📐</div><div class="kpi-label">% Promedio Nacional</div><div class="kpi-value sm" id="prop-kpi-pct">—</div><div class="kpi-sub" id="prop-kpi-pct-sub">IPG / (IPG + Ctrl) × 100</div></div>
+    <div class="kpi-card verde"><div class="kpi-icon">📈</div><div class="kpi-label">Año con mayor proporción</div><div class="kpi-value sm" id="prop-kpi-best-yr">—</div><div class="kpi-sub" id="prop-kpi-best-yr-val">—</div></div>
+    <div class="kpi-card naranja"><div class="kpi-icon">📉</div><div class="kpi-label">Año con menor proporción</div><div class="kpi-value sm" id="prop-kpi-worst-yr">—</div><div class="kpi-sub" id="prop-kpi-worst-yr-val">—</div></div>
+    <div class="kpi-card rojo"><div class="kpi-icon">🏆</div><div class="kpi-label">SS con mayor proporción</div><div class="kpi-value xs" id="prop-kpi-top-ss">—</div><div class="kpi-sub" id="prop-kpi-top-ss-val">—</div></div>
+    <div class="kpi-card morado"><div class="kpi-icon">⚠️</div><div class="kpi-label">SS con menor proporción</div><div class="kpi-value xs" id="prop-kpi-bot-ss">—</div><div class="kpi-sub" id="prop-kpi-bot-ss-val">—</div></div>
+  </div>
+  <div class="sec-title">📈 Tendencia del Indicador</div><div class="sec-sep"></div>
+  <div class="charts-grid g1" style="margin-bottom:18px">
+    <div class="chart-card">
+      <div class="chart-header"><div><div class="chart-title">Evolución de la Proporción IPG / Total Controles (2014–2025)</div><div class="chart-sub">% nacional · IPG ÷ (IPG + Controles Individuales) × 100</div></div><div class="chart-badge">% Proporción</div></div>
+      <div class="cw t"><canvas id="prop-c-tend"></canvas></div>
+    </div>
+  </div>
+  <div class="charts-grid g2">
+    <div class="chart-card">
+      <div class="chart-header"><div><div class="chart-title">Proporción por Servicio de Salud</div><div class="chart-sub">Comparación entre SS · escala de color según nivel</div></div><div class="chart-badge">SS</div></div>
+      <div class="cw xt"><canvas id="prop-c-ss"></canvas></div>
+    </div>
+    <div class="chart-card">
+      <div class="chart-header"><div><div class="chart-title">IPG vs Controles Individuales por Año</div><div class="chart-sub">Composición del total de controles SM</div></div><div class="chart-badge">Composición</div></div>
+      <div class="cw t"><canvas id="prop-c-comp"></canvas></div>
+    </div>
+  </div>
+  <div class="sec-title" style="margin-top:22px">🏥 Proporción por Tipo y Dependencia</div><div class="sec-sep"></div>
+  <div class="charts-grid g2">
+    <div class="chart-card">
+      <div class="chart-header"><div><div class="chart-title">Proporción IPG por Tipo de Establecimiento</div><div class="chart-sub">Uso de modalidad grupal según tipo de centro</div></div><div class="chart-badge">Tipo</div></div>
+      <div class="cw t"><canvas id="prop-c-tipo"></canvas></div>
+    </div>
+    <div class="chart-card">
+      <div class="chart-header"><div><div class="chart-title">Proporción IPG por Dependencia Administrativa</div><div class="chart-sub">Municipal vs SS vs Otra</div></div><div class="chart-badge">Dependencia</div></div>
+      <div class="cw t"><canvas id="prop-c-dep"></canvas></div>
+    </div>
+  </div>
+  <div class="sec-title" style="margin-top:22px">📊 Evolución por Servicio de Salud</div><div class="sec-sep"></div>
+  <div class="charts-grid g1">
+    <div class="chart-card">
+      <div class="chart-header"><div><div class="chart-title">Proporción IPG por SS y Año — Líneas Múltiples</div><div class="chart-sub">Trayectoria de cada SS en el tiempo · Top 15 SS</div></div><div class="chart-badge">2014–2025</div></div>
+      <div class="cw xxxl"><canvas id="prop-c-ss-linea"></canvas></div>
+    </div>
+  </div>
+  <div class="sec-title" style="margin-top:22px">📋 Tabla por Establecimiento</div><div class="sec-sep"></div>
+  <div class="charts-grid g1">
+    <div class="chart-card">
+      <div class="chart-header"><div><div class="chart-title">Proporción IPG por Establecimiento</div><div class="chart-sub">Solo establecimientos con al menos un control · Clic en encabezados para ordenar</div></div><div class="chart-badge" id="prop-badge-tabla">—</div></div>
+      <div class="tabla-wrap">
+        <table><thead><tr>
+          <th onclick="sortTab('prop-tabla-body',0)">#</th>
+          <th onclick="sortTab('prop-tabla-body',1)">Establecimiento ↕</th>
+          <th onclick="sortTab('prop-tabla-body',2)">Comuna ↕</th>
+          <th onclick="sortTab('prop-tabla-body',3)">Servicio de Salud ↕</th>
+          <th onclick="sortTab('prop-tabla-body',4)">Tipo ↕</th>
+          <th onclick="sortTab('prop-tabla-body',5)">IPG ↕</th>
+          <th onclick="sortTab('prop-tabla-body',6)">Ctrl. Individuales ↕</th>
+          <th onclick="sortTab('prop-tabla-body',7)">Total Controles ↕</th>
+          <th onclick="sortTab('prop-tabla-body',8)">% IPG ↕</th>
+          <th>Barra</th>
+        </tr></thead>
+        <tbody id="prop-tabla-body"></tbody></table>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+
 <div class="footer">
   División de Atención Primaria · Ministerio de Salud de Chile &nbsp;|&nbsp; Datos DEIS MINSAL · Altas Clínicas SM y Población Bajo Control APS 2014–2025
 </div>
@@ -1247,10 +1436,11 @@ window._parseDatos = function(pkg){
     window.DATA = pkg.rows.map(r=>({
       id:r[0], n:r[1],
       c:pkg.com[r[2]], s:pkg.ss[r[3]], t:pkg.tip[r[4]], tc:pkg.tc[r[5]], dep:pkg.dep[r[6]],
-      lat:r[7], lon:r[8], ta:r[9], tp:r[10], ti:r[11], tg:r[12], tv:r[13],
-      a:r.slice(14,26), p:r.slice(26,38), i:r.slice(38,50), g:r.slice(50,62), v:r.slice(62,74),
-      cat:r[74]?{N0:r[74][0],N1:r[74][1],N2:r[74][2],N3:r[74][3],N4:r[74][4],
-                  total:r[74][0]+r[74][1]+r[74][2]+r[74][3]+r[74][4]}:null
+      lat:r[7], lon:r[8], ta:r[9], tp:r[10], ti:r[11], tg:r[12], tv:r[13], tk:r[14],
+      a:r.slice(15,27), p:r.slice(27,39), i:r.slice(39,51), g:r.slice(51,63),
+      v:r.slice(63,75), k:r.slice(75,87),
+      cat:r[87]?{N0:r[87][0],N1:r[87][1],N2:r[87][2],N3:r[87][3],N4:r[87][4],
+                  total:r[87][0]+r[87][1]+r[87][2]+r[87][3]+r[87][4]}:null
     }));
   } catch(e) {
     console.error('Error:', e);
@@ -1263,6 +1453,7 @@ function gp(d,y){const i=YEARS.indexOf(String(y));return i>=0?(d.p[i]||0):0;}
 function gi(d,y){const i=YEARS.indexOf(String(y));return i>=0?(d.i[i]||0):0;}
 function gg(d,y){const i=YEARS.indexOf(String(y));return i>=0?(d.g[i]||0):0;}
 function gv(d,y){const i=YEARS.indexOf(String(y));return i>=0?(d.v[i]||0):0;}
+function gk(d,y){const i=YEARS.indexOf(String(y));return i>=0?(d.k[i]||0):0;}
 
 const TIPO_C = {
   'CESFAM':'#005F9E','CECOSF':'#2E8B57','Posta de Salud':'#E67E22',
@@ -1279,8 +1470,8 @@ const PAL = ['#005F9E','#0090D0','#2E8B57','#E67E22','#D0222A','#7c3aed','#16a08
 // ============================================================
 let F = {anio:'total', ss:'', comuna:'', estab:'', tipo:'', dep:'', cat:''};
 let charts = {};
-let maps = {a:null, p:null, c:null, i2:null, ipg:null, act:null};
-let mapMarkers = {a:[], p:[], c:[], i2:[], ipg:[], act:[]};
+let maps = {a:null, p:null, c:null, i2:null, ipg:null, act:null, ctrl:null};
+let mapMarkers = {a:[], p:[], c:[], i2:[], ipg:[], act:[], ctrl:[]};
 let sortDir = {};
 
 // ============================================================
@@ -1301,6 +1492,7 @@ function switchTab(name, btn) {
     if(name==='ing' && maps.i2) maps.i2.invalidateSize();
     if(name==='ipg' && maps.ipg) maps.ipg.invalidateSize();
     if(name==='act' && maps.act) maps.act.invalidateSize();
+    if(name==='ctrl' && maps.ctrl) maps.ctrl.invalidateSize();
   }, 50);
 }
 
@@ -1343,6 +1535,7 @@ function init() {
   initMapaIng();
   initMapaIPG();
   initMapaAct();
+  initMapaCtrl();
   updateHomeKPIs();
   initTerrSelectors();
   actualizarTodo();
@@ -1408,7 +1601,7 @@ function actualizarTodo() {
   document.getElementById('filtros-count').textContent = fd.length.toLocaleString('es-CL')+' establecimientos activos';
 
   // Sync map year selectors with global year filter
-  ['a-map-year','p-map-year','i2-map-year','ipg-map-year','act-map-year'].forEach(id=>{
+  ['a-map-year','p-map-year','i2-map-year','ipg-map-year','act-map-year','ctrl-map-year'].forEach(id=>{
     const sel=document.getElementById(id);
     if(sel) sel.value=F.anio;
   });
@@ -1455,6 +1648,17 @@ function actualizarTodo() {
   kpisInd(fd);
   grafInd(fd);
   tablaInd(fd);
+
+  // Tab Controles Individuales
+  kpisCtrl(fd);
+  grafCtrl(fd);
+  tablaCtrl(fd);
+  actualizarMapaCtrl();
+
+  // Tab Proporción IPG
+  kpisProp(fd);
+  grafProp(fd);
+  tablaProp(fd);
 
   // Tab Actividades
   kpisAct(fd);
@@ -1806,7 +2010,7 @@ function varChart(vals,color='#005F9E') {
 
 function donaCfg(fd,anio,campo) {
   const byT={};
-  fd.forEach(d=>{const v=campo==='altas'?getAltas(d,anio):campo==='pbc'?getPBC(d,anio):campo==='ing'?getIng(d,anio):campo==='ipg'?getIPG(d,anio):getAct(d,anio);byT[d.t]=(byT[d.t]||0)+v;});
+  fd.forEach(d=>{const v=campo==='altas'?getAltas(d,anio):campo==='pbc'?getPBC(d,anio):campo==='ing'?getIng(d,anio):campo==='ipg'?getIPG(d,anio):campo==='act'?getAct(d,anio):getCtrl(d,anio);byT[d.t]=(byT[d.t]||0)+v;});
   const items=Object.entries(byT).sort((a,b)=>b[1]-a[1]);
   return {type:'doughnut',data:{labels:items.map(x=>x[0]),datasets:[{data:items.map(x=>x[1]),
     backgroundColor:items.map(x=>TIPO_C[x[0]]||'#999'),borderColor:'#fff',borderWidth:2}]},
@@ -1842,7 +2046,7 @@ function depStackedCfg(fd,campo) {
 
 function topEstabCfg(topE,anio,campo) {
   const labels=topE.map(d=>{let n=d.n.replace(/Centro de Salud Familiar/i,'CESFAM').replace(/Centro Comunitario de Salud Familiar/i,'CECOSF');return n.length>38?n.slice(0,36)+'…':n;});
-  const vals=topE.map(d=>campo==='altas'?getAltas(d,anio):campo==='pbc'?getPBC(d,anio):campo==='ing'?getIng(d,anio):campo==='ipg'?getIPG(d,anio):getAct(d,anio));
+  const vals=topE.map(d=>campo==='altas'?getAltas(d,anio):campo==='pbc'?getPBC(d,anio):campo==='ing'?getIng(d,anio):campo==='ipg'?getIPG(d,anio):campo==='act'?getAct(d,anio):getCtrl(d,anio));
   return {type:'bar',data:{labels,datasets:[{label:'',data:vals,
     backgroundColor:topE.map(d=>(TIPO_C[d.t]||'#005F9E')+'CC'),
     borderColor:topE.map(d=>TIPO_C[d.t]||'#005F9E'),borderWidth:1,borderRadius:4}]},
@@ -1853,9 +2057,9 @@ function topEstabCfg(topE,anio,campo) {
 
 function ssAnioCfg(fd,campo) {
   const allSS=[...new Set(fd.map(d=>d.s))].filter(Boolean);
-  const ssTots={};allSS.forEach(ss=>{ssTots[ss]=fd.filter(d=>d.s===ss).reduce((s,d)=>s+(campo==='altas'?d.ta:campo==='pbc'?d.tp:campo==='ing'?d.ti:campo==='ipg'?d.tg:d.tv),0);});
+  const ssTots={};allSS.forEach(ss=>{ssTots[ss]=fd.filter(d=>d.s===ss).reduce((s,d)=>s+(campo==='altas'?d.ta:campo==='pbc'?d.tp:campo==='ing'?d.ti:campo==='ipg'?d.tg:campo==='act'?d.tv:d.tk),0);});
   const sortedSS=allSS.sort((a,b)=>ssTots[b]-ssTots[a]);
-  const _getV=(d,i)=>campo==='altas'?(d.a[i]||0):campo==='pbc'?(d.p[i]||0):campo==='ing'?(d.i[i]||0):campo==='ipg'?(d.g[i]||0):(d.v[i]||0);
+  const _getV=(d,i)=>campo==='altas'?(d.a[i]||0):campo==='pbc'?(d.p[i]||0):campo==='ing'?(d.i[i]||0):campo==='ipg'?(d.g[i]||0):campo==='act'?(d.v[i]||0):(d.k[i]||0);
   const ds=YEARS.map((y,i)=>{
     const hue=Math.round(i*(220/11));
     const color=`hsl(${200+hue},70%,45%)`;
@@ -1962,7 +2166,7 @@ function actualizarMapa(prefix, campo) {
   const ssColorMap={};
   if(colorBy==='ss'){[...new Set(withC.map(d=>d.s))].forEach((ss,i)=>ssColorMap[ss]=PAL[i%PAL.length]);}
   withC.forEach(d=>{
-    const val=campo==='altas'?getAltas(d,mapAnio):campo==='pbc'?getPBC(d,mapAnio):campo==='ing'?getIng(d,mapAnio):campo==='ipg'?getIPG(d,mapAnio):campo==='act'?getAct(d,mapAnio):0;
+    const val=campo==='altas'?getAltas(d,mapAnio):campo==='pbc'?getPBC(d,mapAnio):campo==='ing'?getIng(d,mapAnio):campo==='ipg'?getIPG(d,mapAnio):campo==='act'?getAct(d,mapAnio):campo==='ctrl'?getCtrl(d,mapAnio):0;
     if(val<=0)return;
     const color=colorBy==='tipo'?(TIPO_C[d.t]||'#999'):colorBy==='dependencia'?(DEP_C[d.dep.trim()]||'#999'):(ssColorMap[d.s]||'#005F9E');
     const r=Math.max(4,Math.min(28,4+Math.sqrt(val/maxV)*22));
@@ -2180,7 +2384,7 @@ function actualizarMapaCat() {
 // ── switchTabByName (for home cards) ──────────────────────────────────────
 function switchTabByName(name) {
   const btns = document.querySelectorAll('.tab-btn');
-  const tabNames = ['home','altas','pbc','ind','cat','ing','catind','ipg','act','conc'];
+  const tabNames = ['home','altas','pbc','ind','cat','ing','catind','ipg','act','conc','ctrl','prop'];
   const idx = tabNames.indexOf(name);
   if(idx>=0) switchTab(name, btns[idx]);
 }
@@ -2276,6 +2480,242 @@ function actualizarMapaIng(){actualizarMapa('i2','ing');}
 
 
 
+
+
+// ============================================================
+// CONTROLES INDIVIDUALES SM
+// ============================================================
+function getCtrl(d,anio){return anio==='total'?d.tk:gk(d,anio);}
+
+function kpisCtrl(fd){
+  const anio=F.anio;
+  const total=fd.reduce((s,d)=>s+getCtrl(d,anio),0);
+  const set=(id,v)=>{const el=document.getElementById(id);if(el)el.textContent=v;};
+  set('ctrl-kpi-total',fmt(total));
+  set('ctrl-kpi-total-sub',anio==='total'?'Período 2014–2025':'Año '+anio);
+  const con=fd.filter(d=>getCtrl(d,anio)>0).length;
+  set('ctrl-kpi-estab',con.toLocaleString('es-CL'));
+  let promAnual;
+  if(anio==='total'){
+    const s=fd.reduce((acc,d)=>{const yrs=YEARS.filter((_,i)=>(d.k[i]||0)>0).length;return acc+(yrs>0?d.tk/yrs:0);},0);
+    promAnual=con>0?s/con:0;
+  } else {promAnual=con>0?total/con:0;}
+  set('ctrl-kpi-prom',con>0?fmt(promAnual):'—');
+  let bY='',bV=0;
+  YEARS.forEach((y,i)=>{const s=fd.reduce((a,d)=>a+(d.k[i]||0),0);if(s>bV){bV=s;bY=y;}});
+  set('ctrl-kpi-best-yr',bY);
+  set('ctrl-kpi-best-yr-val',fmt(bV)+' controles ese año');
+  const bySS={};fd.forEach(d=>{bySS[d.s]=(bySS[d.s]||0)+getCtrl(d,anio);});
+  const top=Object.entries(bySS).sort((a,b)=>b[1]-a[1])[0];
+  if(top){set('ctrl-kpi-top-ss',top[0].split(' ')[0]);set('ctrl-kpi-top-ss-val',fmt(top[1])+' controles');}
+}
+
+function grafCtrl(fd){
+  const anio=F.anio;
+  const color='#3498db';
+  const tV=YEARS.map((y,i)=>fd.reduce((s,d)=>s+(d.k[i]||0),0));
+  mkChart('ctrl-c-tend',{type:'line',data:{labels:YEARS,datasets:[{
+    label:'Controles Individuales SM',data:tV,borderColor:color,backgroundColor:'rgba(52,152,219,0.08)',
+    fill:true,tension:0.35,pointRadius:5,pointHoverRadius:8,borderWidth:3,
+    pointBackgroundColor:tV.map((v,i)=>i===6?'#D0222A':v===Math.max(...tV)?'#2E8B57':color),
+    pointBorderColor:'#fff',pointBorderWidth:2}]},
+  options:{responsive:true,maintainAspectRatio:false,
+    plugins:{legend:{display:false},tooltip:{callbacks:{label:ctx=>' '+fmt(ctx.raw)+' controles'}}},
+    scales:{x:{ticks:{font:{size:11,weight:'bold'}}},y:{ticks:{callback:v=>fmt(v),font:{size:10}}}}}});
+  const ssTot={};fd.forEach(d=>{ssTot[d.s]=(ssTot[d.s]||0)+getCtrl(d,anio);});
+  const ssSort=Object.entries(ssTot).sort((a,b)=>b[1]-a[1]);
+  mkChart('ctrl-c-ss',hbarCfg(ssSort.map(x=>x[0]),ssSort.map(x=>x[1]),PAL,color));
+  mkChart('ctrl-c-var',varChart(tV,color));
+  mkChart('ctrl-c-tipo-dona',donaCfg(fd,anio,'ctrl'));
+  mkChart('ctrl-c-tipo-linea',tipoLineaCfg(fd,'ctrl'));
+  mkChart('ctrl-c-dep',depStackedCfg(fd,'ctrl'));
+  const comTot={};fd.forEach(d=>{comTot[d.c]=(comTot[d.c]||0)+getCtrl(d,anio);});
+  const comSort=Object.entries(comTot).sort((a,b)=>b[1]-a[1]).slice(0,20);
+  mkChart('ctrl-c-comunas',hbarCfg(comSort.map(x=>x[0]),comSort.map(x=>x[1]),PAL,color));
+  const topE=fd.slice().sort((a,b)=>getCtrl(b,anio)-getCtrl(a,anio)).slice(0,10);
+  mkChart('ctrl-c-top-estab',topEstabCfg(topE,anio,'ctrl'));
+  mkChart('ctrl-c-ss-anio',ssAnioCfg(fd,'ctrl'));
+}
+
+function tablaCtrl(fd){
+  const anio=F.anio;
+  const sorted=fd.slice().sort((a,b)=>getCtrl(b,anio)-getCtrl(a,anio)).slice(0,100);
+  const maxV=sorted.length>0?getCtrl(sorted[0],anio):1;
+  const el=document.getElementById('ctrl-tabla-body');if(!el)return;
+  el.innerHTML=sorted.map((d,i)=>`<tr>
+    <td class="rank">${i+1}</td><td>${d.n}</td><td>${d.c}</td><td>${d.s}</td>
+    <td><span style="background:${TIPO_C[d.t]||'#999'}22;color:${TIPO_C[d.t]||'#999'};font-weight:700;padding:2px 6px;border-radius:8px;font-size:10px">${d.t}</span></td>
+    <td>${d.dep.trim()}</td><td class="num">${fmt(getCtrl(d,anio))}</td>
+    <td><div class="prog"><div class="prog-fill" style="width:${(getCtrl(d,anio)/maxV*100).toFixed(1)}%;background:#3498db"></div></div></td>
+  </tr>`).join('');
+  const badge=document.getElementById('ctrl-badge-tabla');if(badge)badge.textContent='Top '+sorted.length;
+}
+
+function initMapaCtrl(){
+  maps.ctrl=L.map('ctrl-mapa').setView([-35.5,-71.0],5);
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{attribution:'© OpenStreetMap',maxZoom:18}).addTo(maps.ctrl);
+  actualizarMapaCtrl();
+}
+function actualizarMapaCtrl(){actualizarMapa('ctrl','ctrl');}
+
+// ============================================================
+// PROPORCIÓN IPG / TOTAL CONTROLES
+// ============================================================
+function getProp(ipgV, ctrlV){
+  const tot = ipgV + ctrlV;
+  return tot > 0 ? (ipgV / tot * 100) : 0;
+}
+
+function kpisProp(fd){
+  const anio=F.anio;
+  const yi=anio==='total'?-1:YEARS.indexOf(anio);
+  const totIPG =yi===-1?fd.reduce((s,d)=>s+d.tg,0):fd.reduce((s,d)=>s+(d.g[yi]||0),0);
+  const totCtrl=yi===-1?fd.reduce((s,d)=>s+d.tk,0):fd.reduce((s,d)=>s+(d.k[yi]||0),0);
+  const pctNac=getProp(totIPG,totCtrl);
+  const set=(id,v)=>{const el=document.getElementById(id);if(el)el.textContent=v;};
+  set('prop-kpi-pct',pctNac.toFixed(1)+'%');
+  set('prop-kpi-pct-sub',fmt(totIPG)+' IPG / '+fmt(totIPG+totCtrl)+' total controles');
+  // By year
+  const pctByYr=YEARS.map((y,i)=>{
+    const g=fd.reduce((s,d)=>s+(d.g[i]||0),0);
+    const k=fd.reduce((s,d)=>s+(d.k[i]||0),0);
+    return getProp(g,k);
+  });
+  const maxP=Math.max(...pctByYr.filter(v=>v>0));
+  const minP=Math.min(...pctByYr.filter(v=>v>0));
+  const maxYr=YEARS[pctByYr.indexOf(maxP)];
+  const minYr=YEARS[pctByYr.indexOf(minP)];
+  set('prop-kpi-best-yr',maxYr||'—');set('prop-kpi-best-yr-val',maxP.toFixed(1)+'%');
+  set('prop-kpi-worst-yr',minYr||'—');set('prop-kpi-worst-yr-val',minP.toFixed(1)+'%');
+  // By SS
+  const bySS={};
+  fd.forEach(d=>{
+    if(!bySS[d.s])bySS[d.s]={g:0,k:0};
+    if(yi===-1){bySS[d.s].g+=d.tg;bySS[d.s].k+=d.tk;}
+    else{bySS[d.s].g+=(d.g[yi]||0);bySS[d.s].k+=(d.k[yi]||0);}
+  });
+  const ssPcts=Object.entries(bySS).map(([ss,v])=>({ss,p:getProp(v.g,v.k)})).filter(x=>x.p>0).sort((a,b)=>b.p-a.p);
+  if(ssPcts.length>0){
+    set('prop-kpi-top-ss',ssPcts[0].ss.split(' ')[0]);set('prop-kpi-top-ss-val',ssPcts[0].p.toFixed(1)+'%');
+    const bot=ssPcts[ssPcts.length-1];
+    set('prop-kpi-bot-ss',bot.ss.split(' ')[0]);set('prop-kpi-bot-ss-val',bot.p.toFixed(1)+'%');
+  }
+}
+
+function grafProp(fd){
+  const anio=F.anio;
+  const yi=anio==='total'?-1:YEARS.indexOf(anio);
+  const pctByYr=YEARS.map((y,i)=>{
+    const g=fd.reduce((s,d)=>s+(d.g[i]||0),0);
+    const k=fd.reduce((s,d)=>s+(d.k[i]||0),0);
+    return parseFloat(getProp(g,k).toFixed(2));
+  });
+
+  // Tendencia
+  mkChart('prop-c-tend',{type:'line',data:{labels:YEARS,datasets:[{
+    label:'% IPG',data:pctByYr,borderColor:'#9b59b6',backgroundColor:'rgba(155,89,182,0.08)',
+    fill:true,tension:0.35,pointRadius:5,pointHoverRadius:8,borderWidth:3,
+    pointBackgroundColor:pctByYr.map((v,i)=>i===6?'#D0222A':v===Math.max(...pctByYr)?'#2E8B57':'#9b59b6'),
+    pointBorderColor:'#fff',pointBorderWidth:2}]},
+  options:{responsive:true,maintainAspectRatio:false,
+    plugins:{legend:{display:false},tooltip:{callbacks:{label:ctx=>` ${ctx.raw.toFixed(2)}%`}}},
+    scales:{x:{ticks:{font:{size:11,weight:'bold'}}},y:{ticks:{callback:v=>v.toFixed(1)+'%',font:{size:10}},beginAtZero:true}}}});
+
+  // SS proporción
+  const bySS={};
+  fd.forEach(d=>{
+    if(!bySS[d.s])bySS[d.s]={g:0,k:0};
+    if(yi===-1){bySS[d.s].g+=d.tg;bySS[d.s].k+=d.tk;}
+    else{bySS[d.s].g+=(d.g[yi]||0);bySS[d.s].k+=(d.k[yi]||0);}
+  });
+  const ssData=Object.entries(bySS).map(([ss,v])=>({ss,p:parseFloat(getProp(v.g,v.k).toFixed(2)),g:v.g,k:v.k})).filter(x=>x.g+x.k>0).sort((a,b)=>b.p-a.p);
+  const cScale=(p,arr)=>{const vals=arr.map(x=>x.p),mn=Math.min(...vals),mx=Math.max(...vals);const n=(p-mn)/(mx-mn||1);return `rgba(${Math.round(208-(208-46)*n)},${Math.round(34+(139-34)*n)},${Math.round(42+(87-42)*n)},0.8)`;};
+  mkChart('prop-c-ss',{type:'bar',data:{labels:ssData.map(x=>x.ss),datasets:[{
+    label:'% IPG',data:ssData.map(x=>x.p),backgroundColor:ssData.map(x=>cScale(x.p,ssData)),borderRadius:4}]},
+  options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,
+    plugins:{legend:{display:false},tooltip:{callbacks:{label:ctx=>{const d=ssData[ctx.dataIndex];return [` ${ctx.raw.toFixed(2)}%`,` ${fmt(d.g)} IPG / ${fmt(d.g+d.k)} total`];}}}},
+    scales:{x:{ticks:{callback:v=>v.toFixed(1)+'%',font:{size:9}}},y:{ticks:{font:{size:9}}}}}});
+
+  // Composición 100% apilada por año
+  const ipgVals=YEARS.map((y,i)=>fd.reduce((s,d)=>s+(d.g[i]||0),0));
+  const ctrlVals=YEARS.map((y,i)=>fd.reduce((s,d)=>s+(d.k[i]||0),0));
+  mkChart('prop-c-comp',{type:'bar',data:{labels:YEARS,datasets:[
+    {label:'IPG',data:ipgVals,backgroundColor:'rgba(155,89,182,0.8)',borderRadius:2},
+    {label:'Controles Individuales',data:ctrlVals,backgroundColor:'rgba(52,152,219,0.6)',borderRadius:2}
+  ]},options:{responsive:true,maintainAspectRatio:false,
+    plugins:{legend:{position:'bottom',labels:{font:{size:10},boxWidth:12}},
+      tooltip:{mode:'index',intersect:false,callbacks:{
+        label:ctx=>` ${ctx.dataset.label}: ${fmt(ctx.raw)}`,
+        footer:items=>{const tot=items.reduce((s,x)=>s+x.raw,0);const ipg=items[0].raw;return `Proporción IPG: ${getProp(ipg,tot-ipg).toFixed(1)}%`;}
+      }}},
+    scales:{x:{stacked:true,ticks:{font:{size:10}}},y:{stacked:true,ticks:{callback:v=>fmt(v),font:{size:9}}}}}});
+
+  // Tipo
+  const byTipo={};
+  fd.forEach(d=>{if(!byTipo[d.t])byTipo[d.t]={g:0,k:0};if(yi===-1){byTipo[d.t].g+=d.tg;byTipo[d.t].k+=d.tk;}else{byTipo[d.t].g+=(d.g[yi]||0);byTipo[d.t].k+=(d.k[yi]||0);}});
+  const tipoData=Object.entries(byTipo).map(([t,v])=>({t,p:parseFloat(getProp(v.g,v.k).toFixed(2))})).filter(x=>x.p>0).sort((a,b)=>b.p-a.p);
+  mkChart('prop-c-tipo',{type:'bar',data:{labels:tipoData.map(x=>x.t),datasets:[{
+    label:'% IPG',data:tipoData.map(x=>x.p),backgroundColor:tipoData.map(x=>(TIPO_C[x.t]||'#999')+'CC'),borderRadius:4}]},
+  options:{responsive:true,maintainAspectRatio:false,
+    plugins:{legend:{display:false},tooltip:{callbacks:{label:ctx=>` ${ctx.raw.toFixed(2)}%`}}},
+    scales:{x:{ticks:{font:{size:10}}},y:{ticks:{callback:v=>v.toFixed(1)+'%',font:{size:10}},beginAtZero:true}}}});
+
+  // Dep
+  const byDep={};
+  fd.forEach(d=>{const dep=d.dep.trim();if(!byDep[dep])byDep[dep]={g:0,k:0};if(yi===-1){byDep[dep].g+=d.tg;byDep[dep].k+=d.tk;}else{byDep[dep].g+=(d.g[yi]||0);byDep[dep].k+=(d.k[yi]||0);}});
+  const depData=Object.entries(byDep).map(([dep,v])=>({dep,p:parseFloat(getProp(v.g,v.k).toFixed(2))})).filter(x=>x.p>0).sort((a,b)=>b.p-a.p);
+  mkChart('prop-c-dep',{type:'bar',data:{labels:depData.map(x=>x.dep),datasets:[{
+    label:'% IPG',data:depData.map(x=>x.p),backgroundColor:depData.map(x=>(DEP_C[x.dep]||'#999')+'CC'),borderRadius:4}]},
+  options:{responsive:true,maintainAspectRatio:false,
+    plugins:{legend:{display:false},tooltip:{callbacks:{label:ctx=>` ${ctx.raw.toFixed(2)}%`}}},
+    scales:{x:{ticks:{font:{size:10}}},y:{ticks:{callback:v=>v.toFixed(1)+'%',font:{size:10}},beginAtZero:true}}}});
+
+  // SS líneas
+  const allSS=[...new Set(fd.map(d=>d.s))].filter(Boolean);
+  const ssTots={};allSS.forEach(ss=>{ssTots[ss]=fd.filter(d=>d.s===ss).reduce((s,d)=>s+d.tg+d.tk,0);});
+  const top15=allSS.sort((a,b)=>ssTots[b]-ssTots[a]).slice(0,15);
+  const ssLineDs=top15.map((ss,i)=>{
+    const vals=YEARS.map((y,j)=>{
+      const g=fd.filter(d=>d.s===ss).reduce((s,d)=>s+(d.g[j]||0),0);
+      const k=fd.filter(d=>d.s===ss).reduce((s,d)=>s+(d.k[j]||0),0);
+      return (g+k)>0?parseFloat(getProp(g,k).toFixed(2)):null;
+    });
+    return {label:ss,data:vals,borderColor:PAL[i%PAL.length],backgroundColor:'transparent',tension:0.3,pointRadius:3,borderWidth:2,spanGaps:true};
+  });
+  mkChart('prop-c-ss-linea',{type:'line',data:{labels:YEARS,datasets:ssLineDs},options:{
+    responsive:true,maintainAspectRatio:false,
+    plugins:{legend:{position:'bottom',labels:{font:{size:9},boxWidth:10,padding:5}},
+      tooltip:{mode:'index',intersect:false,callbacks:{label:ctx=>ctx.raw!=null?` ${ctx.dataset.label}: ${ctx.raw.toFixed(1)}%`:null}}},
+    scales:{x:{ticks:{font:{size:10}}},y:{ticks:{callback:v=>v!=null?v.toFixed(1)+'%':'',font:{size:10}},beginAtZero:true}}}});
+}
+
+function tablaProp(fd){
+  const anio=F.anio;
+  const yi=anio==='total'?-1:YEARS.indexOf(anio);
+  const conDatos=fd.filter(d=>{
+    const g=yi===-1?d.tg:(d.g[yi]||0);
+    const k=yi===-1?d.tk:(d.k[yi]||0);
+    return (g+k)>0;
+  });
+  const sorted=conDatos.map(d=>{
+    const g=yi===-1?d.tg:(d.g[yi]||0);
+    const k=yi===-1?d.tk:(d.k[yi]||0);
+    return {...d,_g:g,_k:k,_tot:g+k,_p:getProp(g,k)};
+  }).sort((a,b)=>b._p-a._p).slice(0,100);
+  const maxP=sorted.length>0?sorted[0]._p:1;
+  const set=(id,v)=>{const el=document.getElementById(id);if(el)el.textContent=v;};
+  set('prop-badge-tabla',sorted.length+' establecimientos con controles registrados');
+  const el=document.getElementById('prop-tabla-body');if(!el)return;
+  el.innerHTML=sorted.map((d,i)=>`<tr>
+    <td class="rank">${i+1}</td><td>${d.n}</td><td>${d.c}</td><td>${d.s}</td>
+    <td><span style="background:${TIPO_C[d.t]||'#999'}22;color:${TIPO_C[d.t]||'#999'};font-weight:700;padding:2px 6px;border-radius:8px;font-size:10px">${d.t}</span></td>
+    <td class="num">${fmt(d._g)}</td>
+    <td class="num">${fmt(d._k)}</td>
+    <td class="num">${fmt(d._tot)}</td>
+    <td class="num" style="font-weight:800;color:${d._p>=10?'#2E8B57':d._p>=5?'#E67E22':'#D0222A'}">${d._p.toFixed(1)}%</td>
+    <td><div class="prog"><div class="prog-fill" style="width:${Math.min(d._p/maxP*100,100).toFixed(1)}%;background:#9b59b6"></div></div></td>
+  </tr>`).join('');
+}
 
 // ============================================================
 // ACTIVIDADES SM
