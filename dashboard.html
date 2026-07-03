@@ -146,15 +146,21 @@ tbody td.rank{font-weight:800;color:var(--az2);text-align:center}
     <button class="tab-btn active" onclick="switchTab('home',this)">🏠 Inicio</button>
     <button class="tab-btn" onclick="switchTab('altas',this)">🏆 Altas Clínicas SM</button>
     <button class="tab-btn" onclick="switchTab('pbc',this)">👥 Población Bajo Control</button>
-    <button class="tab-btn" onclick="switchTab('ind',this)">📊 % Altas / PBC</button>
-    <button class="tab-btn" onclick="switchTab('cat',this)">🗂️ Categorización SM</button>
     <button class="tab-btn" onclick="switchTab('ing',this)">📥 Ingresos SM</button>
-    <button class="tab-btn" onclick="switchTab('catind',this)">🔢 % Categ./Ingresos</button>
+    <button class="tab-btn" onclick="switchTab('cat',this)">🗂️ Categorización SM</button>
     <button class="tab-btn" onclick="switchTab('ipg',this)">🤝 IPG</button>
     <button class="tab-btn" onclick="switchTab('act',this)">📋 Actividades SM</button>
-    <button class="tab-btn" onclick="switchTab('conc',this)">🎯 Concentración</button>
     <button class="tab-btn" onclick="switchTab('ctrl',this)">👤 Controles Individuales</button>
-    <button class="tab-btn" onclick="switchTab('prop',this)">📐 Proporción IPG</button>
+    <button class="tab-btn" onclick="switchTab('ab',this)">🚪 Abandonos SM</button>
+  </div>
+  <div class="tabs-inner" style="border-top:1px solid var(--gris-borde);background:#F8F0FF">
+    <span style="font-size:10px;font-weight:700;color:#7c3aed;text-transform:uppercase;letter-spacing:.8px;padding:0 12px;align-self:center;white-space:nowrap">Indicadores relacionales →</span>
+    <button class="tab-btn" onclick="switchTab('ind',this)">📊 % Altas / PBC</button>
+    <button class="tab-btn" onclick="switchTab('catind',this)">🔢 % Categ./Ingresos</button>
+    <button class="tab-btn" onclick="switchTab('conc',this)">🎯 Concentración Act./PBC</button>
+    <button class="tab-btn" onclick="switchTab('prop',this)">📐 Proporción IPG/Controles</button>
+    <button class="tab-btn" onclick="switchTab('abpbc',this)">📉 % Abandonos/PBC</button>
+    <button class="tab-btn" onclick="switchTab('res',this)">✅ Tasa Resolución Clínica</button>
   </div>
 </div>
 
@@ -1435,6 +1441,252 @@ tbody td.rank{font-weight:800;color:var(--az2);text-align:center}
 </div>
 </div>
 
+<!-- ===== TAB ABANDONOS SM ===== -->
+<div id="tab-ab" class="tab-content">
+<div class="main">
+  <div class="ind-note">
+    <strong>🚪 Abandonos SM APS:</strong> Corresponde al número de personas que abandonaron el tratamiento de salud mental en APS sin recibir alta clínica. El abandono implica la interrupción no planificada del proceso terapéutico. Su seguimiento es clave para evaluar la continuidad de cuidados. Datos 2014–2025. Nota: la caída en 2020 refleja el menor número de controles durante la pandemia, no una mejora real.
+  </div>
+  <div class="kpi-row">
+    <div class="kpi-card"><div class="kpi-icon">🚪</div><div class="kpi-label">Total Abandonos SM</div><div class="kpi-value" id="ab-kpi-total">—</div><div class="kpi-sub" id="ab-kpi-total-sub">—</div></div>
+    <div class="kpi-card verde"><div class="kpi-icon">🏥</div><div class="kpi-label">Establecimientos con abandonos</div><div class="kpi-value" id="ab-kpi-estab">—</div><div class="kpi-sub">Con registro de abandonos</div></div>
+    <div class="kpi-card naranja"><div class="kpi-icon">📊</div><div class="kpi-label">Promedio anual / estab.</div><div class="kpi-value sm" id="ab-kpi-prom">—</div><div class="kpi-sub">Abandonos por centro por año</div></div>
+    <div class="kpi-card rojo"><div class="kpi-icon">📈</div><div class="kpi-label">Año con más abandonos</div><div class="kpi-value sm" id="ab-kpi-best-yr">—</div><div class="kpi-sub" id="ab-kpi-best-yr-val">—</div></div>
+    <div class="kpi-card morado"><div class="kpi-icon">⚠️</div><div class="kpi-label">SS con más abandonos</div><div class="kpi-value xs" id="ab-kpi-top-ss">—</div><div class="kpi-sub" id="ab-kpi-top-ss-val">—</div></div>
+  </div>
+  <div class="sec-title">📈 Tendencia Temporal</div><div class="sec-sep"></div>
+  <div class="charts-grid g1" style="margin-bottom:18px">
+    <div class="chart-card">
+      <div class="chart-header"><div><div class="chart-title">Evolución Total de Abandonos SM por Año (2014–2025)</div><div class="chart-sub">Total nacional · Tendencia creciente preocupante: de 121.758 en 2014 a 243.414 en 2025</div></div><div class="chart-badge">Nacional</div></div>
+      <div class="cw t"><canvas id="ab-c-tend"></canvas></div>
+    </div>
+  </div>
+  <div class="charts-grid g2">
+    <div class="chart-card">
+      <div class="chart-header"><div><div class="chart-title">Abandonos por Servicio de Salud</div><div class="chart-sub">Comparación entre los 29 SS</div></div><div class="chart-badge">SS</div></div>
+      <div class="cw xt"><canvas id="ab-c-ss"></canvas></div>
+    </div>
+    <div class="chart-card">
+      <div class="chart-header"><div><div class="chart-title">Variación % Año a Año</div><div class="chart-sub">Cambio porcentual respecto al año anterior</div></div><div class="chart-badge">Δ%</div></div>
+      <div class="cw t"><canvas id="ab-c-var"></canvas></div>
+    </div>
+  </div>
+  <div class="sec-title" style="margin-top:22px">🏥 Análisis por Tipo y Dependencia</div><div class="sec-sep"></div>
+  <div class="charts-grid g3">
+    <div class="chart-card">
+      <div class="chart-header"><div><div class="chart-title">Distribución por Tipo de Establecimiento</div><div class="chart-sub">Participación en el total de abandonos</div></div><div class="chart-badge">Tipo</div></div>
+      <div class="cw t"><canvas id="ab-c-tipo-dona"></canvas></div>
+    </div>
+    <div class="chart-card">
+      <div class="chart-header"><div><div class="chart-title">Evolución por Tipo de Establecimiento</div><div class="chart-sub">Tendencia 2014–2025</div></div><div class="chart-badge">Tendencia</div></div>
+      <div class="cw t"><canvas id="ab-c-tipo-linea"></canvas></div>
+    </div>
+    <div class="chart-card">
+      <div class="chart-header"><div><div class="chart-title">Abandonos por Dependencia</div><div class="chart-sub">Municipal vs SS vs Otra</div></div><div class="chart-badge">Dependencia</div></div>
+      <div class="cw t"><canvas id="ab-c-dep"></canvas></div>
+    </div>
+  </div>
+  <div class="sec-title" style="margin-top:22px">🌆 Análisis Comunal y por Establecimiento</div><div class="sec-sep"></div>
+  <div class="charts-grid g2c">
+    <div class="chart-card">
+      <div class="chart-header"><div><div class="chart-title">Top 20 Comunas — Abandonos SM</div><div class="chart-sub">Ordenadas por total acumulado</div></div><div class="chart-badge">Top 20</div></div>
+      <div class="cw xxxl"><canvas id="ab-c-comunas"></canvas></div>
+    </div>
+    <div class="chart-card">
+      <div class="chart-header"><div><div class="chart-title">Top 10 Establecimientos</div><div class="chart-sub">Centros con más abandonos</div></div><div class="chart-badge">Ranking</div></div>
+      <div class="cw xxxl"><canvas id="ab-c-top-estab"></canvas></div>
+    </div>
+  </div>
+  <div class="sec-title" style="margin-top:22px">🔥 Distribución Temporal por Servicio de Salud</div><div class="sec-sep"></div>
+  <div class="charts-grid g1">
+    <div class="chart-card">
+      <div class="chart-header"><div><div class="chart-title">Abandonos por SS y Año — Barras Apiladas</div><div class="chart-sub">Comparación multianual</div></div><div class="chart-badge">2014–2025</div></div>
+      <div class="cw xxxl"><canvas id="ab-c-ss-anio"></canvas></div>
+    </div>
+  </div>
+  <div class="sec-title" style="margin-top:22px">🗺️ Mapa de Abandonos por Establecimiento</div><div class="sec-sep"></div>
+  <div class="charts-grid g1">
+    <div class="chart-card">
+      <div class="chart-header"><div><div class="chart-title">Mapa de Abandonos SM por Centro APS</div><div class="chart-sub">Tamaño proporcional al número de abandonos</div></div><div class="chart-badge">Georreferenciado</div></div>
+      <div class="map-ctrl">
+        <label style="font-size:11px;font-weight:600;color:var(--texto-s)">Año mapa:</label>
+        <select class="map-sel" id="ab-map-year" onchange="actualizarMapaAb()"><option value="total">Total 2014–2025</option></select>
+        <label style="font-size:11px;font-weight:600;color:var(--texto-s);margin-left:10px">Color por:</label>
+        <select class="map-sel" id="ab-map-color" onchange="actualizarMapaAb()">
+          <option value="tipo">Tipo Establecimiento</option>
+          <option value="dependencia">Dependencia</option>
+          <option value="ss">Servicio de Salud</option>
+        </select>
+      </div>
+      <div id="ab-mapa" class="mapa"></div>
+      <div class="map-leg" id="ab-map-leg"></div>
+    </div>
+  </div>
+  <div class="sec-title" style="margin-top:22px">📋 Tabla de Establecimientos</div><div class="sec-sep"></div>
+  <div class="charts-grid g1">
+    <div class="chart-card">
+      <div class="chart-header"><div><div class="chart-title">Detalle por Establecimiento — Abandonos SM</div><div class="chart-sub">Top 100 · Clic en encabezados para ordenar</div></div><div class="chart-badge" id="ab-badge-tabla">Top 100</div></div>
+      <div class="tabla-wrap">
+        <table><thead><tr>
+          <th onclick="sortTab('ab-tabla-body',0)">#</th>
+          <th onclick="sortTab('ab-tabla-body',1)">Establecimiento ↕</th>
+          <th onclick="sortTab('ab-tabla-body',2)">Comuna ↕</th>
+          <th onclick="sortTab('ab-tabla-body',3)">Servicio de Salud ↕</th>
+          <th onclick="sortTab('ab-tabla-body',4)">Tipo ↕</th>
+          <th onclick="sortTab('ab-tabla-body',5)">Dependencia ↕</th>
+          <th onclick="sortTab('ab-tabla-body',6)">Total Abandonos ↕</th>
+          <th>Barra</th>
+        </tr></thead>
+        <tbody id="ab-tabla-body"></tbody></table>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- ===== TAB % ABANDONOS/PBC ===== -->
+<div id="tab-abpbc" class="tab-content">
+<div class="main">
+  <div class="ind-note">
+    <strong>📉 % Abandonos / Población Bajo Control:</strong> Se calcula como <strong>Abandonos SM ÷ PBC (diciembre) × 100</strong>. Indica qué proporción de las personas en control de salud mental abandonó el tratamiento en el año. Es un indicador de deserción terapéutica: valores más altos son señal de alerta sobre continuidad de cuidados. Se excluyen establecimientos con PBC = 0.
+  </div>
+  <div class="kpi-row">
+    <div class="kpi-card"><div class="kpi-icon">📉</div><div class="kpi-label">% Promedio Nacional</div><div class="kpi-value sm" id="abpbc-kpi-pct">—</div><div class="kpi-sub" id="abpbc-kpi-pct-sub">Abandonos / PBC × 100</div></div>
+    <div class="kpi-card verde"><div class="kpi-icon">📈</div><div class="kpi-label">Año con mayor % abandono</div><div class="kpi-value sm" id="abpbc-kpi-best-yr">—</div><div class="kpi-sub" id="abpbc-kpi-best-yr-val">—</div></div>
+    <div class="kpi-card naranja"><div class="kpi-icon">📉</div><div class="kpi-label">Año con menor % abandono</div><div class="kpi-value sm" id="abpbc-kpi-worst-yr">—</div><div class="kpi-sub" id="abpbc-kpi-worst-yr-val">—</div></div>
+    <div class="kpi-card rojo"><div class="kpi-icon">⚠️</div><div class="kpi-label">SS con mayor % abandono</div><div class="kpi-value xs" id="abpbc-kpi-top-ss">—</div><div class="kpi-sub" id="abpbc-kpi-top-ss-val">—</div></div>
+    <div class="kpi-card morado"><div class="kpi-icon">✅</div><div class="kpi-label">SS con menor % abandono</div><div class="kpi-value xs" id="abpbc-kpi-bot-ss">—</div><div class="kpi-sub" id="abpbc-kpi-bot-ss-val">—</div></div>
+  </div>
+  <div class="sec-title">📈 Tendencia del Indicador</div><div class="sec-sep"></div>
+  <div class="charts-grid g1" style="margin-bottom:18px">
+    <div class="chart-card">
+      <div class="chart-header"><div><div class="chart-title">Evolución del % Abandonos/PBC (2014–2025)</div><div class="chart-sub">Tasa de deserción anual sobre población en control · nivel nacional</div></div><div class="chart-badge">% Deserción</div></div>
+      <div class="cw t"><canvas id="abpbc-c-tend"></canvas></div>
+    </div>
+  </div>
+  <div class="charts-grid g2">
+    <div class="chart-card">
+      <div class="chart-header"><div><div class="chart-title">% Abandonos/PBC por Servicio de Salud</div><div class="chart-sub">Comparación entre SS · rojo = mayor deserción</div></div><div class="chart-badge">SS</div></div>
+      <div class="cw xt"><canvas id="abpbc-c-ss"></canvas></div>
+    </div>
+    <div class="chart-card">
+      <div class="chart-header"><div><div class="chart-title">Abandonos vs PBC por Año</div><div class="chart-sub">Volumen absoluto con % superpuesto</div></div><div class="chart-badge">Dual</div></div>
+      <div class="cw t"><canvas id="abpbc-c-dual"></canvas></div>
+    </div>
+  </div>
+  <div class="sec-title" style="margin-top:22px">🏥 Por Tipo y Dependencia</div><div class="sec-sep"></div>
+  <div class="charts-grid g2">
+    <div class="chart-card">
+      <div class="chart-header"><div><div class="chart-title">% Abandonos/PBC por Tipo de Establecimiento</div><div class="chart-sub">Tasa de deserción según tipo de centro</div></div><div class="chart-badge">Tipo</div></div>
+      <div class="cw t"><canvas id="abpbc-c-tipo"></canvas></div>
+    </div>
+    <div class="chart-card">
+      <div class="chart-header"><div><div class="chart-title">% Abandonos/PBC por Dependencia</div><div class="chart-sub">Municipal vs SS vs Otra</div></div><div class="chart-badge">Dependencia</div></div>
+      <div class="cw t"><canvas id="abpbc-c-dep"></canvas></div>
+    </div>
+  </div>
+  <div class="sec-title" style="margin-top:22px">📊 Evolución por SS</div><div class="sec-sep"></div>
+  <div class="charts-grid g1">
+    <div class="chart-card">
+      <div class="chart-header"><div><div class="chart-title">% Abandonos/PBC por SS y Año — Líneas Múltiples</div><div class="chart-sub">Trayectoria de deserción de cada SS · Top 15</div></div><div class="chart-badge">2014–2025</div></div>
+      <div class="cw xxxl"><canvas id="abpbc-c-ss-linea"></canvas></div>
+    </div>
+  </div>
+  <div class="sec-title" style="margin-top:22px">📋 Tabla por Establecimiento</div><div class="sec-sep"></div>
+  <div class="charts-grid g1">
+    <div class="chart-card">
+      <div class="chart-header"><div><div class="chart-title">% Abandonos/PBC por Establecimiento</div><div class="chart-sub">Solo establecimientos con PBC > 0 · Clic para ordenar</div></div><div class="chart-badge" id="abpbc-badge-tabla">—</div></div>
+      <div class="tabla-wrap">
+        <table><thead><tr>
+          <th onclick="sortTab('abpbc-tabla-body',0)">#</th>
+          <th onclick="sortTab('abpbc-tabla-body',1)">Establecimiento ↕</th>
+          <th onclick="sortTab('abpbc-tabla-body',2)">Comuna ↕</th>
+          <th onclick="sortTab('abpbc-tabla-body',3)">Servicio de Salud ↕</th>
+          <th onclick="sortTab('abpbc-tabla-body',4)">Tipo ↕</th>
+          <th onclick="sortTab('abpbc-tabla-body',5)">Abandonos ↕</th>
+          <th onclick="sortTab('abpbc-tabla-body',6)">PBC ↕</th>
+          <th onclick="sortTab('abpbc-tabla-body',7)">% Ab./PBC ↕</th>
+          <th>Barra</th>
+        </tr></thead>
+        <tbody id="abpbc-tabla-body"></tbody></table>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- ===== TAB TASA RESOLUCIÓN CLÍNICA ===== -->
+<div id="tab-res" class="tab-content">
+<div class="main">
+  <div class="ind-note">
+    <strong>✅ Tasa de Resolución Clínica:</strong> Se calcula como <strong>Altas Clínicas ÷ (Altas Clínicas + Abandonos) × 100</strong>. Expresa qué proporción de los egresos del tratamiento SM fueron positivos (alta clínica) versus negativos (abandono). Es el indicador estándar en salud pública para medir efectividad del tratamiento: <span style="color:#2E8B57;font-weight:700">≥60% Bueno</span> · <span style="color:#E67E22;font-weight:700">40–59% Moderado</span> · <span style="color:#D0222A;font-weight:700">&lt;40% Crítico</span>.
+  </div>
+  <div class="kpi-row">
+    <div class="kpi-card"><div class="kpi-icon">✅</div><div class="kpi-label">Tasa Resolución Nacional</div><div class="kpi-value sm" id="res-kpi-pct">—</div><div class="kpi-sub" id="res-kpi-pct-sub">Altas / (Altas + Abandonos)</div></div>
+    <div class="kpi-card verde"><div class="kpi-icon">📈</div><div class="kpi-label">Año con mayor resolución</div><div class="kpi-value sm" id="res-kpi-best-yr">—</div><div class="kpi-sub" id="res-kpi-best-yr-val">—</div></div>
+    <div class="kpi-card naranja"><div class="kpi-icon">📉</div><div class="kpi-label">Año con menor resolución</div><div class="kpi-value sm" id="res-kpi-worst-yr">—</div><div class="kpi-sub" id="res-kpi-worst-yr-val">—</div></div>
+    <div class="kpi-card rojo"><div class="kpi-icon">🏆</div><div class="kpi-label">SS con mayor resolución</div><div class="kpi-value xs" id="res-kpi-top-ss">—</div><div class="kpi-sub" id="res-kpi-top-ss-val">—</div></div>
+    <div class="kpi-card morado"><div class="kpi-icon">⚠️</div><div class="kpi-label">SS con menor resolución</div><div class="kpi-value xs" id="res-kpi-bot-ss">—</div><div class="kpi-sub" id="res-kpi-bot-ss-val">—</div></div>
+  </div>
+  <div class="sec-title">📈 Tendencia del Indicador</div><div class="sec-sep"></div>
+  <div class="charts-grid g1" style="margin-bottom:18px">
+    <div class="chart-card">
+      <div class="chart-header"><div><div class="chart-title">Evolución Tasa de Resolución Clínica SM (2014–2025)</div><div class="chart-sub">Altas ÷ (Altas + Abandonos) × 100 · nivel nacional según filtros</div></div><div class="chart-badge">% Resolución</div></div>
+      <div class="cw t"><canvas id="res-c-tend"></canvas></div>
+    </div>
+  </div>
+  <div class="charts-grid g2">
+    <div class="chart-card">
+      <div class="chart-header"><div><div class="chart-title">Tasa de Resolución por Servicio de Salud</div><div class="chart-sub">Verde = mayor resolución clínica · Rojo = mayor deserción</div></div><div class="chart-badge">SS</div></div>
+      <div class="cw xt"><canvas id="res-c-ss"></canvas></div>
+    </div>
+    <div class="chart-card">
+      <div class="chart-header"><div><div class="chart-title">Altas vs Abandonos por Año</div><div class="chart-sub">Composición de egresos SM con tasa de resolución superpuesta</div></div><div class="chart-badge">Composición</div></div>
+      <div class="cw t"><canvas id="res-c-comp"></canvas></div>
+    </div>
+  </div>
+  <div class="sec-title" style="margin-top:22px">🏥 Por Tipo y Dependencia</div><div class="sec-sep"></div>
+  <div class="charts-grid g2">
+    <div class="chart-card">
+      <div class="chart-header"><div><div class="chart-title">Tasa de Resolución por Tipo de Establecimiento</div><div class="chart-sub">Efectividad clínica comparada según tipo de centro</div></div><div class="chart-badge">Tipo</div></div>
+      <div class="cw t"><canvas id="res-c-tipo"></canvas></div>
+    </div>
+    <div class="chart-card">
+      <div class="chart-header"><div><div class="chart-title">Tasa de Resolución por Dependencia</div><div class="chart-sub">Municipal vs SS vs Otra</div></div><div class="chart-badge">Dependencia</div></div>
+      <div class="cw t"><canvas id="res-c-dep"></canvas></div>
+    </div>
+  </div>
+  <div class="sec-title" style="margin-top:22px">📊 Evolución por SS</div><div class="sec-sep"></div>
+  <div class="charts-grid g1">
+    <div class="chart-card">
+      <div class="chart-header"><div><div class="chart-title">Tasa de Resolución por SS y Año — Líneas Múltiples</div><div class="chart-sub">Trayectoria de efectividad clínica de cada SS · Top 15</div></div><div class="chart-badge">2014–2025</div></div>
+      <div class="cw xxxl"><canvas id="res-c-ss-linea"></canvas></div>
+    </div>
+  </div>
+  <div class="sec-title" style="margin-top:22px">📋 Tabla por Establecimiento</div><div class="sec-sep"></div>
+  <div class="charts-grid g1">
+    <div class="chart-card">
+      <div class="chart-header"><div><div class="chart-title">Tasa de Resolución Clínica por Establecimiento</div><div class="chart-sub">Solo establecimientos con egresos registrados · Clic para ordenar</div></div><div class="chart-badge" id="res-badge-tabla">—</div></div>
+      <div class="tabla-wrap">
+        <table><thead><tr>
+          <th onclick="sortTab('res-tabla-body',0)">#</th>
+          <th onclick="sortTab('res-tabla-body',1)">Establecimiento ↕</th>
+          <th onclick="sortTab('res-tabla-body',2)">Comuna ↕</th>
+          <th onclick="sortTab('res-tabla-body',3)">Servicio de Salud ↕</th>
+          <th onclick="sortTab('res-tabla-body',4)">Tipo ↕</th>
+          <th onclick="sortTab('res-tabla-body',5)">Altas ↕</th>
+          <th onclick="sortTab('res-tabla-body',6)">Abandonos ↕</th>
+          <th onclick="sortTab('res-tabla-body',7)">Total Egresos ↕</th>
+          <th onclick="sortTab('res-tabla-body',8)">% Resolución ↕</th>
+          <th>Barra</th>
+        </tr></thead>
+        <tbody id="res-tabla-body"></tbody></table>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+
 <div class="footer">
   División de Atención Primaria · Ministerio de Salud de Chile &nbsp;|&nbsp; Datos DEIS MINSAL · Altas Clínicas SM y Población Bajo Control APS 2014–2025
 </div>
@@ -1449,11 +1701,11 @@ window._parseDatos = function(pkg){
     window.DATA = pkg.rows.map(r=>({
       id:r[0], n:r[1],
       c:pkg.com[r[2]], s:pkg.ss[r[3]], t:pkg.tip[r[4]], tc:pkg.tc[r[5]], dep:pkg.dep[r[6]],
-      lat:r[7], lon:r[8], ta:r[9], tp:r[10], ti:r[11], tg:r[12], tv:r[13], tk:r[14],
-      a:r.slice(15,27), p:r.slice(27,39), i:r.slice(39,51), g:r.slice(51,63),
-      v:r.slice(63,75), k:r.slice(75,87),
-      cat:r[87]?{N0:r[87][0],N1:r[87][1],N2:r[87][2],N3:r[87][3],N4:r[87][4],
-                  total:r[87][0]+r[87][1]+r[87][2]+r[87][3]+r[87][4]}:null
+      lat:r[7], lon:r[8], ta:r[9], tp:r[10], ti:r[11], tg:r[12], tv:r[13], tk:r[14], tb:r[15],
+      a:r.slice(16,28), p:r.slice(28,40), i:r.slice(40,52), g:r.slice(52,64),
+      v:r.slice(64,76), k:r.slice(76,88), b:r.slice(88,100),
+      cat:r[100]?{N0:r[100][0],N1:r[100][1],N2:r[100][2],N3:r[100][3],N4:r[100][4],
+                  total:r[100][0]+r[100][1]+r[100][2]+r[100][3]+r[100][4]}:null
     }));
   } catch(e) {
     console.error('Error:', e);
@@ -1467,6 +1719,7 @@ function gi(d,y){const i=YEARS.indexOf(String(y));return i>=0?(d.i[i]||0):0;}
 function gg(d,y){const i=YEARS.indexOf(String(y));return i>=0?(d.g[i]||0):0;}
 function gv(d,y){const i=YEARS.indexOf(String(y));return i>=0?(d.v[i]||0):0;}
 function gk(d,y){const i=YEARS.indexOf(String(y));return i>=0?(d.k[i]||0):0;}
+function gb(d,y){const i=YEARS.indexOf(String(y));return i>=0?(d.b[i]||0):0;}
 
 const TIPO_C = {
   'CESFAM':'#005F9E','CECOSF':'#2E8B57','Posta de Salud':'#E67E22',
@@ -1483,8 +1736,8 @@ const PAL = ['#005F9E','#0090D0','#2E8B57','#E67E22','#D0222A','#7c3aed','#16a08
 // ============================================================
 let F = {anio:'total', ss:'', comuna:'', estab:'', tipo:'', dep:'', cat:''};
 let charts = {};
-let maps = {a:null, p:null, c:null, i2:null, ipg:null, act:null, ctrl:null};
-let mapMarkers = {a:[], p:[], c:[], i2:[], ipg:[], act:[], ctrl:[]};
+let maps = {a:null, p:null, c:null, i2:null, ipg:null, act:null, ctrl:null, ab:null};
+let mapMarkers = {a:[], p:[], c:[], i2:[], ipg:[], act:[], ctrl:[], ab:[]};
 let sortDir = {};
 
 // ============================================================
@@ -1506,6 +1759,7 @@ function switchTab(name, btn) {
     if(name==='ipg' && maps.ipg) maps.ipg.invalidateSize();
     if(name==='act' && maps.act) maps.act.invalidateSize();
     if(name==='ctrl' && maps.ctrl) maps.ctrl.invalidateSize();
+    if(name==='ab' && maps.ab) maps.ab.invalidateSize();
   }, 50);
 }
 
@@ -1549,6 +1803,7 @@ function init() {
   initMapaIPG();
   initMapaAct();
   initMapaCtrl();
+  initMapaAb();
   updateHomeKPIs();
   initTerrSelectors();
   actualizarTodo();
@@ -1614,7 +1869,7 @@ function actualizarTodo() {
   document.getElementById('filtros-count').textContent = fd.length.toLocaleString('es-CL')+' establecimientos activos';
 
   // Sync map year selectors with global year filter
-  ['a-map-year','p-map-year','i2-map-year','ipg-map-year','act-map-year','ctrl-map-year'].forEach(id=>{
+  ['a-map-year','p-map-year','i2-map-year','ipg-map-year','act-map-year','ctrl-map-year','ab-map-year'].forEach(id=>{
     const sel=document.getElementById(id);
     if(sel) sel.value=F.anio;
   });
@@ -1661,6 +1916,22 @@ function actualizarTodo() {
   kpisInd(fd);
   grafInd(fd);
   tablaInd(fd);
+
+  // Tab Abandonos
+  kpisAb(fd);
+  grafAb(fd);
+  tablaAb(fd);
+  actualizarMapaAb();
+
+  // Tab % Ab/PBC
+  kpisAbPBC(fd);
+  grafAbPBC(fd);
+  tablaAbPBC(fd);
+
+  // Tab Tasa Resolución
+  kpisRes(fd);
+  grafRes(fd);
+  tablaRes(fd);
 
   // Tab Controles Individuales
   kpisCtrl(fd);
@@ -1975,7 +2246,10 @@ function grafInd(fd) {
   mkChart('i-c-ss-linea',{type:'line',data:{labels:YEARS,datasets:ssLineDs},options:{
     responsive:true,maintainAspectRatio:false,
     plugins:{legend:{position:'bottom',labels:{font:{size:9},boxWidth:10,padding:5}},
-      tooltip:{mode:'index',intersect:false,itemSort:(a,b)=>(b.raw||0)-(a.raw||0),callbacks:{label:ctx=>ctx.raw!=null?` ${ctx.dataset.label}: ${ctx.raw.toFixed(1)}%`:null,title:items=>`Año ${items[0].label}`}}},
+      tooltip:{mode:'nearest',intersect:true,callbacks:{
+          label:ctx=>ctx.raw!=null?` ${ctx.dataset.label}: ${ctx.raw.toFixed(1)}%`:null,
+          title:items=>`${items[0].dataset.label} · Año ${items[0].label}`
+        }}},
     scales:{x:{ticks:{font:{size:10}}},y:{ticks:{callback:v=>v!=null?v.toFixed(1)+'%':'',font:{size:10}},beginAtZero:true}}}});
 }
 
@@ -2023,7 +2297,7 @@ function varChart(vals,color='#005F9E') {
 
 function donaCfg(fd,anio,campo) {
   const byT={};
-  fd.forEach(d=>{const v=campo==='altas'?getAltas(d,anio):campo==='pbc'?getPBC(d,anio):campo==='ing'?getIng(d,anio):campo==='ipg'?getIPG(d,anio):campo==='act'?getAct(d,anio):getCtrl(d,anio);byT[d.t]=(byT[d.t]||0)+v;});
+  fd.forEach(d=>{const v=campo==='altas'?getAltas(d,anio):campo==='pbc'?getPBC(d,anio):campo==='ing'?getIng(d,anio):campo==='ipg'?getIPG(d,anio):campo==='act'?getAct(d,anio):campo==='ctrl'?getCtrl(d,anio):getAb(d,anio);byT[d.t]=(byT[d.t]||0)+v;});
   const items=Object.entries(byT).sort((a,b)=>b[1]-a[1]);
   return {type:'doughnut',data:{labels:items.map(x=>x[0]),datasets:[{data:items.map(x=>x[1]),
     backgroundColor:items.map(x=>TIPO_C[x[0]]||'#999'),borderColor:'#fff',borderWidth:2}]},
@@ -2059,7 +2333,7 @@ function depStackedCfg(fd,campo) {
 
 function topEstabCfg(topE,anio,campo) {
   const labels=topE.map(d=>{let n=d.n.replace(/Centro de Salud Familiar/i,'CESFAM').replace(/Centro Comunitario de Salud Familiar/i,'CECOSF');return n.length>38?n.slice(0,36)+'…':n;});
-  const vals=topE.map(d=>campo==='altas'?getAltas(d,anio):campo==='pbc'?getPBC(d,anio):campo==='ing'?getIng(d,anio):campo==='ipg'?getIPG(d,anio):campo==='act'?getAct(d,anio):getCtrl(d,anio));
+  const vals=topE.map(d=>campo==='altas'?getAltas(d,anio):campo==='pbc'?getPBC(d,anio):campo==='ing'?getIng(d,anio):campo==='ipg'?getIPG(d,anio):campo==='act'?getAct(d,anio):campo==='ctrl'?getCtrl(d,anio):getAb(d,anio));
   return {type:'bar',data:{labels,datasets:[{label:'',data:vals,
     backgroundColor:topE.map(d=>(TIPO_C[d.t]||'#005F9E')+'CC'),
     borderColor:topE.map(d=>TIPO_C[d.t]||'#005F9E'),borderWidth:1,borderRadius:4}]},
@@ -2070,9 +2344,9 @@ function topEstabCfg(topE,anio,campo) {
 
 function ssAnioCfg(fd,campo) {
   const allSS=[...new Set(fd.map(d=>d.s))].filter(Boolean);
-  const ssTots={};allSS.forEach(ss=>{ssTots[ss]=fd.filter(d=>d.s===ss).reduce((s,d)=>s+(campo==='altas'?d.ta:campo==='pbc'?d.tp:campo==='ing'?d.ti:campo==='ipg'?d.tg:campo==='act'?d.tv:d.tk),0);});
+  const ssTots={};allSS.forEach(ss=>{ssTots[ss]=fd.filter(d=>d.s===ss).reduce((s,d)=>s+(campo==='altas'?d.ta:campo==='pbc'?d.tp:campo==='ing'?d.ti:campo==='ipg'?d.tg:campo==='act'?d.tv:campo==='ctrl'?d.tk:d.tb),0);});
   const sortedSS=allSS.sort((a,b)=>ssTots[b]-ssTots[a]);
-  const _getV=(d,i)=>campo==='altas'?(d.a[i]||0):campo==='pbc'?(d.p[i]||0):campo==='ing'?(d.i[i]||0):campo==='ipg'?(d.g[i]||0):campo==='act'?(d.v[i]||0):(d.k[i]||0);
+  const _getV=(d,i)=>campo==='altas'?(d.a[i]||0):campo==='pbc'?(d.p[i]||0):campo==='ing'?(d.i[i]||0):campo==='ipg'?(d.g[i]||0):campo==='act'?(d.v[i]||0):campo==='ctrl'?(d.k[i]||0):(d.b[i]||0);
   const ds=YEARS.map((y,i)=>{
     const hue=Math.round(i*(220/11));
     const color=`hsl(${200+hue},70%,45%)`;
@@ -2179,7 +2453,7 @@ function actualizarMapa(prefix, campo) {
   const ssColorMap={};
   if(colorBy==='ss'){[...new Set(withC.map(d=>d.s))].forEach((ss,i)=>ssColorMap[ss]=PAL[i%PAL.length]);}
   withC.forEach(d=>{
-    const val=campo==='altas'?getAltas(d,mapAnio):campo==='pbc'?getPBC(d,mapAnio):campo==='ing'?getIng(d,mapAnio):campo==='ipg'?getIPG(d,mapAnio):campo==='act'?getAct(d,mapAnio):campo==='ctrl'?getCtrl(d,mapAnio):0;
+    const val=campo==='altas'?getAltas(d,mapAnio):campo==='pbc'?getPBC(d,mapAnio):campo==='ing'?getIng(d,mapAnio):campo==='ipg'?getIPG(d,mapAnio):campo==='act'?getAct(d,mapAnio):campo==='ctrl'?getCtrl(d,mapAnio):campo==='ab'?getAb(d,mapAnio):0;
     if(val<=0)return;
     const color=colorBy==='tipo'?(TIPO_C[d.t]||'#999'):colorBy==='dependencia'?(DEP_C[d.dep.trim()]||'#999'):(ssColorMap[d.s]||'#005F9E');
     const r=Math.max(4,Math.min(28,4+Math.sqrt(val/maxV)*22));
@@ -2397,7 +2671,7 @@ function actualizarMapaCat() {
 // ── switchTabByName (for home cards) ──────────────────────────────────────
 function switchTabByName(name) {
   const btns = document.querySelectorAll('.tab-btn');
-  const tabNames = ['home','altas','pbc','ind','cat','ing','catind','ipg','act','conc','ctrl','prop'];
+  const tabNames = ['home','altas','pbc','ing','cat','ipg','act','ctrl','ab','ind','catind','conc','prop','abpbc','res'];
   const idx = tabNames.indexOf(name);
   if(idx>=0) switchTab(name, btns[idx]);
 }
@@ -2494,6 +2768,273 @@ function actualizarMapaIng(){actualizarMapa('i2','ing');}
 
 
 
+
+
+// ============================================================
+// ABANDONOS SM
+// ============================================================
+function getAb(d,anio){return anio==='total'?d.tb:gb(d,anio);}
+
+function kpisAb(fd){
+  const anio=F.anio;
+  const total=fd.reduce((s,d)=>s+getAb(d,anio),0);
+  const set=(id,v)=>{const el=document.getElementById(id);if(el)el.textContent=v;};
+  set('ab-kpi-total',fmt(total));
+  set('ab-kpi-total-sub',anio==='total'?'Período 2014–2025':'Año '+anio);
+  const con=fd.filter(d=>getAb(d,anio)>0).length;
+  set('ab-kpi-estab',con.toLocaleString('es-CL'));
+  let promAnual;
+  if(anio==='total'){
+    const s=fd.reduce((acc,d)=>{const yrs=YEARS.filter((_,i)=>(d.b[i]||0)>0).length;return acc+(yrs>0?d.tb/yrs:0);},0);
+    promAnual=con>0?s/con:0;
+  } else {promAnual=con>0?total/con:0;}
+  set('ab-kpi-prom',con>0?fmt(promAnual):'—');
+  let bY='',bV=0;
+  YEARS.forEach((y,i)=>{const s=fd.reduce((a,d)=>a+(d.b[i]||0),0);if(s>bV){bV=s;bY=y;}});
+  set('ab-kpi-best-yr',bY);
+  set('ab-kpi-best-yr-val',fmt(bV)+' abandonos ese año');
+  const bySS={};fd.forEach(d=>{bySS[d.s]=(bySS[d.s]||0)+getAb(d,anio);});
+  const top=Object.entries(bySS).sort((a,b)=>b[1]-a[1])[0];
+  if(top){set('ab-kpi-top-ss',top[0].split(' ')[0]);set('ab-kpi-top-ss-val',fmt(top[1])+' abandonos');}
+}
+
+function grafAb(fd){
+  const anio=F.anio;
+  const color='#c0392b';
+  const tV=YEARS.map((y,i)=>fd.reduce((s,d)=>s+(d.b[i]||0),0));
+  mkChart('ab-c-tend',{type:'line',data:{labels:YEARS,datasets:[{
+    label:'Abandonos SM',data:tV,borderColor:color,backgroundColor:'rgba(192,57,43,0.08)',
+    fill:true,tension:0.35,pointRadius:5,pointHoverRadius:8,borderWidth:3,
+    pointBackgroundColor:tV.map((v,i)=>i===6?'#2E8B57':v===Math.max(...tV)?color:color),
+    pointBorderColor:'#fff',pointBorderWidth:2}]},
+  options:{responsive:true,maintainAspectRatio:false,
+    plugins:{legend:{display:false},tooltip:{callbacks:{label:ctx=>' '+fmt(ctx.raw)+' abandonos'}}},
+    scales:{x:{ticks:{font:{size:11,weight:'bold'}}},y:{ticks:{callback:v=>fmt(v),font:{size:10}}}}}});
+  const ssTot={};fd.forEach(d=>{ssTot[d.s]=(ssTot[d.s]||0)+getAb(d,anio);});
+  const ssSort=Object.entries(ssTot).sort((a,b)=>b[1]-a[1]);
+  mkChart('ab-c-ss',hbarCfg(ssSort.map(x=>x[0]),ssSort.map(x=>x[1]),PAL,color));
+  mkChart('ab-c-var',varChart(tV,color));
+  mkChart('ab-c-tipo-dona',donaCfg(fd,anio,'ab'));
+  mkChart('ab-c-tipo-linea',tipoLineaCfg(fd,'ab'));
+  mkChart('ab-c-dep',depStackedCfg(fd,'ab'));
+  const comTot={};fd.forEach(d=>{comTot[d.c]=(comTot[d.c]||0)+getAb(d,anio);});
+  const comSort=Object.entries(comTot).sort((a,b)=>b[1]-a[1]).slice(0,20);
+  mkChart('ab-c-comunas',hbarCfg(comSort.map(x=>x[0]),comSort.map(x=>x[1]),PAL,color));
+  const topE=fd.slice().sort((a,b)=>getAb(b,anio)-getAb(a,anio)).slice(0,10);
+  mkChart('ab-c-top-estab',topEstabCfg(topE,anio,'ab'));
+  mkChart('ab-c-ss-anio',ssAnioCfg(fd,'ab'));
+}
+
+function tablaAb(fd){
+  const anio=F.anio;
+  const sorted=fd.slice().sort((a,b)=>getAb(b,anio)-getAb(a,anio)).slice(0,100);
+  const maxV=sorted.length>0?getAb(sorted[0],anio):1;
+  const el=document.getElementById('ab-tabla-body');if(!el)return;
+  el.innerHTML=sorted.map((d,i)=>`<tr>
+    <td class="rank">${i+1}</td><td>${d.n}</td><td>${d.c}</td><td>${d.s}</td>
+    <td><span style="background:${TIPO_C[d.t]||'#999'}22;color:${TIPO_C[d.t]||'#999'};font-weight:700;padding:2px 6px;border-radius:8px;font-size:10px">${d.t}</span></td>
+    <td>${d.dep.trim()}</td><td class="num">${fmt(getAb(d,anio))}</td>
+    <td><div class="prog"><div class="prog-fill" style="width:${(getAb(d,anio)/maxV*100).toFixed(1)}%;background:#c0392b"></div></div></td>
+  </tr>`).join('');
+  const badge=document.getElementById('ab-badge-tabla');if(badge)badge.textContent='Top '+sorted.length;
+}
+
+function initMapaAb(){
+  maps.ab=L.map('ab-mapa').setView([-35.5,-71.0],5);
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{attribution:'© OpenStreetMap',maxZoom:18}).addTo(maps.ab);
+  actualizarMapaAb();
+}
+function actualizarMapaAb(){actualizarMapa('ab','ab');}
+
+// ============================================================
+// % ABANDONOS / PBC
+// ============================================================
+function kpisAbPBC(fd){
+  const anio=F.anio;
+  const yi=anio==='total'?-1:YEARS.indexOf(anio);
+  const totAb=yi===-1?fd.reduce((s,d)=>s+d.tb,0):fd.reduce((s,d)=>s+(d.b[yi]||0),0);
+  const totPBC=yi===-1?fd.reduce((s,d)=>s+d.tp,0):fd.reduce((s,d)=>s+(d.p[yi]||0),0);
+  const pctNac=totPBC>0?(totAb/totPBC*100):0;
+  const set=(id,v)=>{const el=document.getElementById(id);if(el)el.textContent=v;};
+  set('abpbc-kpi-pct',pctNac.toFixed(1)+'%');
+  set('abpbc-kpi-pct-sub',fmt(totAb)+' ab / '+fmt(totPBC)+' PBC');
+  const pctByYr=YEARS.map((y,i)=>{const b=fd.reduce((s,d)=>s+(d.b[i]||0),0);const p=fd.reduce((s,d)=>s+(d.p[i]||0),0);return p>0?b/p*100:0;}).filter(v=>v>0);
+  const maxP=Math.max(...pctByYr),minP=Math.min(...pctByYr);
+  const allPcts=YEARS.map((y,i)=>{const b=fd.reduce((s,d)=>s+(d.b[i]||0),0);const p=fd.reduce((s,d)=>s+(d.p[i]||0),0);return p>0?b/p*100:0;});
+  set('abpbc-kpi-best-yr',YEARS[allPcts.indexOf(maxP)]||'—');set('abpbc-kpi-best-yr-val',maxP.toFixed(1)+'%');
+  set('abpbc-kpi-worst-yr',YEARS[allPcts.indexOf(minP)]||'—');set('abpbc-kpi-worst-yr-val',minP.toFixed(1)+'%');
+  const bySS={};
+  fd.forEach(d=>{if(!bySS[d.s])bySS[d.s]={b:0,p:0};if(yi===-1){bySS[d.s].b+=d.tb;bySS[d.s].p+=d.tp;}else{bySS[d.s].b+=(d.b[yi]||0);bySS[d.s].p+=(d.p[yi]||0);}});
+  const ssPcts=Object.entries(bySS).map(([ss,v])=>({ss,pct:v.p>0?v.b/v.p*100:0})).filter(x=>x.pct>0).sort((a,b)=>b.pct-a.pct);
+  if(ssPcts.length>0){
+    set('abpbc-kpi-top-ss',ssPcts[0].ss.split(' ')[0]);set('abpbc-kpi-top-ss-val',ssPcts[0].pct.toFixed(1)+'%');
+    const bot=ssPcts[ssPcts.length-1];
+    set('abpbc-kpi-bot-ss',bot.ss.split(' ')[0]);set('abpbc-kpi-bot-ss-val',bot.pct.toFixed(1)+'%');
+  }
+}
+
+function grafAbPBC(fd){
+  const anio=F.anio;
+  const yi=anio==='total'?-1:YEARS.indexOf(anio);
+  const pctV=YEARS.map((y,i)=>{const b=fd.reduce((s,d)=>s+(d.b[i]||0),0);const p=fd.reduce((s,d)=>s+(d.p[i]||0),0);return p>0?parseFloat((b/p*100).toFixed(2)):0;});
+  mkChart('abpbc-c-tend',{type:'line',data:{labels:YEARS,datasets:[{
+    label:'% Ab/PBC',data:pctV,borderColor:'#c0392b',backgroundColor:'rgba(192,57,43,0.08)',
+    fill:true,tension:0.35,pointRadius:5,pointHoverRadius:8,borderWidth:3,
+    pointBackgroundColor:pctV.map((v,i)=>i===6?'#2E8B57':v===Math.max(...pctV)?'#7c3aed':'#c0392b'),
+    pointBorderColor:'#fff',pointBorderWidth:2}]},
+  options:{responsive:true,maintainAspectRatio:false,
+    plugins:{legend:{display:false},tooltip:{callbacks:{label:ctx=>` ${ctx.raw.toFixed(2)}%`}}},
+    scales:{x:{ticks:{font:{size:11,weight:'bold'}}},y:{ticks:{callback:v=>v.toFixed(1)+'%',font:{size:10}},beginAtZero:true}}}});
+  const bySS={};
+  fd.forEach(d=>{if(!bySS[d.s])bySS[d.s]={b:0,p:0};if(yi===-1){bySS[d.s].b+=d.tb;bySS[d.s].p+=d.tp;}else{bySS[d.s].b+=(d.b[yi]||0);bySS[d.s].p+=(d.p[yi]||0);}});
+  const ssData=Object.entries(bySS).map(([ss,v])=>({ss,pct:v.p>0?parseFloat((v.b/v.p*100).toFixed(2)):0,b:v.b,p:v.p})).filter(x=>x.p>0).sort((a,b)=>b.pct-a.pct);
+  const cScaleRed=(pct,arr)=>{const vals=arr.map(x=>x.pct),mn=Math.min(...vals),mx=Math.max(...vals);const n=(pct-mn)/(mx-mn||1);return `rgba(${Math.round(46+(208-46)*n)},${Math.round(139+(34-139)*n)},${Math.round(87+(42-87)*n)},0.8)`;};
+  mkChart('abpbc-c-ss',{type:'bar',data:{labels:ssData.map(x=>x.ss),datasets:[{label:'% Ab/PBC',data:ssData.map(x=>x.pct),backgroundColor:ssData.map(x=>cScaleRed(x.pct,ssData)),borderRadius:4}]},
+  options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,
+    plugins:{legend:{display:false},tooltip:{callbacks:{label:ctx=>{const d=ssData[ctx.dataIndex];return [` ${ctx.raw.toFixed(2)}%`,` ${fmt(d.b)} ab / ${fmt(d.p)} PBC`];}}}},
+    scales:{x:{ticks:{callback:v=>v.toFixed(1)+'%',font:{size:9}}},y:{ticks:{font:{size:9}}}}}});
+  const abVals=YEARS.map((y,i)=>fd.reduce((s,d)=>s+(d.b[i]||0),0));
+  const pbcVals=YEARS.map((y,i)=>fd.reduce((s,d)=>s+(d.p[i]||0),0));
+  mkChart('abpbc-c-dual',{type:'bar',data:{labels:YEARS,datasets:[
+    {label:'Abandonos',data:abVals,backgroundColor:'rgba(192,57,43,0.7)',borderRadius:3,order:2},
+    {label:'PBC',data:pbcVals,backgroundColor:'rgba(46,139,87,0.3)',borderRadius:3,order:3},
+    {label:'% Ab/PBC',data:pctV,type:'line',borderColor:'#c0392b',backgroundColor:'transparent',pointRadius:4,borderWidth:2.5,yAxisID:'y2',order:1}
+  ]},options:{responsive:true,maintainAspectRatio:false,
+    plugins:{legend:{position:'bottom',labels:{font:{size:10},boxWidth:12}},tooltip:{mode:'index',intersect:false}},
+    scales:{x:{ticks:{font:{size:10}}},y:{ticks:{callback:v=>fmt(v),font:{size:9}},position:'left'},y2:{ticks:{callback:v=>v.toFixed(1)+'%',font:{size:9}},position:'right',grid:{display:false}}}}});
+  const byTipo={};fd.forEach(d=>{if(!byTipo[d.t])byTipo[d.t]={b:0,p:0};if(yi===-1){byTipo[d.t].b+=d.tb;byTipo[d.t].p+=d.tp;}else{byTipo[d.t].b+=(d.b[yi]||0);byTipo[d.t].p+=(d.p[yi]||0);}});
+  const tipoData=Object.entries(byTipo).map(([t,v])=>({t,pct:v.p>0?parseFloat((v.b/v.p*100).toFixed(2)):0})).filter(x=>x.pct>0).sort((a,b)=>b.pct-a.pct);
+  mkChart('abpbc-c-tipo',{type:'bar',data:{labels:tipoData.map(x=>x.t),datasets:[{label:'% Ab/PBC',data:tipoData.map(x=>x.pct),backgroundColor:tipoData.map(x=>(TIPO_C[x.t]||'#999')+'CC'),borderRadius:4}]},
+  options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:ctx=>` ${ctx.raw.toFixed(2)}%`}}},scales:{x:{ticks:{font:{size:10}}},y:{ticks:{callback:v=>v.toFixed(1)+'%',font:{size:10}},beginAtZero:true}}}});
+  const byDep={};fd.forEach(d=>{const dep=d.dep.trim();if(!byDep[dep])byDep[dep]={b:0,p:0};if(yi===-1){byDep[dep].b+=d.tb;byDep[dep].p+=d.tp;}else{byDep[dep].b+=(d.b[yi]||0);byDep[dep].p+=(d.p[yi]||0);}});
+  const depData=Object.entries(byDep).map(([dep,v])=>({dep,pct:v.p>0?parseFloat((v.b/v.p*100).toFixed(2)):0})).filter(x=>x.pct>0).sort((a,b)=>b.pct-a.pct);
+  mkChart('abpbc-c-dep',{type:'bar',data:{labels:depData.map(x=>x.dep),datasets:[{label:'% Ab/PBC',data:depData.map(x=>x.pct),backgroundColor:depData.map(x=>(DEP_C[x.dep]||'#999')+'CC'),borderRadius:4}]},
+  options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:ctx=>` ${ctx.raw.toFixed(2)}%`}}},scales:{x:{ticks:{font:{size:10}}},y:{ticks:{callback:v=>v.toFixed(1)+'%',font:{size:10}},beginAtZero:true}}}});
+  const allSS=[...new Set(fd.map(d=>d.s))].filter(Boolean);
+  const ssTots={};allSS.forEach(ss=>{ssTots[ss]=fd.filter(d=>d.s===ss).reduce((s,d)=>s+d.tb+d.tp,0);});
+  const top15=allSS.sort((a,b)=>ssTots[b]-ssTots[a]).slice(0,15);
+  mkChart('abpbc-c-ss-linea',{type:'line',data:{labels:YEARS,datasets:top15.map((ss,i)=>({
+    label:ss,data:YEARS.map((y,j)=>{const b=fd.filter(d=>d.s===ss).reduce((s,d)=>s+(d.b[j]||0),0);const p=fd.filter(d=>d.s===ss).reduce((s,d)=>s+(d.p[j]||0),0);return p>0?parseFloat((b/p*100).toFixed(2)):null;}),
+    borderColor:PAL[i%PAL.length],backgroundColor:'transparent',tension:0.3,pointRadius:5,pointHoverRadius:8,borderWidth:2,spanGaps:true}))},
+  options:{responsive:true,maintainAspectRatio:false,
+    plugins:{legend:{position:'bottom',labels:{font:{size:9},boxWidth:10,padding:5}},
+      tooltip:{mode:'nearest',intersect:true,callbacks:{label:ctx=>ctx.raw!=null?` ${ctx.dataset.label}: ${ctx.raw.toFixed(1)}%`:null,title:items=>`${items[0].dataset.label} · Año ${items[0].label}`}}},
+    scales:{x:{ticks:{font:{size:10}}},y:{ticks:{callback:v=>v!=null?v.toFixed(1)+'%':'',font:{size:10}},beginAtZero:true}}}});
+}
+
+function tablaAbPBC(fd){
+  const anio=F.anio;
+  const yi=anio==='total'?-1:YEARS.indexOf(anio);
+  const conPBC=fd.filter(d=>yi===-1?d.tp>0:(d.p[yi]||0)>0);
+  const sorted=conPBC.map(d=>{const b=yi===-1?d.tb:(d.b[yi]||0);const p=yi===-1?d.tp:(d.p[yi]||0);return {...d,_b:b,_p:p,_pct:p>0?b/p*100:0};}).sort((a,b)=>b._pct-a._pct).slice(0,100);
+  const maxPct=sorted.length>0?sorted[0]._pct:1;
+  const set=(id,v)=>{const el=document.getElementById(id);if(el)el.textContent=v;};
+  set('abpbc-badge-tabla',sorted.length+' establecimientos con PBC > 0');
+  const el=document.getElementById('abpbc-tabla-body');if(!el)return;
+  el.innerHTML=sorted.map((d,i)=>`<tr>
+    <td class="rank">${i+1}</td><td>${d.n}</td><td>${d.c}</td><td>${d.s}</td>
+    <td><span style="background:${TIPO_C[d.t]||'#999'}22;color:${TIPO_C[d.t]||'#999'};font-weight:700;padding:2px 6px;border-radius:8px;font-size:10px">${d.t}</span></td>
+    <td class="num">${fmt(d._b)}</td><td class="num">${fmt(d._p)}</td>
+    <td class="num" style="font-weight:800;color:${d._pct>=20?'#D0222A':d._pct>=10?'#E67E22':'#2E8B57'}">${d._pct.toFixed(1)}%</td>
+    <td><div class="prog"><div class="prog-fill" style="width:${Math.min(d._pct/maxPct*100,100).toFixed(1)}%;background:#c0392b"></div></div></td>
+  </tr>`).join('');
+}
+
+// ============================================================
+// TASA DE RESOLUCIÓN CLÍNICA
+// ============================================================
+function getTasaRes(altas, abandonos){ return (altas+abandonos)>0?(altas/(altas+abandonos)*100):0; }
+
+function kpisRes(fd){
+  const anio=F.anio;
+  const yi=anio==='total'?-1:YEARS.indexOf(anio);
+  const totA=yi===-1?fd.reduce((s,d)=>s+d.ta,0):fd.reduce((s,d)=>s+(d.a[yi]||0),0);
+  const totB=yi===-1?fd.reduce((s,d)=>s+d.tb,0):fd.reduce((s,d)=>s+(d.b[yi]||0),0);
+  const tasaNac=getTasaRes(totA,totB);
+  const set=(id,v)=>{const el=document.getElementById(id);if(el)el.textContent=v;};
+  set('res-kpi-pct',tasaNac.toFixed(1)+'%');
+  set('res-kpi-pct-sub',fmt(totA)+' altas / '+fmt(totA+totB)+' egresos');
+  const tasaByYr=YEARS.map((y,i)=>{const a=fd.reduce((s,d)=>s+(d.a[i]||0),0);const b=fd.reduce((s,d)=>s+(d.b[i]||0),0);return getTasaRes(a,b);}).filter(v=>v>0);
+  const allTasas=YEARS.map((y,i)=>{const a=fd.reduce((s,d)=>s+(d.a[i]||0),0);const b=fd.reduce((s,d)=>s+(d.b[i]||0),0);return getTasaRes(a,b);});
+  const maxT=Math.max(...tasaByYr),minT=Math.min(...tasaByYr);
+  set('res-kpi-best-yr',YEARS[allTasas.indexOf(maxT)]||'—');set('res-kpi-best-yr-val',maxT.toFixed(1)+'%');
+  set('res-kpi-worst-yr',YEARS[allTasas.indexOf(minT)]||'—');set('res-kpi-worst-yr-val',minT.toFixed(1)+'%');
+  const bySS={};
+  fd.forEach(d=>{if(!bySS[d.s])bySS[d.s]={a:0,b:0};if(yi===-1){bySS[d.s].a+=d.ta;bySS[d.s].b+=d.tb;}else{bySS[d.s].a+=(d.a[yi]||0);bySS[d.s].b+=(d.b[yi]||0);}});
+  const ssTasas=Object.entries(bySS).map(([ss,v])=>({ss,t:getTasaRes(v.a,v.b)})).filter(x=>x.t>0).sort((a,b)=>b.t-a.t);
+  if(ssTasas.length>0){
+    set('res-kpi-top-ss',ssTasas[0].ss.split(' ')[0]);set('res-kpi-top-ss-val',ssTasas[0].t.toFixed(1)+'%');
+    const bot=ssTasas[ssTasas.length-1];
+    set('res-kpi-bot-ss',bot.ss.split(' ')[0]);set('res-kpi-bot-ss-val',bot.t.toFixed(1)+'%');
+  }
+}
+
+function grafRes(fd){
+  const anio=F.anio;
+  const yi=anio==='total'?-1:YEARS.indexOf(anio);
+  const tasaV=YEARS.map((y,i)=>{const a=fd.reduce((s,d)=>s+(d.a[i]||0),0);const b=fd.reduce((s,d)=>s+(d.b[i]||0),0);return parseFloat(getTasaRes(a,b).toFixed(2));});
+  const colorTasa=(v)=>v>=60?'#2E8B57':v>=40?'#E67E22':'#D0222A';
+  mkChart('res-c-tend',{type:'line',data:{labels:YEARS,datasets:[{
+    label:'Tasa Resolución',data:tasaV,borderColor:'#2E8B57',backgroundColor:'rgba(46,139,87,0.08)',
+    fill:true,tension:0.35,pointRadius:5,pointHoverRadius:8,borderWidth:3,
+    pointBackgroundColor:tasaV.map(v=>colorTasa(v)),
+    pointBorderColor:'#fff',pointBorderWidth:2}]},
+  options:{responsive:true,maintainAspectRatio:false,
+    plugins:{legend:{display:false},tooltip:{callbacks:{label:ctx=>` ${ctx.raw.toFixed(1)}% de resolución clínica`}}},
+    scales:{x:{ticks:{font:{size:11,weight:'bold'}}},y:{ticks:{callback:v=>v.toFixed(0)+'%',font:{size:10}},min:0,max:100,
+      grid:{color:(ctx)=>ctx.tick.value===60?'rgba(46,139,87,0.5)':ctx.tick.value===40?'rgba(230,126,34,0.5)':'rgba(0,0,0,0.05)'}}}}}});
+  const bySS={};
+  fd.forEach(d=>{if(!bySS[d.s])bySS[d.s]={a:0,b:0};if(yi===-1){bySS[d.s].a+=d.ta;bySS[d.s].b+=d.tb;}else{bySS[d.s].a+=(d.a[yi]||0);bySS[d.s].b+=(d.b[yi]||0);}});
+  const ssData=Object.entries(bySS).map(([ss,v])=>({ss,t:parseFloat(getTasaRes(v.a,v.b).toFixed(2)),a:v.a,b:v.b})).filter(x=>x.a+x.b>0).sort((a,b)=>b.t-a.t);
+  mkChart('res-c-ss',{type:'bar',data:{labels:ssData.map(x=>x.ss),datasets:[{label:'% Resolución',data:ssData.map(x=>x.t),backgroundColor:ssData.map(x=>colorTasa(x.t)),borderRadius:4}]},
+  options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,
+    plugins:{legend:{display:false},tooltip:{callbacks:{label:ctx=>{const d=ssData[ctx.dataIndex];return [` ${ctx.raw.toFixed(1)}% resolución`,` ${fmt(d.a)} altas / ${fmt(d.a+d.b)} egresos`];}}}},
+    scales:{x:{ticks:{callback:v=>v.toFixed(0)+'%',font:{size:9}},max:100},y:{ticks:{font:{size:9}}}}}});
+  const altVals=YEARS.map((y,i)=>fd.reduce((s,d)=>s+(d.a[i]||0),0));
+  const abVals=YEARS.map((y,i)=>fd.reduce((s,d)=>s+(d.b[i]||0),0));
+  mkChart('res-c-comp',{type:'bar',data:{labels:YEARS,datasets:[
+    {label:'Altas Clínicas',data:altVals,backgroundColor:'rgba(46,139,87,0.8)',borderRadius:2,order:2},
+    {label:'Abandonos',data:abVals,backgroundColor:'rgba(192,57,43,0.7)',borderRadius:2,order:3},
+    {label:'% Resolución',data:tasaV,type:'line',borderColor:'#2E8B57',backgroundColor:'transparent',pointRadius:4,borderWidth:2.5,yAxisID:'y2',order:1}
+  ]},options:{responsive:true,maintainAspectRatio:false,
+    plugins:{legend:{position:'bottom',labels:{font:{size:10},boxWidth:12}},tooltip:{mode:'index',intersect:false,callbacks:{footer:items=>`Tasa resolución: ${tasaV[items[0].dataIndex].toFixed(1)}%`}}},
+    scales:{x:{stacked:true,ticks:{font:{size:10}}},y:{stacked:true,ticks:{callback:v=>fmt(v),font:{size:9}},position:'left'},y2:{ticks:{callback:v=>v.toFixed(0)+'%',font:{size:9}},position:'right',grid:{display:false},max:100}}}});
+  const byTipo={};fd.forEach(d=>{if(!byTipo[d.t])byTipo[d.t]={a:0,b:0};if(yi===-1){byTipo[d.t].a+=d.ta;byTipo[d.t].b+=d.tb;}else{byTipo[d.t].a+=(d.a[yi]||0);byTipo[d.t].b+=(d.b[yi]||0);}});
+  const tipoData=Object.entries(byTipo).map(([t,v])=>({t,tasa:parseFloat(getTasaRes(v.a,v.b).toFixed(2))})).filter(x=>x.tasa>0).sort((a,b)=>b.tasa-a.tasa);
+  mkChart('res-c-tipo',{type:'bar',data:{labels:tipoData.map(x=>x.t),datasets:[{label:'% Resolución',data:tipoData.map(x=>x.tasa),backgroundColor:tipoData.map(x=>colorTasa(x.tasa)),borderRadius:4}]},
+  options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:ctx=>` ${ctx.raw.toFixed(1)}%`}}},scales:{x:{ticks:{font:{size:10}}},y:{ticks:{callback:v=>v.toFixed(0)+'%',font:{size:10}},max:100,beginAtZero:true}}}});
+  const byDep={};fd.forEach(d=>{const dep=d.dep.trim();if(!byDep[dep])byDep[dep]={a:0,b:0};if(yi===-1){byDep[dep].a+=d.ta;byDep[dep].b+=d.tb;}else{byDep[dep].a+=(d.a[yi]||0);byDep[dep].b+=(d.b[yi]||0);}});
+  const depData=Object.entries(byDep).map(([dep,v])=>({dep,tasa:parseFloat(getTasaRes(v.a,v.b).toFixed(2))})).filter(x=>x.tasa>0).sort((a,b)=>b.tasa-a.tasa);
+  mkChart('res-c-dep',{type:'bar',data:{labels:depData.map(x=>x.dep),datasets:[{label:'% Resolución',data:depData.map(x=>x.tasa),backgroundColor:depData.map(x=>colorTasa(x.tasa)),borderRadius:4}]},
+  options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:ctx=>` ${ctx.raw.toFixed(1)}%`}}},scales:{x:{ticks:{font:{size:10}}},y:{ticks:{callback:v=>v.toFixed(0)+'%',font:{size:10}},max:100,beginAtZero:true}}}});
+  const allSS=[...new Set(fd.map(d=>d.s))].filter(Boolean);
+  const ssTots={};allSS.forEach(ss=>{ssTots[ss]=fd.filter(d=>d.s===ss).reduce((s,d)=>s+d.ta+d.tb,0);});
+  const top15=allSS.sort((a,b)=>ssTots[b]-ssTots[a]).slice(0,15);
+  mkChart('res-c-ss-linea',{type:'line',data:{labels:YEARS,datasets:top15.map((ss,i)=>({
+    label:ss,data:YEARS.map((y,j)=>{const a=fd.filter(d=>d.s===ss).reduce((s,d)=>s+(d.a[j]||0),0);const b=fd.filter(d=>d.s===ss).reduce((s,d)=>s+(d.b[j]||0),0);return (a+b)>0?parseFloat(getTasaRes(a,b).toFixed(2)):null;}),
+    borderColor:PAL[i%PAL.length],backgroundColor:'transparent',tension:0.3,pointRadius:5,pointHoverRadius:8,borderWidth:2,spanGaps:true}))},
+  options:{responsive:true,maintainAspectRatio:false,
+    plugins:{legend:{position:'bottom',labels:{font:{size:9},boxWidth:10,padding:5}},
+      tooltip:{mode:'nearest',intersect:true,callbacks:{label:ctx=>ctx.raw!=null?` ${ctx.dataset.label}: ${ctx.raw.toFixed(1)}%`:null,title:items=>`${items[0].dataset.label} · Año ${items[0].label}`}}},
+    scales:{x:{ticks:{font:{size:10}}},y:{ticks:{callback:v=>v!=null?v.toFixed(0)+'%':'',font:{size:10}},min:0,max:100}}}});
+}
+
+function tablaRes(fd){
+  const anio=F.anio;
+  const yi=anio==='total'?-1:YEARS.indexOf(anio);
+  const conEgresos=fd.filter(d=>{const a=yi===-1?d.ta:(d.a[yi]||0);const b=yi===-1?d.tb:(d.b[yi]||0);return (a+b)>0;});
+  const sorted=conEgresos.map(d=>{const a=yi===-1?d.ta:(d.a[yi]||0);const b=yi===-1?d.tb:(d.b[yi]||0);return {...d,_a:a,_b:b,_eg:a+b,_t:getTasaRes(a,b)};}).sort((a,b)=>b._t-a._t).slice(0,100);
+  const set=(id,v)=>{const el=document.getElementById(id);if(el)el.textContent=v;};
+  set('res-badge-tabla',sorted.length+' establecimientos con egresos registrados');
+  const el=document.getElementById('res-tabla-body');if(!el)return;
+  el.innerHTML=sorted.map((d,i)=>`<tr>
+    <td class="rank">${i+1}</td><td>${d.n}</td><td>${d.c}</td><td>${d.s}</td>
+    <td><span style="background:${TIPO_C[d.t]||'#999'}22;color:${TIPO_C[d.t]||'#999'};font-weight:700;padding:2px 6px;border-radius:8px;font-size:10px">${d.t}</span></td>
+    <td class="num">${fmt(d._a)}</td><td class="num">${fmt(d._b)}</td><td class="num">${fmt(d._eg)}</td>
+    <td class="num" style="font-weight:800;color:${d._t>=60?'#2E8B57':d._t>=40?'#E67E22':'#D0222A'}">${d._t.toFixed(1)}%</td>
+    <td><div class="prog"><div class="prog-fill" style="width:${d._t.toFixed(1)}%;background:${d._t>=60?'#2E8B57':d._t>=40?'#E67E22':'#D0222A'}"></div></div></td>
+  </tr>`).join('');
+}
 
 // ============================================================
 // CONTROLES INDIVIDUALES SM
@@ -2693,7 +3234,7 @@ function grafProp(fd){
       const k=fd.filter(d=>d.s===ss).reduce((s,d)=>s+(d.k[j]||0),0);
       return (g+k)>0?parseFloat(getProp(g,k).toFixed(2)):null;
     });
-    return {label:ss,data:vals,borderColor:PAL[i%PAL.length],backgroundColor:'transparent',tension:0.3,pointRadius:3,borderWidth:2,spanGaps:true};
+    return {label:ss,data:vals,borderColor:PAL[i%PAL.length],backgroundColor:'transparent',tension:0.3,pointRadius:5,pointHoverRadius:8,borderWidth:2,spanGaps:true};
   });
   mkChart('prop-c-ss-linea',{type:'line',data:{labels:YEARS,datasets:ssLineDs},options:{
     responsive:true,maintainAspectRatio:false,
@@ -2940,12 +3481,15 @@ function grafConc(fd){
       const p=fd.filter(d=>d.s===ss).reduce((s,d)=>s+(d.p[j]||0),0);
       return p>0?parseFloat((a/p).toFixed(2)):null;
     });
-    return {label:ss,data:vals,borderColor:PAL[i%PAL.length],backgroundColor:'transparent',tension:0.3,pointRadius:3,borderWidth:2,spanGaps:true};
+    return {label:ss,data:vals,borderColor:PAL[i%PAL.length],backgroundColor:'transparent',tension:0.3,pointRadius:5,pointHoverRadius:8,borderWidth:2,spanGaps:true};
   });
   mkChart('conc-c-ss-linea',{type:'line',data:{labels:YEARS,datasets:ssLineDs},options:{
     responsive:true,maintainAspectRatio:false,
     plugins:{legend:{position:'bottom',labels:{font:{size:9},boxWidth:10,padding:5}},
-      tooltip:{mode:'index',intersect:false,itemSort:(a,b)=>(b.raw||0)-(a.raw||0),callbacks:{label:ctx=>ctx.raw!=null?` ${ctx.dataset.label}: ${ctx.raw.toFixed(2)}`:null,title:items=>`Año ${items[0].label}`}}},
+      tooltip:{mode:'nearest',intersect:true,callbacks:{
+          label:ctx=>ctx.raw!=null?` ${ctx.dataset.label}: ${ctx.raw.toFixed(2)}`:null,
+          title:items=>`${items[0].dataset.label} · Año ${items[0].label}`
+        }}},
     scales:{x:{ticks:{font:{size:10}}},y:{ticks:{callback:v=>v!=null?v.toFixed(1):'',font:{size:10}},beginAtZero:true}}}});
 }
 
