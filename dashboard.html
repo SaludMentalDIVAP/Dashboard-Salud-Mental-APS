@@ -352,6 +352,11 @@ tbody td.rank{font-weight:800;color:var(--az2);text-align:center}
           <div style="padding:8px 6px;border-right:1px solid #D0DCE8;text-align:center"><div style="font-size:8px;color:#4A6080;font-weight:600;text-transform:uppercase;margin-bottom:2px" id="ficha-lbl-act">Actividades SM</div><div style="font-size:14px;font-weight:800;color:#e74c3c" id="ficha-kpi-act">—</div></div>
           <div style="padding:8px 6px;text-align:center"><div style="font-size:8px;color:#4A6080;font-weight:600;text-transform:uppercase;margin-bottom:2px">% IPG/Controles</div><div style="font-size:14px;font-weight:800;color:#9b59b6" id="ficha-kpi-prop">—</div></div>
         </div>
+        <div style="display:grid;grid-template-columns:repeat(3,1fr);background:white;border-left:1.5px solid #D0DCE8;border-right:1.5px solid #D0DCE8">
+          <div style="padding:8px 6px;border-right:1px solid #D0DCE8;text-align:center"><div style="font-size:8px;color:#4A6080;font-weight:600;text-transform:uppercase;margin-bottom:2px" id="ficha-lbl-ab">Abandonos SM</div><div style="font-size:14px;font-weight:800;color:#c0392b" id="ficha-kpi-ab">—</div></div>
+          <div style="padding:8px 6px;border-right:1px solid #D0DCE8;text-align:center"><div style="font-size:8px;color:#4A6080;font-weight:600;text-transform:uppercase;margin-bottom:2px">% Abandonos/PBC</div><div style="font-size:14px;font-weight:800;color:#e74c3c" id="ficha-kpi-abpbc">—</div></div>
+          <div style="padding:8px 6px;text-align:center"><div style="font-size:8px;color:#4A6080;font-weight:600;text-transform:uppercase;margin-bottom:2px">Tasa Resolución</div><div style="font-size:14px;font-weight:800;color:#2E8B57" id="ficha-kpi-res">—</div></div>
+        </div>
         <div style="background:white;border:1.5px solid #D0DCE8;border-top:none;border-radius:0 0 12px 12px;overflow:hidden">
           <div style="display:grid;grid-template-columns:1fr 1fr 1fr 1fr;border-bottom:1px solid #D0DCE8">
             <div style="padding:8px 10px;border-right:1px solid #D0DCE8">
@@ -387,6 +392,20 @@ tbody td.rank{font-weight:800;color:var(--az2);text-align:center}
             <div style="padding:8px 10px">
               <div style="font-size:9px;font-weight:700;color:#003F6B;margin-bottom:4px">📐 % IPG / Controles</div>
               <div style="position:relative;height:80px;width:100%"><canvas id="ficha-c-prop" style="max-width:100%"></canvas></div>
+            </div>
+          </div>
+          <div style="display:grid;grid-template-columns:1fr 1fr 1fr;border-top:1px solid #D0DCE8">
+            <div style="padding:8px 10px;border-right:1px solid #D0DCE8">
+              <div style="font-size:9px;font-weight:700;color:#003F6B;margin-bottom:4px">🚪 Abandonos SM</div>
+              <div style="position:relative;height:80px;width:100%"><canvas id="ficha-c-ab" style="max-width:100%"></canvas></div>
+            </div>
+            <div style="padding:8px 10px;border-right:1px solid #D0DCE8">
+              <div style="font-size:9px;font-weight:700;color:#003F6B;margin-bottom:4px">📉 % Abandonos/PBC</div>
+              <div style="position:relative;height:80px;width:100%"><canvas id="ficha-c-abpbc" style="max-width:100%"></canvas></div>
+            </div>
+            <div style="padding:8px 10px">
+              <div style="font-size:9px;font-weight:700;color:#003F6B;margin-bottom:4px">✅ Tasa Resolución</div>
+              <div style="position:relative;height:80px;width:100%"><canvas id="ficha-c-res" style="max-width:100%"></canvas></div>
             </div>
           </div>
         </div>
@@ -3875,6 +3894,14 @@ function renderFicha(){
   set('ficha-kpi-ctrl',fmt(ctrlVal));
   set('ficha-kpi-act',fmt(actVal));
   set('ficha-kpi-prop',propVal.toFixed(1)+'%');
+  // Abandonos e indicadores relacionales
+  const abVal=fAnio==='total'?fd.reduce((s,d)=>s+d.tb,0):fd.reduce((s,d)=>s+gb(d,fAnio),0);
+  const abpbcVal=pbcVal>0?(abVal/pbcVal*100):0;
+  const resVal=getTasaRes(altasVal,abVal);
+  set('ficha-lbl-ab','Abandonos '+anioLabel);
+  set('ficha-kpi-ab',fmt(abVal));
+  set('ficha-kpi-abpbc',abpbcVal.toFixed(1)+'%');
+  set('ficha-kpi-res',resVal.toFixed(1)+'%');
   const aV=YEARS.map(y=>fd.reduce((s,d)=>s+ga(d,y),0));
   const pV=YEARS.map(y=>fd.reduce((s,d)=>s+gp(d,y),0));
   const pctV=YEARS.map((y,i)=>pV[i]>0?parseFloat((aV[i]/pV[i]*100).toFixed(2)):0);
@@ -3945,6 +3972,35 @@ function renderFicha(){
     type:'line',data:{labels:YEARS,datasets:[{data:propV,borderColor:'#9b59b6',
       backgroundColor:'rgba(155,89,182,.08)',fill:true,tension:0.35,pointRadius:3,borderWidth:2,
       pointBackgroundColor:'#9b59b6'}]},
+    options:mOpts(true)});
+
+  // Abandonos mini chart
+  const abV=YEARS.map(y=>fd.reduce((s,d)=>s+gb(d,y),0));
+  if(fichaCharts.ab)fichaCharts.ab.destroy();
+  const cAb=document.getElementById('ficha-c-ab');
+  if(cAb) fichaCharts.ab=new Chart(cAb.getContext('2d'),{
+    type:'bar',data:{labels:YEARS,datasets:[{data:abV,
+      backgroundColor:abV.map((_,i)=>i===6?'rgba(46,139,87,.7)':'rgba(192,57,43,.7)'),borderRadius:2}]},
+    options:mOpts(false)});
+
+  // % Abandonos/PBC mini chart
+  const abpbcV=YEARS.map((y,i)=>{const b=abV[i],p=pV[i];return p>0?parseFloat((b/p*100).toFixed(2)):0;});
+  if(fichaCharts.abpbc)fichaCharts.abpbc.destroy();
+  const cAbpbc=document.getElementById('ficha-c-abpbc');
+  if(cAbpbc) fichaCharts.abpbc=new Chart(cAbpbc.getContext('2d'),{
+    type:'line',data:{labels:YEARS,datasets:[{data:abpbcV,borderColor:'#e74c3c',
+      backgroundColor:'rgba(231,76,60,.08)',fill:true,tension:0.35,pointRadius:3,borderWidth:2,
+      pointBackgroundColor:'#e74c3c'}]},
+    options:mOpts(true)});
+
+  // Tasa Resolución mini chart
+  const resV=YEARS.map((y,i)=>{const a=aV[i],b=abV[i];return (a+b)>0?parseFloat(getTasaRes(a,b).toFixed(2)):0;});
+  if(fichaCharts.res)fichaCharts.res.destroy();
+  const cRes=document.getElementById('ficha-c-res');
+  if(cRes) fichaCharts.res=new Chart(cRes.getContext('2d'),{
+    type:'line',data:{labels:YEARS,datasets:[{data:resV,borderColor:'#2E8B57',
+      backgroundColor:'rgba(46,139,87,.08)',fill:true,tension:0.35,pointRadius:3,borderWidth:2,
+      pointBackgroundColor:resV.map(v=>v>=60?'#2E8B57':v>=40?'#E67E22':'#D0222A')}]},
     options:mOpts(true)});
 }
 function verFichaCompleta(){
