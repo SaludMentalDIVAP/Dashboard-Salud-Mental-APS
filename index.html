@@ -366,10 +366,12 @@ tbody td.rank{font-weight:800;color:var(--az2);text-align:center}
           <div style="padding:8px 6px;border-right:1px solid #D0DCE8;text-align:center"><div style="font-size:8px;color:#4A6080;font-weight:600;text-transform:uppercase;margin-bottom:2px" id="ficha-lbl-act">Actividades SM</div><div style="font-size:14px;font-weight:800;color:#e74c3c" id="ficha-kpi-act">—</div></div>
           <div style="padding:8px 6px;text-align:center"><div style="font-size:8px;color:#4A6080;font-weight:600;text-transform:uppercase;margin-bottom:2px">% IPG/Controles</div><div style="font-size:14px;font-weight:800;color:#9b59b6" id="ficha-kpi-prop">—</div></div>
         </div>
-        <div style="display:grid;grid-template-columns:repeat(3,1fr);background:white;border-left:1.5px solid #D0DCE8;border-right:1.5px solid #D0DCE8">
+        <div style="display:grid;grid-template-columns:repeat(5,1fr);background:white;border-left:1.5px solid #D0DCE8;border-right:1.5px solid #D0DCE8">
           <div style="padding:8px 6px;border-right:1px solid #D0DCE8;text-align:center"><div style="font-size:8px;color:#4A6080;font-weight:600;text-transform:uppercase;margin-bottom:2px" id="ficha-lbl-ab">Abandonos SM</div><div style="font-size:14px;font-weight:800;color:#c0392b" id="ficha-kpi-ab">—</div></div>
           <div style="padding:8px 6px;border-right:1px solid #D0DCE8;text-align:center"><div style="font-size:8px;color:#4A6080;font-weight:600;text-transform:uppercase;margin-bottom:2px">% Abandonos/PBC</div><div style="font-size:14px;font-weight:800;color:#e74c3c" id="ficha-kpi-abpbc">—</div></div>
-          <div style="padding:8px 6px;text-align:center"><div style="font-size:8px;color:#4A6080;font-weight:600;text-transform:uppercase;margin-bottom:2px">Tasa Resolución</div><div style="font-size:14px;font-weight:800;color:#2E8B57" id="ficha-kpi-res">—</div></div>
+          <div style="padding:8px 6px;border-right:1px solid #D0DCE8;text-align:center"><div style="font-size:8px;color:#4A6080;font-weight:600;text-transform:uppercase;margin-bottom:2px">Tasa Resolución</div><div style="font-size:14px;font-weight:800;color:#2E8B57" id="ficha-kpi-res">—</div></div>
+          <div style="padding:8px 6px;border-right:1px solid #D0DCE8;text-align:center"><div style="font-size:8px;color:#4A6080;font-weight:600;text-transform:uppercase;margin-bottom:2px" id="ficha-lbl-pci">PCI 2020–2025</div><div style="font-size:14px;font-weight:800;color:#8e44ad" id="ficha-kpi-pci">—</div></div>
+          <div style="padding:8px 6px;text-align:center"><div style="font-size:8px;color:#4A6080;font-weight:600;text-transform:uppercase;margin-bottom:2px">% PCI/PBC 2025</div><div style="font-size:14px;font-weight:800;color:#6c3483" id="ficha-kpi-pcipbc">—</div></div>
         </div>
         <div style="background:white;border:1.5px solid #D0DCE8;border-top:none;border-radius:0 0 12px 12px;overflow:hidden">
           <div style="display:grid;grid-template-columns:1fr 1fr 1fr 1fr;border-bottom:1px solid #D0DCE8">
@@ -420,6 +422,16 @@ tbody td.rank{font-weight:800;color:var(--az2);text-align:center}
             <div style="padding:8px 10px">
               <div style="font-size:9px;font-weight:700;color:#003F6B;margin-bottom:4px">✅ Tasa Resolución</div>
               <div style="position:relative;height:80px;width:100%"><canvas id="ficha-c-res" style="max-width:100%"></canvas></div>
+            </div>
+          </div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;border-top:1px solid #D0DCE8">
+            <div style="padding:8px 10px;border-right:1px solid #D0DCE8">
+              <div style="font-size:9px;font-weight:700;color:#003F6B;margin-bottom:4px">📝 PCI (2020–2025)</div>
+              <div style="position:relative;height:80px;width:100%"><canvas id="ficha-c-pci" style="max-width:100%"></canvas></div>
+            </div>
+            <div style="padding:8px 10px">
+              <div style="font-size:9px;font-weight:700;color:#003F6B;margin-bottom:4px">📊 % PCI/PBC (2020–2025)</div>
+              <div style="position:relative;height:80px;width:100%"><canvas id="ficha-c-pcipbc" style="max-width:100%"></canvas></div>
             </div>
           </div>
         </div>
@@ -3023,7 +3035,15 @@ function grafPCI(fd){
   const ssTot={};fd.forEach(d=>{ssTot[d.s]=(ssTot[d.s]||0)+getPCI(d,anio);});
   const ssSort=Object.entries(ssTot).sort((a,b)=>b[1]-a[1]);
   mkChart('pci-c-ss',hbarCfg(ssSort.map(x=>x[0]),ssSort.map(x=>x[1]),PAL,color));
-  mkChart('pci-c-var',varChart(tV,color));
+  // Variación % solo entre años PCI (2020-2025)
+  const pciVarV=tV.map((v,i)=>i===0?null:(tV[i-1]>0?parseFloat(((v-tV[i-1])/tV[i-1]*100).toFixed(1)):null));
+  mkChart('pci-c-var',{type:'bar',data:{labels:PY,datasets:[{
+    label:'Variación %',data:pciVarV,
+    backgroundColor:pciVarV.map(v=>v===null?'transparent':v>=0?'rgba(46,139,87,0.75)':'rgba(208,34,42,0.75)'),
+    borderRadius:4}]},
+  options:{responsive:true,maintainAspectRatio:false,
+    plugins:{legend:{display:false},tooltip:{callbacks:{label:ctx=>ctx.raw!==null?` ${ctx.raw>0?'+':''}${ctx.raw.toFixed(1)}%`:' Sin dato'}}},
+    scales:{x:{ticks:{font:{size:10}}},y:{ticks:{callback:v=>v+'%',font:{size:10}},beginAtZero:false}}}});
 
   // Tipo/dep using PCI_YEARS
   const byTipo={};
@@ -4310,6 +4330,14 @@ function renderFicha(){
   set('ficha-kpi-ab',fmt(abVal));
   set('ficha-kpi-abpbc',abpbcVal.toFixed(1)+'%');
   set('ficha-kpi-res',resVal.toFixed(1)+'%');
+  // PCI (total acumulado 2020-2025)
+  const pciVal=fd.reduce((s,d)=>s+(d.tr||0),0);
+  const pci2025=fd.reduce((s,d)=>s+(d.r&&d.r[5]?d.r[5]:0),0);
+  const pbc2025f=fd.reduce((s,d)=>s+gp(d,'2025'),0);
+  const pcipbcVal=pbc2025f>0?(pci2025/pbc2025f*100):0;
+  set('ficha-lbl-pci','PCI 2020–2025');
+  set('ficha-kpi-pci',fmt(pciVal));
+  set('ficha-kpi-pcipbc',pcipbcVal.toFixed(1)+'%');
   const aV=YEARS.map(y=>fd.reduce((s,d)=>s+ga(d,y),0));
   const pV=YEARS.map(y=>fd.reduce((s,d)=>s+gp(d,y),0));
   const pctV=YEARS.map((y,i)=>pV[i]>0?parseFloat((aV[i]/pV[i]*100).toFixed(2)):0);
@@ -4409,6 +4437,26 @@ function renderFicha(){
     type:'line',data:{labels:YEARS,datasets:[{data:resV,borderColor:'#2E8B57',
       backgroundColor:'rgba(46,139,87,.08)',fill:true,tension:0.35,pointRadius:3,borderWidth:2,
       pointBackgroundColor:resV.map(v=>v>=60?'#2E8B57':v>=40?'#E67E22':'#D0222A')}]},
+    options:mOpts(true)});
+
+  // PCI mini chart (2020-2025 only)
+  const PY=PCI_YRS();
+  const pciMV=PY.map((y,i)=>fd.reduce((s,d)=>s+(d.r&&d.r[i]?d.r[i]:0),0));
+  if(fichaCharts.pci)fichaCharts.pci.destroy();
+  const cPci=document.getElementById('ficha-c-pci');
+  if(cPci) fichaCharts.pci=new Chart(cPci.getContext('2d'),{
+    type:'bar',data:{labels:PY,datasets:[{data:pciMV,
+      backgroundColor:'rgba(142,68,173,.75)',borderRadius:2}]},
+    options:mOpts(false)});
+
+  // % PCI/PBC mini chart (2020-2025)
+  const pcipbcMV=PY.map((y,i)=>{const r=fd.reduce((s,d)=>s+(d.r&&d.r[i]?d.r[i]:0),0);const p=fd.reduce((s,d)=>s+gp(d,y),0);return p>0?parseFloat((r/p*100).toFixed(2)):0;});
+  if(fichaCharts.pcipbc)fichaCharts.pcipbc.destroy();
+  const cPcipbc=document.getElementById('ficha-c-pcipbc');
+  if(cPcipbc) fichaCharts.pcipbc=new Chart(cPcipbc.getContext('2d'),{
+    type:'line',data:{labels:PY,datasets:[{data:pcipbcMV,borderColor:'#6c3483',
+      backgroundColor:'rgba(108,52,131,.08)',fill:true,tension:0.35,pointRadius:3,borderWidth:2,
+      pointBackgroundColor:'#6c3483'}]},
     options:mOpts(true)});
 }
 function verFichaCompleta(){
