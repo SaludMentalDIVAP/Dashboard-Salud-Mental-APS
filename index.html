@@ -158,6 +158,7 @@ tbody td.rank{font-weight:800;color:var(--az2);text-align:center}
     <button class="tab-btn" onclick="switchTab('act',this)">📋 Actividades SM</button>
     <button class="tab-btn" onclick="switchTab('ctrl',this)">👤 Controles Individuales</button>
     <button class="tab-btn" onclick="switchTab('ab',this)">🚪 Abandonos SM</button>
+    <button class="tab-btn" onclick="switchTab('pci',this)">📝 Plan Cuidado Integral</button>
   </div>
   <div class="tabs-inner" style="border-top:1px solid var(--gris-borde);background:#F8F0FF">
     <span style="font-size:10px;font-weight:700;color:#7c3aed;text-transform:uppercase;letter-spacing:.8px;padding:0 12px;align-self:center;white-space:nowrap">Indicadores relacionales →</span>
@@ -167,6 +168,7 @@ tbody td.rank{font-weight:800;color:var(--az2);text-align:center}
     <button class="tab-btn" onclick="switchTab('prop',this)">📐 Proporción IPG/Controles</button>
     <button class="tab-btn" onclick="switchTab('abpbc',this)">📉 % Abandonos/PBC</button>
     <button class="tab-btn" onclick="switchTab('res',this)">✅ Tasa Resolución Clínica</button>
+    <button class="tab-btn" onclick="switchTab('pcipbc',this)">📊 PCI / PBC</button>
   </div>
 </div>
 
@@ -285,6 +287,12 @@ tbody td.rank{font-weight:800;color:var(--az2);text-align:center}
           <div style="font-size:13px;font-weight:800;color:#003F6B;margin-bottom:5px">Proporción IPG / Total Controles</div>
           <div style="font-size:11px;color:#4A6080;line-height:1.5">% de controles SM realizados en formato grupal. IPG ÷ (IPG + Controles Individuales) × 100.</div>
           <div style="margin-top:10px;font-size:10px;font-weight:700;color:#9b59b6;text-transform:uppercase;letter-spacing:.5px">6 gráficos + tabla →</div>
+        </div>
+        <div onclick="switchTabByName('pci')" style="background:white;border-radius:12px;box-shadow:0 2px 12px rgba(0,60,120,.10);padding:20px 22px;cursor:pointer;border-left:5px solid #8e44ad;transition:all .2s" onmouseover="this.style.transform='translateY(-2px)';this.style.boxShadow='0 6px 24px rgba(0,60,120,.18)'" onmouseout="this.style.transform='none';this.style.boxShadow='0 2px 12px rgba(0,60,120,.10)'">
+          <div style="font-size:26px;margin-bottom:8px">📝</div>
+          <div style="font-size:13px;font-weight:800;color:#003F6B;margin-bottom:5px">Plan de Cuidado Integral (PCI)</div>
+          <div style="font-size:11px;color:#4A6080;line-height:1.5">PCI elaborados en APS 2020–2025. Tendencia creciente sostenida de implementación del modelo.</div>
+          <div style="margin-top:10px;font-size:10px;font-weight:700;color:#8e44ad;text-transform:uppercase;letter-spacing:.5px">8 gráficos + tabla →</div>
         </div>
         <div onclick="switchTabByName('catind')" style="background:white;border-radius:12px;box-shadow:0 2px 12px rgba(0,60,120,.10);padding:20px 22px;cursor:pointer;border-left:5px solid #8e44ad;transition:all .2s" onmouseover="this.style.transform='translateY(-2px)';this.style.boxShadow='0 6px 24px rgba(0,60,120,.18)'" onmouseout="this.style.transform='none';this.style.boxShadow='0 2px 12px rgba(0,60,120,.10)'">
           <div style="font-size:26px;margin-bottom:8px">🔢</div>
@@ -1712,6 +1720,162 @@ tbody td.rank{font-weight:800;color:var(--az2);text-align:center}
 </div>
 </div>
 
+<!-- ===== TAB PCI ===== -->
+<div id="tab-pci" class="tab-content">
+<div class="main">
+  <div class="ind-note">
+    <strong>📝 Plan de Cuidado Integral (PCI) SM APS:</strong> El Plan de Cuidado Integral es un instrumento clínico que sistematiza y orienta el proceso de atención de salud mental en APS, articulando las necesidades de la persona con los recursos disponibles. Registra el número de PCI elaborados en cada establecimiento. <strong>Datos disponibles desde 2020</strong>, año de implementación del registro en los centros APS. Tendencia creciente sostenida: de 42.072 en 2020 a 222.452 en 2025.
+  </div>
+  <div class="kpi-row">
+    <div class="kpi-card"><div class="kpi-icon">📝</div><div class="kpi-label">Total PCI 2020–2025</div><div class="kpi-value" id="pci-kpi-total">—</div><div class="kpi-sub" id="pci-kpi-total-sub">—</div></div>
+    <div class="kpi-card verde"><div class="kpi-icon">🏥</div><div class="kpi-label">Establecimientos activos</div><div class="kpi-value" id="pci-kpi-estab">—</div><div class="kpi-sub">Con registro de PCI</div></div>
+    <div class="kpi-card naranja"><div class="kpi-icon">📊</div><div class="kpi-label">Promedio anual / estab.</div><div class="kpi-value sm" id="pci-kpi-prom">—</div><div class="kpi-sub">PCI por centro por año</div></div>
+    <div class="kpi-card rojo"><div class="kpi-icon">📈</div><div class="kpi-label">Año con más PCI</div><div class="kpi-value sm" id="pci-kpi-best-yr">—</div><div class="kpi-sub" id="pci-kpi-best-yr-val">—</div></div>
+    <div class="kpi-card morado"><div class="kpi-icon">🥇</div><div class="kpi-label">SS líder</div><div class="kpi-value xs" id="pci-kpi-top-ss">—</div><div class="kpi-sub" id="pci-kpi-top-ss-val">—</div></div>
+  </div>
+  <div class="sec-title">📈 Tendencia Temporal (2020–2025)</div><div class="sec-sep"></div>
+  <div class="charts-grid g1" style="margin-bottom:18px">
+    <div class="chart-card">
+      <div class="chart-header"><div><div class="chart-title">Evolución Total de PCI SM por Año (2020–2025)</div><div class="chart-sub">Total nacional · Crecimiento sostenido desde la implementación del registro</div></div><div class="chart-badge">Nacional</div></div>
+      <div class="cw t"><canvas id="pci-c-tend"></canvas></div>
+    </div>
+  </div>
+  <div class="charts-grid g2">
+    <div class="chart-card">
+      <div class="chart-header"><div><div class="chart-title">PCI por Servicio de Salud</div><div class="chart-sub">Comparación entre los 29 SS</div></div><div class="chart-badge">SS</div></div>
+      <div class="cw xt"><canvas id="pci-c-ss"></canvas></div>
+    </div>
+    <div class="chart-card">
+      <div class="chart-header"><div><div class="chart-title">Variación % Año a Año</div><div class="chart-sub">Cambio porcentual respecto al año anterior</div></div><div class="chart-badge">Δ%</div></div>
+      <div class="cw t"><canvas id="pci-c-var"></canvas></div>
+    </div>
+  </div>
+  <div class="sec-title" style="margin-top:22px">🏥 Análisis por Tipo y Dependencia</div><div class="sec-sep"></div>
+  <div class="charts-grid g3">
+    <div class="chart-card">
+      <div class="chart-header"><div><div class="chart-title">Distribución por Tipo de Establecimiento</div><div class="chart-sub">Participación en el total de PCI</div></div><div class="chart-badge">Tipo</div></div>
+      <div class="cw t"><canvas id="pci-c-tipo-dona"></canvas></div>
+    </div>
+    <div class="chart-card">
+      <div class="chart-header"><div><div class="chart-title">Evolución por Tipo de Establecimiento</div><div class="chart-sub">Tendencia 2020–2025</div></div><div class="chart-badge">Tendencia</div></div>
+      <div class="cw t"><canvas id="pci-c-tipo-linea"></canvas></div>
+    </div>
+    <div class="chart-card">
+      <div class="chart-header"><div><div class="chart-title">PCI por Dependencia</div><div class="chart-sub">Municipal vs SS vs Otra</div></div><div class="chart-badge">Dependencia</div></div>
+      <div class="cw t"><canvas id="pci-c-dep"></canvas></div>
+    </div>
+  </div>
+  <div class="sec-title" style="margin-top:22px">🌆 Análisis Comunal y por Establecimiento</div><div class="sec-sep"></div>
+  <div class="charts-grid g2c">
+    <div class="chart-card">
+      <div class="chart-header"><div><div class="chart-title">Top 20 Comunas — PCI</div><div class="chart-sub">Ordenadas por total acumulado 2020–2025</div></div><div class="chart-badge">Top 20</div></div>
+      <div class="cw xxxl"><canvas id="pci-c-comunas"></canvas></div>
+    </div>
+    <div class="chart-card">
+      <div class="chart-header"><div><div class="chart-title">Top 10 Establecimientos</div><div class="chart-sub">Centros con más PCI elaborados</div></div><div class="chart-badge">Ranking</div></div>
+      <div class="cw xxxl"><canvas id="pci-c-top-estab"></canvas></div>
+    </div>
+  </div>
+  <div class="sec-title" style="margin-top:22px">🔥 Distribución Temporal por Servicio de Salud</div><div class="sec-sep"></div>
+  <div class="charts-grid g1">
+    <div class="chart-card">
+      <div class="chart-header"><div><div class="chart-title">PCI por SS y Año — Barras Apiladas (2020–2025)</div><div class="chart-sub">Comparación multianual entre SS</div></div><div class="chart-badge">2020–2025</div></div>
+      <div class="cw xxxl"><canvas id="pci-c-ss-anio"></canvas></div>
+    </div>
+  </div>
+  <div class="sec-title" style="margin-top:22px">📋 Tabla de Establecimientos</div><div class="sec-sep"></div>
+  <div class="charts-grid g1">
+    <div class="chart-card">
+      <div class="chart-header"><div><div class="chart-title">Detalle por Establecimiento — PCI SM</div><div class="chart-sub">Top 100 · Clic en encabezados para ordenar</div></div><div class="chart-badge" id="pci-badge-tabla">Top 100</div></div>
+      <div class="tabla-wrap">
+        <table><thead><tr>
+          <th onclick="sortTab('pci-tabla-body',0)">#</th>
+          <th onclick="sortTab('pci-tabla-body',1)">Establecimiento ↕</th>
+          <th onclick="sortTab('pci-tabla-body',2)">Comuna ↕</th>
+          <th onclick="sortTab('pci-tabla-body',3)">Servicio de Salud ↕</th>
+          <th onclick="sortTab('pci-tabla-body',4)">Tipo ↕</th>
+          <th onclick="sortTab('pci-tabla-body',5)">Dependencia ↕</th>
+          <th onclick="sortTab('pci-tabla-body',6)">Total PCI ↕</th>
+          <th>Barra</th>
+        </tr></thead>
+        <tbody id="pci-tabla-body"></tbody></table>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- ===== TAB PCI/PBC ===== -->
+<div id="tab-pcipbc" class="tab-content">
+<div class="main">
+  <div class="ind-note">
+    <strong>📊 PCI / PBC — Planes de Cuidado Integral por Persona en Control:</strong> Se calcula como <strong>PCI ÷ PBC (diciembre) × 100</strong>. Indica qué porcentaje de la población en control de salud mental tiene un Plan de Cuidado Integral elaborado en el año. Es un indicador de cobertura de planificación clínica. <strong>Solo disponible desde 2020.</strong> Un valor mayor indica mayor proporción de personas con plan de cuidado activo.
+  </div>
+  <div class="kpi-row">
+    <div class="kpi-card"><div class="kpi-icon">📊</div><div class="kpi-label">% PCI/PBC Nacional</div><div class="kpi-value sm" id="pcipbc-kpi-pct">—</div><div class="kpi-sub" id="pcipbc-kpi-pct-sub">PCI / PBC × 100</div></div>
+    <div class="kpi-card verde"><div class="kpi-icon">📈</div><div class="kpi-label">Año con mayor %</div><div class="kpi-value sm" id="pcipbc-kpi-best-yr">—</div><div class="kpi-sub" id="pcipbc-kpi-best-yr-val">—</div></div>
+    <div class="kpi-card naranja"><div class="kpi-icon">🏥</div><div class="kpi-label">Establecimientos con PCI</div><div class="kpi-value" id="pcipbc-kpi-estab">—</div><div class="kpi-sub">Con PCI y PBC > 0</div></div>
+    <div class="kpi-card rojo"><div class="kpi-icon">🏆</div><div class="kpi-label">SS con mayor %</div><div class="kpi-value xs" id="pcipbc-kpi-top-ss">—</div><div class="kpi-sub" id="pcipbc-kpi-top-ss-val">—</div></div>
+    <div class="kpi-card morado"><div class="kpi-icon">⚠️</div><div class="kpi-label">SS con menor %</div><div class="kpi-value xs" id="pcipbc-kpi-bot-ss">—</div><div class="kpi-sub" id="pcipbc-kpi-bot-ss-val">—</div></div>
+  </div>
+  <div class="sec-title">📈 Tendencia del Indicador (2020–2025)</div><div class="sec-sep"></div>
+  <div class="charts-grid g1" style="margin-bottom:18px">
+    <div class="chart-card">
+      <div class="chart-header"><div><div class="chart-title">Evolución % PCI/PBC (2020–2025)</div><div class="chart-sub">PCI ÷ PBC × 100 · nivel nacional</div></div><div class="chart-badge">% Cobertura</div></div>
+      <div class="cw t"><canvas id="pcipbc-c-tend"></canvas></div>
+    </div>
+  </div>
+  <div class="charts-grid g2">
+    <div class="chart-card">
+      <div class="chart-header"><div><div class="chart-title">% PCI/PBC por Servicio de Salud</div><div class="chart-sub">Comparación entre SS · verde = mayor cobertura</div></div><div class="chart-badge">SS</div></div>
+      <div class="cw xt"><canvas id="pcipbc-c-ss"></canvas></div>
+    </div>
+    <div class="chart-card">
+      <div class="chart-header"><div><div class="chart-title">PCI vs PBC por Año</div><div class="chart-sub">Volumen absoluto con % superpuesto</div></div><div class="chart-badge">Dual</div></div>
+      <div class="cw t"><canvas id="pcipbc-c-dual"></canvas></div>
+    </div>
+  </div>
+  <div class="sec-title" style="margin-top:22px">🏥 Por Tipo y Dependencia</div><div class="sec-sep"></div>
+  <div class="charts-grid g2">
+    <div class="chart-card">
+      <div class="chart-header"><div><div class="chart-title">% PCI/PBC por Tipo de Establecimiento</div></div><div class="chart-badge">Tipo</div></div>
+      <div class="cw t"><canvas id="pcipbc-c-tipo"></canvas></div>
+    </div>
+    <div class="chart-card">
+      <div class="chart-header"><div><div class="chart-title">% PCI/PBC por Dependencia</div></div><div class="chart-badge">Dependencia</div></div>
+      <div class="cw t"><canvas id="pcipbc-c-dep"></canvas></div>
+    </div>
+  </div>
+  <div class="sec-title" style="margin-top:22px">📊 Evolución por SS</div><div class="sec-sep"></div>
+  <div class="charts-grid g1">
+    <div class="chart-card">
+      <div class="chart-header"><div><div class="chart-title">% PCI/PBC por SS y Año — Líneas Múltiples (2020–2025)</div><div class="chart-sub">Trayectoria de cada SS · Top 15</div></div><div class="chart-badge">2020–2025</div></div>
+      <div class="cw xxxl"><canvas id="pcipbc-c-ss-linea"></canvas></div>
+    </div>
+  </div>
+  <div class="sec-title" style="margin-top:22px">📋 Tabla por Establecimiento</div><div class="sec-sep"></div>
+  <div class="charts-grid g1">
+    <div class="chart-card">
+      <div class="chart-header"><div><div class="chart-title">% PCI/PBC por Establecimiento</div><div class="chart-sub">Solo establecimientos con PBC > 0 · Clic para ordenar</div></div><div class="chart-badge" id="pcipbc-badge-tabla">—</div></div>
+      <div class="tabla-wrap">
+        <table><thead><tr>
+          <th onclick="sortTab('pcipbc-tabla-body',0)">#</th>
+          <th onclick="sortTab('pcipbc-tabla-body',1)">Establecimiento ↕</th>
+          <th onclick="sortTab('pcipbc-tabla-body',2)">Comuna ↕</th>
+          <th onclick="sortTab('pcipbc-tabla-body',3)">Servicio de Salud ↕</th>
+          <th onclick="sortTab('pcipbc-tabla-body',4)">Tipo ↕</th>
+          <th onclick="sortTab('pcipbc-tabla-body',5)">PCI ↕</th>
+          <th onclick="sortTab('pcipbc-tabla-body',6)">PBC ↕</th>
+          <th onclick="sortTab('pcipbc-tabla-body',7)">% PCI/PBC ↕</th>
+          <th>Barra</th>
+        </tr></thead>
+        <tbody id="pcipbc-tabla-body"></tbody></table>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+
 <div class="footer">
   División de Atención Primaria · Ministerio de Salud de Chile &nbsp;|&nbsp; Datos DEIS MINSAL · Altas Clínicas SM y Población Bajo Control APS 2014–2025
 </div>
@@ -1724,14 +1888,15 @@ tbody td.rank{font-weight:800;color:var(--az2);text-align:center}
 window._parseDatos = function(pkg){
   try {
     const ss=pkg.ss,com=pkg.com,tip=pkg.tip,tc2=pkg.tc,dep=pkg.dep;
+    window.PCI_YEARS=pkg.pci_years||['2020','2021','2022','2023','2024','2025'];
     window.DATA = pkg.rows.map(r=>{
-      const cat=r[100];
+      const cat=r[107];
       return {
         id:r[0], n:r[1],
         c:com[r[2]], s:ss[r[3]], t:tip[r[4]], tc:tc2[r[5]], dep:dep[r[6]],
-        lat:r[7], lon:r[8], ta:r[9], tp:r[10], ti:r[11], tg:r[12], tv:r[13], tk:r[14], tb:r[15],
-        a:r.slice(16,28), p:r.slice(28,40), i:r.slice(40,52), g:r.slice(52,64),
-        v:r.slice(64,76), k:r.slice(76,88), b:r.slice(88,100),
+        lat:r[7], lon:r[8], ta:r[9], tp:r[10], ti:r[11], tg:r[12], tv:r[13], tk:r[14], tb:r[15], tr:r[16],
+        a:r.slice(17,29), p:r.slice(29,41), i:r.slice(41,53), g:r.slice(53,65),
+        v:r.slice(65,77), k:r.slice(77,89), b:r.slice(89,101), r:r.slice(101,107),
         cat:cat?{N0:cat[0],N1:cat[1],N2:cat[2],N3:cat[3],N4:cat[4],total:cat[0]+cat[1]+cat[2]+cat[3]+cat[4]}:null
       };
     });
@@ -1748,6 +1913,7 @@ function gg(d,y){const i=YEARS.indexOf(String(y));return i>=0?(d.g[i]||0):0;}
 function gv(d,y){const i=YEARS.indexOf(String(y));return i>=0?(d.v[i]||0):0;}
 function gk(d,y){const i=YEARS.indexOf(String(y));return i>=0?(d.k[i]||0):0;}
 function gb(d,y){const i=YEARS.indexOf(String(y));return i>=0?(d.b[i]||0):0;}
+function gr(d,y){const i=(window.PCI_YEARS||['2020','2021','2022','2023','2024','2025']).indexOf(String(y));return i>=0?(d.r[i]||0):0;}
 
 const TIPO_C = {
   'CESFAM':'#005F9E','CECOSF':'#2E8B57','Posta de Salud':'#E67E22',
@@ -1944,6 +2110,16 @@ function actualizarTodo() {
   kpisInd(fd);
   grafInd(fd);
   tablaInd(fd);
+
+  // Tab PCI
+  kpisPCI(fd);
+  grafPCI(fd);
+  tablaPCI(fd);
+
+  // Tab PCI/PBC
+  kpisPCIPBC(fd);
+  grafPCIPBC(fd);
+  tablaPCIPBC(fd);
 
   // Tab Abandonos
   kpisAb(fd);
@@ -2699,7 +2875,7 @@ function actualizarMapaCat() {
 // ── switchTabByName (for home cards) ──────────────────────────────────────
 function switchTabByName(name) {
   const btns = document.querySelectorAll('.tab-btn');
-  const tabNames = ['home','altas','pbc','ing','cat','ipg','act','ctrl','ab','ind','catind','conc','prop','abpbc','res'];
+  const tabNames = ['home','altas','pbc','ing','cat','ipg','act','ctrl','ab','pci','ind','catind','conc','prop','abpbc','res','pcipbc'];
   const idx = tabNames.indexOf(name);
   if(idx>=0) switchTab(name, btns[idx]);
 }
@@ -2797,6 +2973,232 @@ function actualizarMapaIng(){actualizarMapa('i2','ing');}
 
 
 
+
+
+// ============================================================
+// PCI — PLAN DE CUIDADO INTEGRAL
+// ============================================================
+const PCI_YRS = () => window.PCI_YEARS || ['2020','2021','2022','2023','2024','2025'];
+function getPCI(d,anio){
+  if(anio==='total') return d.tr||0;
+  const i=PCI_YRS().indexOf(String(anio));
+  return i>=0?(d.r[i]||0):0;
+}
+
+function kpisPCI(fd){
+  const anio=F.anio;
+  // If selected year is before 2020 or total, show total/2025
+  const useAnio = (anio!=='total' && parseInt(anio)<2020) ? '2025' : anio;
+  const total=fd.reduce((s,d)=>s+getPCI(d,useAnio),0);
+  const set=(id,v)=>{const el=document.getElementById(id);if(el)el.textContent=v;};
+  set('pci-kpi-total',fmt(total));
+  set('pci-kpi-total-sub',useAnio==='total'?'Período 2020–2025':'Año '+useAnio);
+  const con=fd.filter(d=>getPCI(d,useAnio)>0).length;
+  set('pci-kpi-estab',con.toLocaleString('es-CL'));
+  const promAnual=con>0?total/con:0;
+  set('pci-kpi-prom',con>0?fmt(promAnual):'—');
+  let bY='',bV=0;
+  PCI_YRS().forEach((y,i)=>{const s=fd.reduce((a,d)=>a+(d.r[i]||0),0);if(s>bV){bV=s;bY=y;}});
+  set('pci-kpi-best-yr',bY);
+  set('pci-kpi-best-yr-val',fmt(bV)+' PCI ese año');
+  const bySS={};fd.forEach(d=>{bySS[d.s]=(bySS[d.s]||0)+getPCI(d,useAnio);});
+  const top=Object.entries(bySS).sort((a,b)=>b[1]-a[1])[0];
+  if(top){set('pci-kpi-top-ss',top[0].split(' ')[0]);set('pci-kpi-top-ss-val',fmt(top[1])+' PCI');}
+}
+
+function grafPCI(fd){
+  const PY=PCI_YRS();
+  const color='#8e44ad';
+  const tV=PY.map((y,i)=>fd.reduce((s,d)=>s+(d.r[i]||0),0));
+  mkChart('pci-c-tend',{type:'line',data:{labels:PY,datasets:[{
+    label:'PCI SM',data:tV,borderColor:color,backgroundColor:'rgba(142,68,173,0.08)',
+    fill:true,tension:0.35,pointRadius:5,pointHoverRadius:8,borderWidth:3,
+    pointBackgroundColor:tV.map((v,i)=>v===Math.max(...tV)?'#2E8B57':color),
+    pointBorderColor:'#fff',pointBorderWidth:2}]},
+  options:{responsive:true,maintainAspectRatio:false,
+    plugins:{legend:{display:false},tooltip:{callbacks:{label:ctx=>' '+fmt(ctx.raw)+' PCI'}}},
+    scales:{x:{ticks:{font:{size:11,weight:'bold'}}},y:{ticks:{callback:v=>fmt(v),font:{size:10}}}}}});
+
+  const anio=F.anio==='total'||parseInt(F.anio)<2020?'total':F.anio;
+  const ssTot={};fd.forEach(d=>{ssTot[d.s]=(ssTot[d.s]||0)+getPCI(d,anio);});
+  const ssSort=Object.entries(ssTot).sort((a,b)=>b[1]-a[1]);
+  mkChart('pci-c-ss',hbarCfg(ssSort.map(x=>x[0]),ssSort.map(x=>x[1]),PAL,color));
+  mkChart('pci-c-var',varChart(tV,color));
+
+  // Tipo/dep using PCI_YEARS
+  const byTipo={};
+  fd.forEach(d=>{if(!byTipo[d.t])byTipo[d.t]=0;byTipo[d.t]+=d.tr||0;});
+  const tipoEntries=Object.entries(byTipo).sort((a,b)=>b[1]-a[1]);
+  mkChart('pci-c-tipo-dona',{type:'doughnut',data:{
+    labels:tipoEntries.map(x=>x[0]),
+    datasets:[{data:tipoEntries.map(x=>x[1]),backgroundColor:tipoEntries.map(x=>TIPO_C[x[0]]||'#999'),borderColor:'#fff',borderWidth:2}]},
+  options:{responsive:true,maintainAspectRatio:false,cutout:'55%',
+    plugins:{legend:{position:'right',labels:{font:{size:10},padding:6,boxWidth:12}},
+      tooltip:{callbacks:{label:ctx=>{const t=ctx.dataset.data.reduce((a,b)=>a+b,0);return ` ${ctx.label}: ${fmt(ctx.raw)} (${(ctx.raw/t*100).toFixed(1)}%)`;}}}}
+  }});
+
+  // Tipo linea por PCI_YEARS
+  const tipos=[...new Set(fd.map(d=>d.t))].filter(Boolean);
+  mkChart('pci-c-tipo-linea',{type:'line',data:{labels:PY,
+    datasets:tipos.map(t=>({
+      label:t,data:PY.map((y,i)=>fd.filter(d=>d.t===t).reduce((s,d)=>s+(d.r[i]||0),0)),
+      borderColor:TIPO_C[t]||'#999',backgroundColor:'transparent',tension:0.3,pointRadius:3,borderWidth:2}))},
+  options:{responsive:true,maintainAspectRatio:false,
+    plugins:{legend:{position:'bottom',labels:{font:{size:9},boxWidth:10,padding:4}}},
+    scales:{x:{ticks:{font:{size:10}}},y:{ticks:{callback:v=>fmt(v),font:{size:9}}}}}});
+
+  // Dep
+  const byDep={};fd.forEach(d=>{const dep=d.dep.trim();byDep[dep]=(byDep[dep]||0)+(d.tr||0);});
+  const depSort=Object.entries(byDep).sort((a,b)=>b[1]-a[1]);
+  mkChart('pci-c-dep',{type:'bar',data:{labels:depSort.map(x=>x[0]),datasets:[{
+    data:depSort.map(x=>x[1]),backgroundColor:depSort.map(x=>DEP_C[x[0]]||'#999'),borderRadius:4}]},
+  options:{responsive:true,maintainAspectRatio:false,
+    plugins:{legend:{display:false},tooltip:{callbacks:{label:ctx=>' '+fmt(ctx.raw)}}},
+    scales:{x:{ticks:{font:{size:10}}},y:{ticks:{callback:v=>fmt(v),font:{size:9}}}}}});
+
+  // Top 20 comunas
+  const byCom={};fd.forEach(d=>{byCom[d.c]=(byCom[d.c]||0)+(d.tr||0);});
+  const comSort=Object.entries(byCom).sort((a,b)=>b[1]-a[1]).slice(0,20);
+  mkChart('pci-c-comunas',hbarCfg(comSort.map(x=>x[0]),comSort.map(x=>x[1]),PAL,color));
+
+  // Top 10 estab
+  const topE=fd.slice().sort((a,b)=>(b.tr||0)-(a.tr||0)).slice(0,10);
+  mkChart('pci-c-top-estab',{type:'bar',data:{
+    labels:topE.map(d=>d.n.length>30?d.n.slice(0,30)+'…':d.n),
+    datasets:[{data:topE.map(d=>d.tr||0),backgroundColor:topE.map(d=>TIPO_C[d.t]||color),borderRadius:4}]},
+  options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,
+    plugins:{legend:{display:false},tooltip:{callbacks:{label:ctx=>' '+fmt(ctx.raw)+' PCI'}}},
+    scales:{x:{ticks:{callback:v=>fmt(v),font:{size:9}}},y:{ticks:{font:{size:9}}}}}});
+
+  // SS × año apilado
+  const allSS=[...new Set(fd.map(d=>d.s))].filter(Boolean);
+  const ssTots2={};allSS.forEach(ss=>{ssTots2[ss]=fd.filter(d=>d.s===ss).reduce((s,d)=>s+(d.tr||0),0);});
+  const sortedSS=allSS.sort((a,b)=>ssTots2[b]-ssTots2[a]);
+  mkChart('pci-c-ss-anio',{type:'bar',data:{labels:PY,
+    datasets:sortedSS.map((ss,i)=>({
+      label:ss,data:PY.map((y,j)=>fd.filter(d=>d.s===ss).reduce((s,d)=>s+(d.r[j]||0),0)),
+      backgroundColor:PAL[i%PAL.length],borderRadius:2,stack:'s'}))},
+  options:{responsive:true,maintainAspectRatio:false,
+    plugins:{legend:{position:'bottom',labels:{font:{size:8},boxWidth:10,padding:4}}},
+    scales:{x:{stacked:true,ticks:{font:{size:10}}},y:{stacked:true,ticks:{callback:v=>fmt(v),font:{size:9}}}}}});
+}
+
+function tablaPCI(fd){
+  const anio=F.anio==='total'||parseInt(F.anio)<2020?'total':F.anio;
+  const sorted=fd.slice().sort((a,b)=>getPCI(b,anio)-getPCI(a,anio)).slice(0,100);
+  const maxV=sorted.length>0?getPCI(sorted[0],anio):1;
+  const el=document.getElementById('pci-tabla-body');if(!el)return;
+  el.innerHTML=sorted.map((d,i)=>`<tr>
+    <td class="rank">${i+1}</td><td>${d.n}</td><td>${d.c}</td><td>${d.s}</td>
+    <td><span style="background:${TIPO_C[d.t]||'#999'}22;color:${TIPO_C[d.t]||'#999'};font-weight:700;padding:2px 6px;border-radius:8px;font-size:10px">${d.t}</span></td>
+    <td>${d.dep.trim()}</td><td class="num">${fmt(getPCI(d,anio))}</td>
+    <td><div class="prog"><div class="prog-fill" style="width:${(getPCI(d,anio)/maxV*100).toFixed(1)}%;background:#8e44ad"></div></div></td>
+  </tr>`).join('');
+  const badge=document.getElementById('pci-badge-tabla');if(badge)badge.textContent='Top '+sorted.length;
+}
+
+// ============================================================
+// % PCI / PBC
+// ============================================================
+function kpisPCIPBC(fd){
+  const anio=F.anio==='total'||parseInt(F.anio)<2020?'2025':F.anio;
+  const PY=PCI_YRS();
+  const yi=PY.indexOf(anio);
+  const totPCI=yi>=0?fd.reduce((s,d)=>s+(d.r[yi]||0),0):fd.reduce((s,d)=>s+(d.tr||0),0);
+  const totPBC=fd.reduce((s,d)=>s+gp(d,anio),0);
+  const pctNac=totPBC>0?(totPCI/totPBC*100):0;
+  const set=(id,v)=>{const el=document.getElementById(id);if(el)el.textContent=v;};
+  set('pcipbc-kpi-pct',pctNac.toFixed(1)+'%');
+  set('pcipbc-kpi-pct-sub',fmt(totPCI)+' PCI / '+fmt(totPBC)+' PBC · '+anio);
+  const pctByYr=PY.map((y,i)=>{const p=fd.reduce((s,d)=>s+(d.r[i]||0),0);const b=fd.reduce((s,d)=>s+gp(d,y),0);return b>0?p/b*100:0;});
+  const maxP=Math.max(...pctByYr.filter(v=>v>0));
+  set('pcipbc-kpi-best-yr',PY[pctByYr.indexOf(maxP)]||'—');set('pcipbc-kpi-best-yr-val',maxP.toFixed(1)+'%');
+  const con=fd.filter(d=>yi>=0?(d.r[yi]||0)>0&&gp(d,anio)>0:(d.tr||0)>0).length;
+  set('pcipbc-kpi-estab',con.toLocaleString('es-CL'));
+  const bySS={};
+  fd.forEach(d=>{if(!bySS[d.s])bySS[d.s]={r:0,p:0};
+    bySS[d.s].r+=yi>=0?(d.r[yi]||0):(d.tr||0);bySS[d.s].p+=gp(d,anio);});
+  const ssPcts=Object.entries(bySS).map(([ss,v])=>({ss,pct:v.p>0?v.r/v.p*100:0})).filter(x=>x.pct>0).sort((a,b)=>b.pct-a.pct);
+  if(ssPcts.length>0){
+    set('pcipbc-kpi-top-ss',ssPcts[0].ss.split(' ')[0]);set('pcipbc-kpi-top-ss-val',ssPcts[0].pct.toFixed(1)+'%');
+    const bot=ssPcts[ssPcts.length-1];
+    set('pcipbc-kpi-bot-ss',bot.ss.split(' ')[0]);set('pcipbc-kpi-bot-ss-val',bot.pct.toFixed(1)+'%');
+  }
+}
+
+function grafPCIPBC(fd){
+  const PY=PCI_YRS();
+  const pctV=PY.map((y,i)=>{const p=fd.reduce((s,d)=>s+(d.r[i]||0),0);const b=fd.reduce((s,d)=>s+gp(d,y),0);return b>0?parseFloat((p/b*100).toFixed(2)):0;});
+  mkChart('pcipbc-c-tend',{type:'line',data:{labels:PY,datasets:[{
+    label:'% PCI/PBC',data:pctV,borderColor:'#8e44ad',backgroundColor:'rgba(142,68,173,0.08)',
+    fill:true,tension:0.35,pointRadius:5,pointHoverRadius:8,borderWidth:3,
+    pointBackgroundColor:pctV.map((v,i)=>v===Math.max(...pctV)?'#2E8B57':'#8e44ad'),
+    pointBorderColor:'#fff',pointBorderWidth:2}]},
+  options:{responsive:true,maintainAspectRatio:false,
+    plugins:{legend:{display:false},tooltip:{callbacks:{label:ctx=>` ${ctx.raw.toFixed(2)}%`}}},
+    scales:{x:{ticks:{font:{size:11,weight:'bold'}}},y:{ticks:{callback:v=>v.toFixed(1)+'%',font:{size:10}},beginAtZero:true}}}});
+
+  const anio=F.anio==='total'||parseInt(F.anio)<2020?'2025':F.anio;
+  const yi=PY.indexOf(anio);
+  const bySS={};
+  fd.forEach(d=>{if(!bySS[d.s])bySS[d.s]={r:0,p:0};bySS[d.s].r+=yi>=0?(d.r[yi]||0):(d.tr||0);bySS[d.s].p+=gp(d,anio);});
+  const ssData=Object.entries(bySS).map(([ss,v])=>({ss,pct:v.p>0?parseFloat((v.r/v.p*100).toFixed(2)):0,r:v.r,p:v.p})).filter(x=>x.p>0).sort((a,b)=>b.pct-a.pct);
+  const cScaleG=(pct,arr)=>{const vals=arr.map(x=>x.pct),mn=Math.min(...vals),mx=Math.max(...vals);const n=(pct-mn)/(mx-mn||1);return `rgba(${Math.round(208-(208-46)*n)},${Math.round(34+(139-34)*n)},${Math.round(42+(87-42)*n)},0.8)`;};
+  mkChart('pcipbc-c-ss',{type:'bar',data:{labels:ssData.map(x=>x.ss),datasets:[{label:'% PCI/PBC',data:ssData.map(x=>x.pct),backgroundColor:ssData.map(x=>cScaleG(x.pct,ssData)),borderRadius:4}]},
+  options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,
+    plugins:{legend:{display:false},tooltip:{callbacks:{label:ctx=>{const d=ssData[ctx.dataIndex];return [` ${ctx.raw.toFixed(1)}%`,` ${fmt(d.r)} PCI / ${fmt(d.p)} PBC`];}}}},
+    scales:{x:{ticks:{callback:v=>v.toFixed(1)+'%',font:{size:9}}},y:{ticks:{font:{size:9}}}}}});
+
+  const pciVals=PY.map((y,i)=>fd.reduce((s,d)=>s+(d.r[i]||0),0));
+  const pbcVals=PY.map(y=>fd.reduce((s,d)=>s+gp(d,y),0));
+  mkChart('pcipbc-c-dual',{type:'bar',data:{labels:PY,datasets:[
+    {label:'PCI',data:pciVals,backgroundColor:'rgba(142,68,173,0.7)',borderRadius:3,order:2},
+    {label:'PBC',data:pbcVals,backgroundColor:'rgba(46,139,87,0.3)',borderRadius:3,order:3},
+    {label:'% PCI/PBC',data:pctV,type:'line',borderColor:'#8e44ad',backgroundColor:'transparent',pointRadius:4,borderWidth:2.5,yAxisID:'y2',order:1}
+  ]},options:{responsive:true,maintainAspectRatio:false,
+    plugins:{legend:{position:'bottom',labels:{font:{size:10},boxWidth:12}},tooltip:{mode:'index',intersect:false}},
+    scales:{x:{ticks:{font:{size:10}}},y:{ticks:{callback:v=>fmt(v),font:{size:9}},position:'left'},y2:{ticks:{callback:v=>v.toFixed(1)+'%',font:{size:9}},position:'right',grid:{display:false}}}}});
+
+  const byTipo={};fd.forEach(d=>{if(!byTipo[d.t])byTipo[d.t]={r:0,p:0};byTipo[d.t].r+=yi>=0?(d.r[yi]||0):(d.tr||0);byTipo[d.t].p+=gp(d,anio);});
+  const tipoData=Object.entries(byTipo).map(([t,v])=>({t,pct:v.p>0?parseFloat((v.r/v.p*100).toFixed(2)):0})).filter(x=>x.pct>0).sort((a,b)=>b.pct-a.pct);
+  mkChart('pcipbc-c-tipo',{type:'bar',data:{labels:tipoData.map(x=>x.t),datasets:[{label:'% PCI/PBC',data:tipoData.map(x=>x.pct),backgroundColor:tipoData.map(x=>(TIPO_C[x.t]||'#999')+'CC'),borderRadius:4}]},
+  options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:ctx=>` ${ctx.raw.toFixed(1)}%`}}},scales:{x:{ticks:{font:{size:10}}},y:{ticks:{callback:v=>v.toFixed(1)+'%',font:{size:10}},beginAtZero:true}}}});
+
+  const byDep={};fd.forEach(d=>{const dep=d.dep.trim();if(!byDep[dep])byDep[dep]={r:0,p:0};byDep[dep].r+=yi>=0?(d.r[yi]||0):(d.tr||0);byDep[dep].p+=gp(d,anio);});
+  const depData=Object.entries(byDep).map(([dep,v])=>({dep,pct:v.p>0?parseFloat((v.r/v.p*100).toFixed(2)):0})).filter(x=>x.pct>0).sort((a,b)=>b.pct-a.pct);
+  mkChart('pcipbc-c-dep',{type:'bar',data:{labels:depData.map(x=>x.dep),datasets:[{label:'% PCI/PBC',data:depData.map(x=>x.pct),backgroundColor:depData.map(x=>(DEP_C[x.dep]||'#999')+'CC'),borderRadius:4}]},
+  options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:ctx=>` ${ctx.raw.toFixed(1)}%`}}},scales:{x:{ticks:{font:{size:10}}},y:{ticks:{callback:v=>v.toFixed(1)+'%',font:{size:10}},beginAtZero:true}}}});
+
+  const allSS=[...new Set(fd.map(d=>d.s))].filter(Boolean);
+  const ssTots={};allSS.forEach(ss=>{ssTots[ss]=fd.filter(d=>d.s===ss).reduce((s,d)=>s+(d.tr||0)+gp(d,'2025'),0);});
+  const top15=allSS.sort((a,b)=>ssTots[b]-ssTots[a]).slice(0,15);
+  mkChart('pcipbc-c-ss-linea',{type:'line',data:{labels:PY,datasets:top15.map((ss,i)=>({
+    label:ss,data:PY.map((y,j)=>{const r=fd.filter(d=>d.s===ss).reduce((s,d)=>s+(d.r[j]||0),0);const p=fd.filter(d=>d.s===ss).reduce((s,d)=>s+gp(d,y),0);return p>0?parseFloat((r/p*100).toFixed(2)):null;}),
+    borderColor:PAL[i%PAL.length],backgroundColor:'transparent',tension:0.3,pointRadius:5,pointHoverRadius:8,borderWidth:2,spanGaps:true}))},
+  options:{responsive:true,maintainAspectRatio:false,
+    plugins:{legend:{position:'bottom',labels:{font:{size:9},boxWidth:10,padding:5}},
+      tooltip:{mode:'nearest',intersect:true,callbacks:{label:ctx=>ctx.raw!=null?` ${ctx.dataset.label}: ${ctx.raw.toFixed(1)}%`:null,title:items=>`${items[0].dataset.label} · ${items[0].label}`}}},
+    scales:{x:{ticks:{font:{size:10}}},y:{ticks:{callback:v=>v!=null?v.toFixed(1)+'%':'',font:{size:10}},beginAtZero:true}}}});
+}
+
+function tablaPCIPBC(fd){
+  const PY=PCI_YRS();
+  const anio=F.anio==='total'||parseInt(F.anio)<2020?'2025':F.anio;
+  const yi=PY.indexOf(anio);
+  const conDatos=fd.filter(d=>{const r=yi>=0?(d.r[yi]||0):(d.tr||0);return r>0&&gp(d,anio)>0;});
+  const sorted=conDatos.map(d=>{const r=yi>=0?(d.r[yi]||0):(d.tr||0);const p=gp(d,anio);return {...d,_r:r,_p:p,_pct:p>0?r/p*100:0};}).sort((a,b)=>b._pct-a._pct).slice(0,100);
+  const maxPct=sorted.length>0?sorted[0]._pct:1;
+  const set=(id,v)=>{const el=document.getElementById(id);if(el)el.textContent=v;};
+  set('pcipbc-badge-tabla',sorted.length+' establecimientos con PCI y PBC registrados · '+anio);
+  const el=document.getElementById('pcipbc-tabla-body');if(!el)return;
+  el.innerHTML=sorted.map((d,i)=>`<tr>
+    <td class="rank">${i+1}</td><td>${d.n}</td><td>${d.c}</td><td>${d.s}</td>
+    <td><span style="background:${TIPO_C[d.t]||'#999'}22;color:${TIPO_C[d.t]||'#999'};font-weight:700;padding:2px 6px;border-radius:8px;font-size:10px">${d.t}</span></td>
+    <td class="num">${fmt(d._r)}</td><td class="num">${fmt(d._p)}</td>
+    <td class="num" style="font-weight:800;color:${d._pct>=30?'#2E8B57':d._pct>=15?'#E67E22':'#D0222A'}">${d._pct.toFixed(1)}%</td>
+    <td><div class="prog"><div class="prog-fill" style="width:${Math.min(d._pct/maxPct*100,100).toFixed(1)}%;background:#8e44ad"></div></div></td>
+  </tr>`).join('');
+}
 
 // ============================================================
 // ABANDONOS SM
