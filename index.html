@@ -2095,6 +2095,13 @@ window._parseDatos = function(pkg){
   }
 };
 const YEARS = ['2014','2015','2016','2017','2018','2019','2020','2021','2022','2023','2024','2025'];
+
+function ssNom(s){
+  if(!s) return s;
+  // Abreviar Servicios de Salud Metropolitanos
+  s = s.replace(/^Metropolitano /,'Metrop. ');
+  return s.length>26?s.slice(0,25)+'…':s;
+}
 function ga(d,y){const i=YEARS.indexOf(String(y));return i>=0?(d.a[i]||0):0;}
 function gp(d,y){const i=YEARS.indexOf(String(y));return i>=0?(d.p[i]||0):0;}
 function gi(d,y){const i=YEARS.indexOf(String(y));return i>=0?(d.i[i]||0):0;}
@@ -2422,7 +2429,7 @@ function kpisAltas(fd) {
   document.getElementById('a-kpi-best-yr-val').textContent=fmt(bV)+' altas ese año';
   const bySS={};fd.forEach(d=>{bySS[d.s]=(bySS[d.s]||0)+getAltas(d,anio);});
   const top=Object.entries(bySS).sort((a,b)=>b[1]-a[1])[0];
-  if(top){document.getElementById('a-kpi-top-ss').textContent=top[0].split(' ')[0];document.getElementById('a-kpi-top-ss-val').textContent=fmt(top[1])+' altas';}
+  if(top){document.getElementById('a-kpi-top-ss').textContent=ssNom(top[0]);document.getElementById('a-kpi-top-ss-val').textContent=fmt(top[1])+' altas';}
 }
 
 // ============================================================
@@ -2498,7 +2505,7 @@ function kpisPBC(fd) {
   document.getElementById('p-kpi-best-yr-val').textContent=fmt(bV)+' personas';
   const bySS={};fd.forEach(d=>{bySS[d.s]=(bySS[d.s]||0)+getPBC(d,anio);});
   const top=Object.entries(bySS).sort((a,b)=>b[1]-a[1])[0];
-  if(top){document.getElementById('p-kpi-top-ss').textContent=top[0].split(' ')[0];document.getElementById('p-kpi-top-ss-val').textContent=fmt(top[1])+' personas';}
+  if(top){document.getElementById('p-kpi-top-ss').textContent=ssNom(top[0]);document.getElementById('p-kpi-top-ss-val').textContent=fmt(top[1])+' personas';}
 }
 
 // ============================================================
@@ -2554,10 +2561,10 @@ function kpisInd(fd) {
   fd.forEach(d=>{if(!bySS[d.s])bySS[d.s]={a:0,p:0};bySS[d.s].a+=getAltas(d,anio);bySS[d.s].p+=getPBC(d,anio);});
   const ssPcts=Object.entries(bySS).map(([ss,v])=>({ss,pct:v.p>0?v.a/v.p*100:0})).filter(x=>x.pct>0).sort((a,b)=>b.pct-a.pct);
   if(ssPcts.length>0){
-    document.getElementById('i-kpi-top-ss').textContent=ssPcts[0].ss.split(' ')[0];
+    document.getElementById('i-kpi-top-ss').textContent=ssNom(ssPcts[0].ss);
     document.getElementById('i-kpi-top-ss-val').textContent=fmtPct(ssPcts[0].pct);
     const bot=ssPcts[ssPcts.length-1];
-    document.getElementById('i-kpi-bot-ss').textContent=bot.ss.split(' ')[0];
+    document.getElementById('i-kpi-bot-ss').textContent=ssNom(bot.ss);
     document.getElementById('i-kpi-bot-ss-val').textContent=fmtPct(bot.pct);
   }
 }
@@ -2933,7 +2940,7 @@ function kpisCat(fcd) {
   fcd.forEach(d=>{bySS[d.s]=(bySS[d.s]||0)+d.cat.total;});
   const topSS=Object.entries(bySS).sort((a,b)=>b[1]-a[1])[0];
   if(topSS){
-    document.getElementById('c-kpi-top-ss').textContent=topSS[0].split(' ')[0];
+    document.getElementById('c-kpi-top-ss').textContent=ssNom(topSS[0]);
     document.getElementById('c-kpi-top-ss-val').textContent=fmt(topSS[1])+' categorizados';
   }
 }
@@ -3120,7 +3127,7 @@ function kpisIng(fd){
   document.getElementById('i2-kpi-best-yr-val').textContent=fmt(bV)+' ingresos ese año';
   const bySS={};fd.forEach(d=>{bySS[d.s]=(bySS[d.s]||0)+getIng(d,anio);});
   const top=Object.entries(bySS).sort((a,b)=>b[1]-a[1])[0];
-  if(top){document.getElementById('i2-kpi-top-ss').textContent=top[0].split(' ')[0];document.getElementById('i2-kpi-top-ss-val').textContent=fmt(top[1])+' ingresos';}
+  if(top){document.getElementById('i2-kpi-top-ss').textContent=ssNom(top[0]);document.getElementById('i2-kpi-top-ss-val').textContent=fmt(top[1])+' ingresos';}
 }
 
 function grafIng(fd){
@@ -3196,7 +3203,7 @@ function kpisPIV(fd){
   set('piv-kpi-best-yr-val',fmt(bV)+' personas inscritas');
   const bySS={};fd.forEach(d=>{bySS[d.s]=(bySS[d.s]||0)+getPIV(d,anio);});
   const top=Object.entries(bySS).sort((a,b)=>b[1]-a[1])[0];
-  if(top){set('piv-kpi-top-ss',top[0].split(' ')[0]);set('piv-kpi-top-ss-val',fmt(top[1])+' personas');}
+  if(top){set('piv-kpi-top-ss',ssNom(top[0]));set('piv-kpi-top-ss-val',fmt(top[1])+' personas');}
 }
 
 function grafPIV(fd){
@@ -3281,9 +3288,9 @@ function kpisCob(fd){
   });
   const ssCob=Object.entries(bySS).map(([ss,v])=>({ss,c:getCob(v.p,v.w)})).filter(x=>x.c!==null&&x.c>0).sort((a,b)=>b.c-a.c);
   if(ssCob.length>0){
-    set('cob-kpi-top-ss',ssCob[0].ss.split(' ')[0]);set('cob-kpi-top-ss-val',ssCob[0].c.toFixed(1)+'%');
+    set('cob-kpi-top-ss',ssNom(ssCob[0].ss));set('cob-kpi-top-ss-val',ssCob[0].c.toFixed(1)+'%');
     const bot=ssCob[ssCob.length-1];
-    set('cob-kpi-bot-ss',bot.ss.split(' ')[0]);set('cob-kpi-bot-ss-val',bot.c.toFixed(1)+'%');
+    set('cob-kpi-bot-ss',ssNom(bot.ss));set('cob-kpi-bot-ss-val',bot.c.toFixed(1)+'%');
   }
 }
 
@@ -3404,7 +3411,7 @@ function kpisPCI(fd){
   set('pci-kpi-best-yr-val',fmt(bV)+' PCI ese año');
   const bySS={};fd.forEach(d=>{bySS[d.s]=(bySS[d.s]||0)+getPCI(d,useAnio);});
   const top=Object.entries(bySS).sort((a,b)=>b[1]-a[1])[0];
-  if(top){set('pci-kpi-top-ss',top[0].split(' ')[0]);set('pci-kpi-top-ss-val',fmt(top[1])+' PCI');}
+  if(top){set('pci-kpi-top-ss',ssNom(top[0]));set('pci-kpi-top-ss-val',fmt(top[1])+' PCI');}
 }
 
 function grafPCI(fd){
@@ -3529,9 +3536,9 @@ function kpisPCIPBC(fd){
     bySS[d.s].r+=yi>=0?(d.r[yi]||0):(d.tr||0);bySS[d.s].p+=gp(d,anio);});
   const ssPcts=Object.entries(bySS).map(([ss,v])=>({ss,pct:v.p>0?v.r/v.p*100:0})).filter(x=>x.pct>0).sort((a,b)=>b.pct-a.pct);
   if(ssPcts.length>0){
-    set('pcipbc-kpi-top-ss',ssPcts[0].ss.split(' ')[0]);set('pcipbc-kpi-top-ss-val',ssPcts[0].pct.toFixed(1)+'%');
+    set('pcipbc-kpi-top-ss',ssNom(ssPcts[0].ss));set('pcipbc-kpi-top-ss-val',ssPcts[0].pct.toFixed(1)+'%');
     const bot=ssPcts[ssPcts.length-1];
-    set('pcipbc-kpi-bot-ss',bot.ss.split(' ')[0]);set('pcipbc-kpi-bot-ss-val',bot.pct.toFixed(1)+'%');
+    set('pcipbc-kpi-bot-ss',ssNom(bot.ss));set('pcipbc-kpi-bot-ss-val',bot.pct.toFixed(1)+'%');
   }
 }
 
@@ -3634,7 +3641,7 @@ function kpisAb(fd){
   set('ab-kpi-best-yr-val',fmt(bV)+' abandonos ese año');
   const bySS={};fd.forEach(d=>{bySS[d.s]=(bySS[d.s]||0)+getAb(d,anio);});
   const top=Object.entries(bySS).sort((a,b)=>b[1]-a[1])[0];
-  if(top){set('ab-kpi-top-ss',top[0].split(' ')[0]);set('ab-kpi-top-ss-val',fmt(top[1])+' abandonos');}
+  if(top){set('ab-kpi-top-ss',ssNom(top[0]));set('ab-kpi-top-ss-val',fmt(top[1])+' abandonos');}
 }
 
 function grafAb(fd){
@@ -3706,9 +3713,9 @@ function kpisAbPBC(fd){
   fd.forEach(d=>{if(!bySS[d.s])bySS[d.s]={b:0,p:0};if(yi===-1){bySS[d.s].b+=d.tb;bySS[d.s].p+=d.tp;}else{bySS[d.s].b+=(d.b[yi]||0);bySS[d.s].p+=(d.p[yi]||0);}});
   const ssPcts=Object.entries(bySS).map(([ss,v])=>({ss,pct:v.p>0?v.b/v.p*100:0})).filter(x=>x.pct>0).sort((a,b)=>b.pct-a.pct);
   if(ssPcts.length>0){
-    set('abpbc-kpi-top-ss',ssPcts[0].ss.split(' ')[0]);set('abpbc-kpi-top-ss-val',ssPcts[0].pct.toFixed(1)+'%');
+    set('abpbc-kpi-top-ss',ssNom(ssPcts[0].ss));set('abpbc-kpi-top-ss-val',ssPcts[0].pct.toFixed(1)+'%');
     const bot=ssPcts[ssPcts.length-1];
-    set('abpbc-kpi-bot-ss',bot.ss.split(' ')[0]);set('abpbc-kpi-bot-ss-val',bot.pct.toFixed(1)+'%');
+    set('abpbc-kpi-bot-ss',ssNom(bot.ss));set('abpbc-kpi-bot-ss-val',bot.pct.toFixed(1)+'%');
   }
 }
 
@@ -3802,9 +3809,9 @@ function kpisRes(fd){
   fd.forEach(d=>{if(!bySS[d.s])bySS[d.s]={a:0,b:0};if(yi===-1){bySS[d.s].a+=d.ta;bySS[d.s].b+=d.tb;}else{bySS[d.s].a+=(d.a[yi]||0);bySS[d.s].b+=(d.b[yi]||0);}});
   const ssTasas=Object.entries(bySS).map(([ss,v])=>({ss,t:getTasaRes(v.a,v.b)})).filter(x=>x.t>0).sort((a,b)=>b.t-a.t);
   if(ssTasas.length>0){
-    set('res-kpi-top-ss',ssTasas[0].ss.split(' ')[0]);set('res-kpi-top-ss-val',ssTasas[0].t.toFixed(1)+'%');
+    set('res-kpi-top-ss',ssNom(ssTasas[0].ss));set('res-kpi-top-ss-val',ssTasas[0].t.toFixed(1)+'%');
     const bot=ssTasas[ssTasas.length-1];
-    set('res-kpi-bot-ss',bot.ss.split(' ')[0]);set('res-kpi-bot-ss-val',bot.t.toFixed(1)+'%');
+    set('res-kpi-bot-ss',ssNom(bot.ss));set('res-kpi-bot-ss-val',bot.t.toFixed(1)+'%');
   }
 }
 
@@ -3900,7 +3907,7 @@ function kpisCtrl(fd){
   set('ctrl-kpi-best-yr-val',fmt(bV)+' controles ese año');
   const bySS={};fd.forEach(d=>{bySS[d.s]=(bySS[d.s]||0)+getCtrl(d,anio);});
   const top=Object.entries(bySS).sort((a,b)=>b[1]-a[1])[0];
-  if(top){set('ctrl-kpi-top-ss',top[0].split(' ')[0]);set('ctrl-kpi-top-ss-val',fmt(top[1])+' controles');}
+  if(top){set('ctrl-kpi-top-ss',ssNom(top[0]));set('ctrl-kpi-top-ss-val',fmt(top[1])+' controles');}
 }
 
 function grafCtrl(fd){
@@ -3989,9 +3996,9 @@ function kpisProp(fd){
   });
   const ssPcts=Object.entries(bySS).map(([ss,v])=>({ss,p:getProp(v.g,v.k)})).filter(x=>x.p>0).sort((a,b)=>b.p-a.p);
   if(ssPcts.length>0){
-    set('prop-kpi-top-ss',ssPcts[0].ss.split(' ')[0]);set('prop-kpi-top-ss-val',ssPcts[0].p.toFixed(1)+'%');
+    set('prop-kpi-top-ss',ssNom(ssPcts[0].ss));set('prop-kpi-top-ss-val',ssPcts[0].p.toFixed(1)+'%');
     const bot=ssPcts[ssPcts.length-1];
-    set('prop-kpi-bot-ss',bot.ss.split(' ')[0]);set('prop-kpi-bot-ss-val',bot.p.toFixed(1)+'%');
+    set('prop-kpi-bot-ss',ssNom(bot.ss));set('prop-kpi-bot-ss-val',bot.p.toFixed(1)+'%');
   }
 }
 
@@ -4144,7 +4151,7 @@ function kpisAct(fd){
   set('act-kpi-best-yr-val',fmt(bV)+' actividades ese año');
   const bySS={};fd.forEach(d=>{bySS[d.s]=(bySS[d.s]||0)+getAct(d,anio);});
   const top=Object.entries(bySS).sort((a,b)=>b[1]-a[1])[0];
-  if(top){set('act-kpi-top-ss',top[0].split(' ')[0]);set('act-kpi-top-ss-val',fmt(top[1])+' actividades');}
+  if(top){set('act-kpi-top-ss',ssNom(top[0]));set('act-kpi-top-ss-val',fmt(top[1])+' actividades');}
 }
 
 function grafAct(fd){
@@ -4237,9 +4244,9 @@ function kpisConc(fd){
   });
   const ssPcts=Object.entries(bySS).map(([ss,v])=>({ss,c:v.p>0?v.a/v.p:0})).filter(x=>x.c>0).sort((a,b)=>b.c-a.c);
   if(ssPcts.length>0){
-    set('conc-kpi-top-ss',ssPcts[0].ss.split(' ')[0]);set('conc-kpi-top-ss-val',ssPcts[0].c.toFixed(2)+' act/persona');
+    set('conc-kpi-top-ss',ssNom(ssPcts[0].ss));set('conc-kpi-top-ss-val',ssPcts[0].c.toFixed(2)+' act/persona');
     const bot=ssPcts[ssPcts.length-1];
-    set('conc-kpi-bot-ss',bot.ss.split(' ')[0]);set('conc-kpi-bot-ss-val',bot.c.toFixed(2)+' act/persona');
+    set('conc-kpi-bot-ss',ssNom(bot.ss));set('conc-kpi-bot-ss-val',bot.c.toFixed(2)+' act/persona');
   }
 }
 
@@ -4379,7 +4386,7 @@ function kpisIPG(fd){
   set('ipg-kpi-best-yr-val',fmt(bV)+' IPG ese año');
   const bySS={};fd.forEach(d=>{bySS[d.s]=(bySS[d.s]||0)+getIPG(d,anio);});
   const top=Object.entries(bySS).sort((a,b)=>b[1]-a[1])[0];
-  if(top){set('ipg-kpi-top-ss',top[0].split(' ')[0]);set('ipg-kpi-top-ss-val',fmt(top[1])+' IPG');}
+  if(top){set('ipg-kpi-top-ss',ssNom(top[0]));set('ipg-kpi-top-ss-val',fmt(top[1])+' IPG');}
 }
 
 function grafIPG(fd){
@@ -4467,7 +4474,7 @@ function kpisCatInd(fci) {
     .map(([ss,v])=>({ss,pct:pctCatInd(v.cat,v.ing)}))
     .filter(x=>x.pct>0).sort((a,b)=>b.pct-a.pct);
   if(ssPcts.length>0){
-    set('ci-kpi-top-ss', ssPcts[0].ss.split(' ')[0]);
+    set('ci-kpi-top-ss', ssNom(ssPcts[0].ss));
     set('ci-kpi-top-ss-val', ssPcts[0].pct.toFixed(1)+'% cobertura');
   }
 }
