@@ -3246,7 +3246,8 @@ function tablaPIV(fd){
 const COB_PREV = 0.22; // Prevalencia SM Chile (Vicente et al., 2002)
 
 function getCob(pbc, piv){
-  if(!piv || piv===0 || !pbc) return null; // sin datos = null
+  if(!piv || piv===0) return null; // sin PIV = no calculable
+  if(!pbc || pbc===0) return 0;    // sin PBC pero con PIV = 0% cobertura
   return (pbc / (piv * COB_PREV)) * 100;
 }
 
@@ -3257,7 +3258,7 @@ function kpisCob(fd){
   const totPIV=yi===-1?fd.reduce((s,d)=>s+d.tw,0):fd.reduce((s,d)=>s+gw(d,anio),0);
   const cobNac=getCob(totPBC,totPIV);
   const set=(id,v)=>{const el=document.getElementById(id);if(el)el.textContent=v;};
-  set('cob-kpi-pct',cobNac!==null?cobNac.toFixed(1)+'%':'Sin datos');
+  set('cob-kpi-pct',cobNac!==null?cobNac.toFixed(1)+'%':'Sin datos (PIV = 0)');
   set('cob-kpi-pct-sub',cobNac!==null?fmt(totPBC)+' PBC / '+fmt(Math.round(totPIV*COB_PREV))+' esperados':'PBC o PIV = 0');
   // Por año
   const cobByYr=YEARS.map((y,i)=>{const p=fd.reduce((s,d)=>s+(d.p[i]||0),0);const w=fd.reduce((s,d)=>s+(d.w[i]||0),0);return getCob(p,w);});
@@ -3351,9 +3352,8 @@ function tablaCob(fd){
   const yi=anio==='total'?-1:YEARS.indexOf(anio);
   // Solo establecimientos con PBC>0 Y PIV>0
   const conDatos=fd.filter(d=>{
-    const p=yi===-1?d.tp:gp(d,anio);
     const w=yi===-1?d.tw:gw(d,anio);
-    return p>0&&w>0;
+    return w>0; // solo excluir si PIV=0, PBC=0 muestra 0%
   });
   const sinDatos=fd.length-conDatos.length;
   const sorted=conDatos.map(d=>{
@@ -4864,7 +4864,6 @@ function renderFicha(){
     options:mOpts(false)});
 
   // Cobertura SM mini chart
-  const cobMV=YEARS.map((y,i)=>{const p=aV[i]||0,w=pivMV[i];const c=getCob(p>0?fd.reduce((s,d)=>s+gp(d,y),0):0,w);return c!==null?parseFloat(c.toFixed(2)):null;});
   const cobMV2=YEARS.map((y,i)=>{const p=fd.reduce((s,d)=>s+gp(d,y),0),w=pivMV[i];return getCob(p,w)!==null?parseFloat(getCob(p,w).toFixed(2)):null;});
   if(fichaCharts.cob)fichaCharts.cob.destroy();
   const cCob=document.getElementById('ficha-c-cob');
