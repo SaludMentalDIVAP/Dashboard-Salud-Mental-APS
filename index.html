@@ -2079,13 +2079,13 @@ window._parseDatos = function(pkg){
     const ss=pkg.ss,com=pkg.com,tip=pkg.tip,tc2=pkg.tc,dep=pkg.dep;
     window.PCI_YEARS=pkg.pci_years||['2020','2021','2022','2023','2024','2025'];
     window.DATA = pkg.rows.map(r=>{
-      const cat=r[121];
+      const cat=r[120];
       return {
         id:r[0], n:r[1],
         c:com[r[2]], s:ss[r[3]], t:tip[r[4]], tc:tc2[r[5]], dep:dep[r[6]],
         lat:r[7], lon:r[8], ta:r[9], tp:r[10], ti:r[11], tg:r[12], tv:r[13], tk:r[14], tb:r[15], tr:r[16], tw:r[17],
-        a:r.slice(19,31), p:r.slice(31,43), i:r.slice(43,55), g:r.slice(55,67),
-        v:r.slice(67,79), k:r.slice(79,91), b:r.slice(91,103), r:r.slice(103,109), w:r.slice(109,121),
+        a:r.slice(18,30), p:r.slice(30,42), i:r.slice(42,54), g:r.slice(54,66),
+        v:r.slice(66,78), k:r.slice(78,90), b:r.slice(90,102), r:r.slice(102,108), w:r.slice(108,120),
         cat:cat?{N0:cat[0],N1:cat[1],N2:cat[2],N3:cat[3],N4:cat[4],total:cat[0]+cat[1]+cat[2]+cat[3]+cat[4]}:null
       };
     });
