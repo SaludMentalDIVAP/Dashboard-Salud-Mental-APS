@@ -159,6 +159,7 @@ tbody td.rank{font-weight:800;color:var(--az2);text-align:center}
     <button class="tab-btn" onclick="switchTab('ctrl',this)">👤 Controles Individuales</button>
     <button class="tab-btn" onclick="switchTab('ab',this)">🚪 Abandonos SM</button>
     <button class="tab-btn" onclick="switchTab('pci',this)">📝 Plan Cuidado Integral</button>
+    <button class="tab-btn" onclick="switchTab('piv',this)">👥 Población Inscrita (PIV)</button>
   </div>
   <div class="tabs-inner" style="border-top:1px solid var(--gris-borde);background:#F8F0FF">
     <span style="font-size:10px;font-weight:700;color:#7c3aed;text-transform:uppercase;letter-spacing:.8px;padding:0 12px;align-self:center;white-space:nowrap">Indicadores relacionales →</span>
@@ -169,6 +170,7 @@ tbody td.rank{font-weight:800;color:var(--az2);text-align:center}
     <button class="tab-btn" onclick="switchTab('abpbc',this)">📉 % Abandonos/PBC</button>
     <button class="tab-btn" onclick="switchTab('res',this)">✅ Tasa Resolución Clínica</button>
     <button class="tab-btn" onclick="switchTab('pcipbc',this)">📊 PCI / PBC</button>
+    <button class="tab-btn" onclick="switchTab('cob',this)">🎯 Cobertura SM APS</button>
   </div>
 </div>
 
@@ -294,6 +296,12 @@ tbody td.rank{font-weight:800;color:var(--az2);text-align:center}
           <div style="font-size:11px;color:#4A6080;line-height:1.5">PCI elaborados en APS 2020–2025. Tendencia creciente sostenida de implementación del modelo.</div>
           <div style="margin-top:10px;font-size:10px;font-weight:700;color:#8e44ad;text-transform:uppercase;letter-spacing:.5px">8 gráficos + tabla →</div>
         </div>
+        <div onclick="switchTabByName('piv')" style="background:white;border-radius:12px;box-shadow:0 2px 12px rgba(0,60,120,.10);padding:20px 22px;cursor:pointer;border-left:5px solid #2980b9;transition:all .2s" onmouseover="this.style.transform='translateY(-2px)';this.style.boxShadow='0 6px 24px rgba(0,60,120,.18)'" onmouseout="this.style.transform='none';this.style.boxShadow='0 2px 12px rgba(0,60,120,.10)'">
+          <div style="font-size:26px;margin-bottom:8px">🏘️</div>
+          <div style="font-size:13px;font-weight:800;color:#003F6B;margin-bottom:5px">Población Inscrita Validada (PIV)</div>
+          <div style="font-size:11px;color:#4A6080;line-height:1.5">Personas inscritas y validadas en APS 2014–2025. Denominador de referencia para indicadores de cobertura.</div>
+          <div style="margin-top:10px;font-size:10px;font-weight:700;color:#2980b9;text-transform:uppercase;letter-spacing:.5px">10 gráficos + tabla →</div>
+        </div>
         <div onclick="switchTabByName('catind')" style="background:white;border-radius:12px;box-shadow:0 2px 12px rgba(0,60,120,.10);padding:20px 22px;cursor:pointer;border-left:5px solid #8e44ad;transition:all .2s" onmouseover="this.style.transform='translateY(-2px)';this.style.boxShadow='0 6px 24px rgba(0,60,120,.18)'" onmouseout="this.style.transform='none';this.style.boxShadow='0 2px 12px rgba(0,60,120,.10)'">
           <div style="font-size:26px;margin-bottom:8px">🔢</div>
           <div style="font-size:13px;font-weight:800;color:#003F6B;margin-bottom:5px">% Categ. / Ingresos</div>
@@ -371,7 +379,9 @@ tbody td.rank{font-weight:800;color:var(--az2);text-align:center}
           <div style="padding:8px 6px;border-right:1px solid #D0DCE8;text-align:center"><div style="font-size:8px;color:#4A6080;font-weight:600;text-transform:uppercase;margin-bottom:2px">% Abandonos/PBC</div><div style="font-size:14px;font-weight:800;color:#e74c3c" id="ficha-kpi-abpbc">—</div></div>
           <div style="padding:8px 6px;border-right:1px solid #D0DCE8;text-align:center"><div style="font-size:8px;color:#4A6080;font-weight:600;text-transform:uppercase;margin-bottom:2px">Tasa Resolución</div><div style="font-size:14px;font-weight:800;color:#2E8B57" id="ficha-kpi-res">—</div></div>
           <div style="padding:8px 6px;border-right:1px solid #D0DCE8;text-align:center"><div style="font-size:8px;color:#4A6080;font-weight:600;text-transform:uppercase;margin-bottom:2px" id="ficha-lbl-pci">PCI 2020–2025</div><div style="font-size:14px;font-weight:800;color:#8e44ad" id="ficha-kpi-pci">—</div></div>
-          <div style="padding:8px 6px;text-align:center"><div style="font-size:8px;color:#4A6080;font-weight:600;text-transform:uppercase;margin-bottom:2px">% PCI/PBC 2025</div><div style="font-size:14px;font-weight:800;color:#6c3483" id="ficha-kpi-pcipbc">—</div></div>
+          <div style="padding:8px 6px;border-right:1px solid #D0DCE8;text-align:center"><div style="font-size:8px;color:#4A6080;font-weight:600;text-transform:uppercase;margin-bottom:2px">% PCI/PBC 2025</div><div style="font-size:14px;font-weight:800;color:#6c3483" id="ficha-kpi-pcipbc">—</div></div>
+          <div style="padding:8px 6px;border-right:1px solid #D0DCE8;text-align:center"><div style="font-size:8px;color:#4A6080;font-weight:600;text-transform:uppercase;margin-bottom:2px" id="ficha-lbl-piv">PIV</div><div style="font-size:14px;font-weight:800;color:#2980b9" id="ficha-kpi-piv">—</div></div>
+          <div style="padding:8px 6px;text-align:center"><div style="font-size:8px;color:#4A6080;font-weight:600;text-transform:uppercase;margin-bottom:2px">Cobertura SM</div><div style="font-size:14px;font-weight:800;color:#27ae60" id="ficha-kpi-cob">—</div></div>
         </div>
         <div style="background:white;border:1.5px solid #D0DCE8;border-top:none;border-radius:0 0 12px 12px;overflow:hidden">
           <div style="display:grid;grid-template-columns:1fr 1fr 1fr 1fr;border-bottom:1px solid #D0DCE8">
@@ -432,6 +442,16 @@ tbody td.rank{font-weight:800;color:var(--az2);text-align:center}
             <div style="padding:8px 10px">
               <div style="font-size:9px;font-weight:700;color:#003F6B;margin-bottom:4px">📊 % PCI/PBC (2020–2025)</div>
               <div style="position:relative;height:80px;width:100%"><canvas id="ficha-c-pcipbc" style="max-width:100%"></canvas></div>
+            </div>
+          </div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;border-top:1px solid #D0DCE8">
+            <div style="padding:8px 10px;border-right:1px solid #D0DCE8">
+              <div style="font-size:9px;font-weight:700;color:#003F6B;margin-bottom:4px">🏘️ PIV por año</div>
+              <div style="position:relative;height:80px;width:100%"><canvas id="ficha-c-piv" style="max-width:100%"></canvas></div>
+            </div>
+            <div style="padding:8px 10px">
+              <div style="font-size:9px;font-weight:700;color:#003F6B;margin-bottom:4px">🎯 Cobertura SM APS</div>
+              <div style="position:relative;height:80px;width:100%"><canvas id="ficha-c-cob" style="max-width:100%"></canvas></div>
             </div>
           </div>
         </div>
@@ -1888,6 +1908,163 @@ tbody td.rank{font-weight:800;color:var(--az2);text-align:center}
 </div>
 </div>
 
+<!-- ===== TAB PIV ===== -->
+<div id="tab-piv" class="tab-content">
+<div class="main">
+  <div class="ind-note">
+    <strong>👥 Población Inscrita y Validada (PIV) en APS:</strong> Corresponde al número de personas inscritas y validadas en cada establecimiento de Atención Primaria de Salud. Es el denominador de referencia para el cálculo de cobertura de salud mental. A mayor PIV, mayor es la población potencial a atender. Datos 2014–2025.
+  </div>
+  <div class="kpi-row">
+    <div class="kpi-card"><div class="kpi-icon">👥</div><div class="kpi-label">Total PIV Nacional</div><div class="kpi-value" id="piv-kpi-total">—</div><div class="kpi-sub" id="piv-kpi-total-sub">—</div></div>
+    <div class="kpi-card verde"><div class="kpi-icon">🏥</div><div class="kpi-label">Establecimientos</div><div class="kpi-value" id="piv-kpi-estab">—</div><div class="kpi-sub">Con PIV registrada</div></div>
+    <div class="kpi-card naranja"><div class="kpi-icon">📊</div><div class="kpi-label">Promedio PIV / estab.</div><div class="kpi-value sm" id="piv-kpi-prom">—</div><div class="kpi-sub">Personas inscritas por centro</div></div>
+    <div class="kpi-card rojo"><div class="kpi-icon">📈</div><div class="kpi-label">Año con mayor PIV</div><div class="kpi-value sm" id="piv-kpi-best-yr">—</div><div class="kpi-sub" id="piv-kpi-best-yr-val">—</div></div>
+    <div class="kpi-card morado"><div class="kpi-icon">🥇</div><div class="kpi-label">SS con mayor PIV</div><div class="kpi-value xs" id="piv-kpi-top-ss">—</div><div class="kpi-sub" id="piv-kpi-top-ss-val">—</div></div>
+  </div>
+  <div class="sec-title">📈 Tendencia Temporal</div><div class="sec-sep"></div>
+  <div class="charts-grid g1" style="margin-bottom:18px">
+    <div class="chart-card">
+      <div class="chart-header"><div><div class="chart-title">Evolución de la Población Inscrita y Validada (PIV) por Año (2014–2025)</div><div class="chart-sub">Total nacional según filtros activos</div></div><div class="chart-badge">Nacional</div></div>
+      <div class="cw t"><canvas id="piv-c-tend"></canvas></div>
+    </div>
+  </div>
+  <div class="charts-grid g2">
+    <div class="chart-card">
+      <div class="chart-header"><div><div class="chart-title">PIV por Servicio de Salud</div><div class="chart-sub">Comparación entre los 29 SS</div></div><div class="chart-badge">SS</div></div>
+      <div class="cw xt"><canvas id="piv-c-ss"></canvas></div>
+    </div>
+    <div class="chart-card">
+      <div class="chart-header"><div><div class="chart-title">Variación % Año a Año</div><div class="chart-sub">Cambio porcentual respecto al año anterior</div></div><div class="chart-badge">Δ%</div></div>
+      <div class="cw t"><canvas id="piv-c-var"></canvas></div>
+    </div>
+  </div>
+  <div class="sec-title" style="margin-top:22px">🏥 Análisis por Tipo y Dependencia</div><div class="sec-sep"></div>
+  <div class="charts-grid g3">
+    <div class="chart-card">
+      <div class="chart-header"><div><div class="chart-title">Distribución PIV por Tipo de Establecimiento</div></div><div class="chart-badge">Tipo</div></div>
+      <div class="cw t"><canvas id="piv-c-tipo-dona"></canvas></div>
+    </div>
+    <div class="chart-card">
+      <div class="chart-header"><div><div class="chart-title">Evolución PIV por Tipo de Establecimiento</div></div><div class="chart-badge">Tendencia</div></div>
+      <div class="cw t"><canvas id="piv-c-tipo-linea"></canvas></div>
+    </div>
+    <div class="chart-card">
+      <div class="chart-header"><div><div class="chart-title">PIV por Dependencia</div></div><div class="chart-badge">Dependencia</div></div>
+      <div class="cw t"><canvas id="piv-c-dep"></canvas></div>
+    </div>
+  </div>
+  <div class="sec-title" style="margin-top:22px">🌆 Top Comunas y Establecimientos</div><div class="sec-sep"></div>
+  <div class="charts-grid g2c">
+    <div class="chart-card">
+      <div class="chart-header"><div><div class="chart-title">Top 20 Comunas — PIV</div></div><div class="chart-badge">Top 20</div></div>
+      <div class="cw xxxl"><canvas id="piv-c-comunas"></canvas></div>
+    </div>
+    <div class="chart-card">
+      <div class="chart-header"><div><div class="chart-title">Top 10 Establecimientos — PIV</div></div><div class="chart-badge">Ranking</div></div>
+      <div class="cw xxxl"><canvas id="piv-c-top-estab"></canvas></div>
+    </div>
+  </div>
+  <div class="sec-title" style="margin-top:22px">🔥 Distribución por SS y Año</div><div class="sec-sep"></div>
+  <div class="charts-grid g1">
+    <div class="chart-card">
+      <div class="chart-header"><div><div class="chart-title">PIV por SS y Año — Barras Apiladas</div></div><div class="chart-badge">2014–2025</div></div>
+      <div class="cw xxxl"><canvas id="piv-c-ss-anio"></canvas></div>
+    </div>
+  </div>
+  <div class="sec-title" style="margin-top:22px">📋 Tabla de Establecimientos</div><div class="sec-sep"></div>
+  <div class="charts-grid g1">
+    <div class="chart-card">
+      <div class="chart-header"><div><div class="chart-title">Detalle por Establecimiento — PIV</div><div class="chart-sub">Top 100 · Clic en encabezados para ordenar</div></div><div class="chart-badge" id="piv-badge-tabla">Top 100</div></div>
+      <div class="tabla-wrap">
+        <table><thead><tr>
+          <th onclick="sortTab('piv-tabla-body',0)">#</th>
+          <th onclick="sortTab('piv-tabla-body',1)">Establecimiento ↕</th>
+          <th onclick="sortTab('piv-tabla-body',2)">Comuna ↕</th>
+          <th onclick="sortTab('piv-tabla-body',3)">Servicio de Salud ↕</th>
+          <th onclick="sortTab('piv-tabla-body',4)">Tipo ↕</th>
+          <th onclick="sortTab('piv-tabla-body',5)">Dependencia ↕</th>
+          <th onclick="sortTab('piv-tabla-body',6)">PIV ↕</th>
+          <th>Barra</th>
+        </tr></thead>
+        <tbody id="piv-tabla-body"></tbody></table>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- ===== TAB COBERTURA SM ===== -->
+<div id="tab-cob" class="tab-content">
+<div class="main">
+  <div class="ind-note">
+    <strong>🎯 Cobertura de Atención de Salud Mental APS:</strong> Se calcula como <strong>PBC ÷ (PIV × 0,22) × 100</strong>. El denominador representa la <em>población esperada con necesidad de atención SM</em>, usando el 22% de prevalencia estimada para Chile (Vicente et al., 2002). El resultado expresa qué proporción de la población que requeriría atención SM está efectivamente bajo control en APS. <strong>Cuando PBC o PIV son 0, el indicador no puede calcularse</strong> — estos establecimientos se excluyen del análisis y se indica expresamente.
+  </div>
+  <div class="kpi-row">
+    <div class="kpi-card"><div class="kpi-icon">🎯</div><div class="kpi-label">Cobertura SM Nacional</div><div class="kpi-value sm" id="cob-kpi-pct">—</div><div class="kpi-sub" id="cob-kpi-pct-sub">PBC ÷ (PIV × 0,22) × 100</div></div>
+    <div class="kpi-card verde"><div class="kpi-icon">📈</div><div class="kpi-label">Año con mayor cobertura</div><div class="kpi-value sm" id="cob-kpi-best-yr">—</div><div class="kpi-sub" id="cob-kpi-best-yr-val">—</div></div>
+    <div class="kpi-card naranja"><div class="kpi-icon">🏥</div><div class="kpi-label">Establecimientos calculables</div><div class="kpi-value" id="cob-kpi-estab">—</div><div class="kpi-sub" id="cob-kpi-estab-sub">Con PBC y PIV > 0</div></div>
+    <div class="kpi-card rojo"><div class="kpi-icon">🏆</div><div class="kpi-label">SS con mayor cobertura</div><div class="kpi-value xs" id="cob-kpi-top-ss">—</div><div class="kpi-sub" id="cob-kpi-top-ss-val">—</div></div>
+    <div class="kpi-card morado"><div class="kpi-icon">⚠️</div><div class="kpi-label">SS con menor cobertura</div><div class="kpi-value xs" id="cob-kpi-bot-ss">—</div><div class="kpi-sub" id="cob-kpi-bot-ss-val">—</div></div>
+  </div>
+  <div class="sec-title">📈 Tendencia de Cobertura (2014–2025)</div><div class="sec-sep"></div>
+  <div class="charts-grid g1" style="margin-bottom:18px">
+    <div class="chart-card">
+      <div class="chart-header"><div><div class="chart-title">Evolución de la Cobertura SM APS (2014–2025)</div><div class="chart-sub">PBC ÷ (PIV × 0,22) × 100 · nivel nacional · Prevalencia SM 22% (Vicente et al., 2002)</div></div><div class="chart-badge">% Cobertura</div></div>
+      <div class="cw t"><canvas id="cob-c-tend"></canvas></div>
+    </div>
+  </div>
+  <div class="charts-grid g2">
+    <div class="chart-card">
+      <div class="chart-header"><div><div class="chart-title">Cobertura SM por Servicio de Salud</div><div class="chart-sub">Verde = mayor cobertura · Solo SS con PBC y PIV > 0</div></div><div class="chart-badge">SS</div></div>
+      <div class="cw xt"><canvas id="cob-c-ss"></canvas></div>
+    </div>
+    <div class="chart-card">
+      <div class="chart-header"><div><div class="chart-title">PBC vs PIV×0,22 por Año</div><div class="chart-sub">Población bajo control vs población esperada con necesidad SM</div></div><div class="chart-badge">Dual</div></div>
+      <div class="cw t"><canvas id="cob-c-dual"></canvas></div>
+    </div>
+  </div>
+  <div class="sec-title" style="margin-top:22px">🏥 Cobertura por Tipo y Dependencia</div><div class="sec-sep"></div>
+  <div class="charts-grid g2">
+    <div class="chart-card">
+      <div class="chart-header"><div><div class="chart-title">Cobertura SM por Tipo de Establecimiento</div></div><div class="chart-badge">Tipo</div></div>
+      <div class="cw t"><canvas id="cob-c-tipo"></canvas></div>
+    </div>
+    <div class="chart-card">
+      <div class="chart-header"><div><div class="chart-title">Cobertura SM por Dependencia</div></div><div class="chart-badge">Dependencia</div></div>
+      <div class="cw t"><canvas id="cob-c-dep"></canvas></div>
+    </div>
+  </div>
+  <div class="sec-title" style="margin-top:22px">📊 Evolución por SS</div><div class="sec-sep"></div>
+  <div class="charts-grid g1">
+    <div class="chart-card">
+      <div class="chart-header"><div><div class="chart-title">Cobertura SM por SS y Año — Líneas Múltiples (2014–2025)</div><div class="chart-sub">Solo SS con datos disponibles · Top 15</div></div><div class="chart-badge">2014–2025</div></div>
+      <div class="cw xxxl"><canvas id="cob-c-ss-linea"></canvas></div>
+    </div>
+  </div>
+  <div class="sec-title" style="margin-top:22px">📋 Tabla por Establecimiento</div><div class="sec-sep"></div>
+  <div class="charts-grid g1">
+    <div class="chart-card">
+      <div class="chart-header"><div><div class="chart-title">Cobertura SM por Establecimiento</div><div class="chart-sub">Solo establecimientos con PBC y PIV > 0 — Los que no tienen ambos datos se excluyen del cálculo</div></div><div class="chart-badge" id="cob-badge-tabla">—</div></div>
+      <div class="tabla-wrap">
+        <table><thead><tr>
+          <th onclick="sortTab('cob-tabla-body',0)">#</th>
+          <th onclick="sortTab('cob-tabla-body',1)">Establecimiento ↕</th>
+          <th onclick="sortTab('cob-tabla-body',2)">Comuna ↕</th>
+          <th onclick="sortTab('cob-tabla-body',3)">Servicio de Salud ↕</th>
+          <th onclick="sortTab('cob-tabla-body',4)">Tipo ↕</th>
+          <th onclick="sortTab('cob-tabla-body',5)">PBC ↕</th>
+          <th onclick="sortTab('cob-tabla-body',6)">PIV ↕</th>
+          <th onclick="sortTab('cob-tabla-body',7)">PIV×0,22 ↕</th>
+          <th onclick="sortTab('cob-tabla-body',8)">% Cobertura ↕</th>
+          <th>Barra</th>
+        </tr></thead>
+        <tbody id="cob-tabla-body"></tbody></table>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+
 <div class="footer">
   División de Atención Primaria · Ministerio de Salud de Chile &nbsp;|&nbsp; Datos DEIS MINSAL · Altas Clínicas SM y Población Bajo Control APS 2014–2025
 </div>
@@ -1902,13 +2079,13 @@ window._parseDatos = function(pkg){
     const ss=pkg.ss,com=pkg.com,tip=pkg.tip,tc2=pkg.tc,dep=pkg.dep;
     window.PCI_YEARS=pkg.pci_years||['2020','2021','2022','2023','2024','2025'];
     window.DATA = pkg.rows.map(r=>{
-      const cat=r[107];
+      const cat=r[121];
       return {
         id:r[0], n:r[1],
         c:com[r[2]], s:ss[r[3]], t:tip[r[4]], tc:tc2[r[5]], dep:dep[r[6]],
-        lat:r[7], lon:r[8], ta:r[9], tp:r[10], ti:r[11], tg:r[12], tv:r[13], tk:r[14], tb:r[15], tr:r[16],
-        a:r.slice(17,29), p:r.slice(29,41), i:r.slice(41,53), g:r.slice(53,65),
-        v:r.slice(65,77), k:r.slice(77,89), b:r.slice(89,101), r:r.slice(101,107),
+        lat:r[7], lon:r[8], ta:r[9], tp:r[10], ti:r[11], tg:r[12], tv:r[13], tk:r[14], tb:r[15], tr:r[16], tw:r[17],
+        a:r.slice(19,31), p:r.slice(31,43), i:r.slice(43,55), g:r.slice(55,67),
+        v:r.slice(67,79), k:r.slice(79,91), b:r.slice(91,103), r:r.slice(103,109), w:r.slice(109,121),
         cat:cat?{N0:cat[0],N1:cat[1],N2:cat[2],N3:cat[3],N4:cat[4],total:cat[0]+cat[1]+cat[2]+cat[3]+cat[4]}:null
       };
     });
@@ -1926,6 +2103,7 @@ function gv(d,y){const i=YEARS.indexOf(String(y));return i>=0?(d.v[i]||0):0;}
 function gk(d,y){const i=YEARS.indexOf(String(y));return i>=0?(d.k[i]||0):0;}
 function gb(d,y){const i=YEARS.indexOf(String(y));return i>=0?(d.b[i]||0):0;}
 function gr(d,y){const i=(window.PCI_YEARS||['2020','2021','2022','2023','2024','2025']).indexOf(String(y));return i>=0?(d.r[i]||0):0;}
+function gw(d,y){const i=YEARS.indexOf(String(y));return i>=0?(d.w[i]||0):0;}
 
 const TIPO_C = {
   'CESFAM':'#005F9E','CECOSF':'#2E8B57','Posta de Salud':'#E67E22',
@@ -2122,6 +2300,16 @@ function actualizarTodo() {
   kpisInd(fd);
   grafInd(fd);
   tablaInd(fd);
+
+  // Tab PIV
+  kpisPIV(fd);
+  grafPIV(fd);
+  tablaPIV(fd);
+
+  // Tab Cobertura SM
+  kpisCob(fd);
+  grafCob(fd);
+  tablaCob(fd);
 
   // Tab PCI
   kpisPCI(fd);
@@ -2513,7 +2701,7 @@ function varChart(vals,color='#005F9E') {
 
 function donaCfg(fd,anio,campo) {
   const byT={};
-  fd.forEach(d=>{const v=campo==='altas'?getAltas(d,anio):campo==='pbc'?getPBC(d,anio):campo==='ing'?getIng(d,anio):campo==='ipg'?getIPG(d,anio):campo==='act'?getAct(d,anio):campo==='ctrl'?getCtrl(d,anio):getAb(d,anio);byT[d.t]=(byT[d.t]||0)+v;});
+  fd.forEach(d=>{const v=campo==='altas'?getAltas(d,anio):campo==='pbc'?getPBC(d,anio):campo==='ing'?getIng(d,anio):campo==='ipg'?getIPG(d,anio):campo==='act'?getAct(d,anio):campo==='ctrl'?getCtrl(d,anio):campo==='piv'?getPIV(d,anio):getAb(d,anio);byT[d.t]=(byT[d.t]||0)+v;});
   const items=Object.entries(byT).sort((a,b)=>b[1]-a[1]);
   return {type:'doughnut',data:{labels:items.map(x=>x[0]),datasets:[{data:items.map(x=>x[1]),
     backgroundColor:items.map(x=>TIPO_C[x[0]]||'#999'),borderColor:'#fff',borderWidth:2}]},
@@ -2549,7 +2737,7 @@ function depStackedCfg(fd,campo) {
 
 function topEstabCfg(topE,anio,campo) {
   const labels=topE.map(d=>{let n=d.n.replace(/Centro de Salud Familiar/i,'CESFAM').replace(/Centro Comunitario de Salud Familiar/i,'CECOSF');return n.length>38?n.slice(0,36)+'…':n;});
-  const vals=topE.map(d=>campo==='altas'?getAltas(d,anio):campo==='pbc'?getPBC(d,anio):campo==='ing'?getIng(d,anio):campo==='ipg'?getIPG(d,anio):campo==='act'?getAct(d,anio):campo==='ctrl'?getCtrl(d,anio):getAb(d,anio));
+  const vals=topE.map(d=>campo==='altas'?getAltas(d,anio):campo==='pbc'?getPBC(d,anio):campo==='ing'?getIng(d,anio):campo==='ipg'?getIPG(d,anio):campo==='act'?getAct(d,anio):campo==='ctrl'?getCtrl(d,anio):campo==='piv'?getPIV(d,anio):getAb(d,anio));
   return {type:'bar',data:{labels,datasets:[{label:'',data:vals,
     backgroundColor:topE.map(d=>(TIPO_C[d.t]||'#005F9E')+'CC'),
     borderColor:topE.map(d=>TIPO_C[d.t]||'#005F9E'),borderWidth:1,borderRadius:4}]},
@@ -2560,9 +2748,9 @@ function topEstabCfg(topE,anio,campo) {
 
 function ssAnioCfg(fd,campo) {
   const allSS=[...new Set(fd.map(d=>d.s))].filter(Boolean);
-  const ssTots={};allSS.forEach(ss=>{ssTots[ss]=fd.filter(d=>d.s===ss).reduce((s,d)=>s+(campo==='altas'?d.ta:campo==='pbc'?d.tp:campo==='ing'?d.ti:campo==='ipg'?d.tg:campo==='act'?d.tv:campo==='ctrl'?d.tk:d.tb),0);});
+  const ssTots={};allSS.forEach(ss=>{ssTots[ss]=fd.filter(d=>d.s===ss).reduce((s,d)=>s+(campo==='altas'?d.ta:campo==='pbc'?d.tp:campo==='ing'?d.ti:campo==='ipg'?d.tg:campo==='act'?d.tv:campo==='ctrl'?d.tk:campo==='piv'?d.tw:d.tb),0);});
   const sortedSS=allSS.sort((a,b)=>ssTots[b]-ssTots[a]);
-  const _getV=(d,i)=>campo==='altas'?(d.a[i]||0):campo==='pbc'?(d.p[i]||0):campo==='ing'?(d.i[i]||0):campo==='ipg'?(d.g[i]||0):campo==='act'?(d.v[i]||0):campo==='ctrl'?(d.k[i]||0):(d.b[i]||0);
+  const _getV=(d,i)=>campo==='altas'?(d.a[i]||0):campo==='pbc'?(d.p[i]||0):campo==='ing'?(d.i[i]||0):campo==='ipg'?(d.g[i]||0):campo==='act'?(d.v[i]||0):campo==='ctrl'?(d.k[i]||0):campo==='piv'?(d.w[i]||0):(d.b[i]||0);
   const ds=YEARS.map((y,i)=>{
     const hue=Math.round(i*(220/11));
     const color=`hsl(${200+hue},70%,45%)`;
@@ -2887,7 +3075,7 @@ function actualizarMapaCat() {
 // ── switchTabByName (for home cards) ──────────────────────────────────────
 function switchTabByName(name) {
   const btns = document.querySelectorAll('.tab-btn');
-  const tabNames = ['home','altas','pbc','ing','cat','ipg','act','ctrl','ab','pci','ind','catind','conc','prop','abpbc','res','pcipbc'];
+  const tabNames = ['home','altas','pbc','ing','cat','ipg','act','ctrl','ab','pci','piv','ind','catind','conc','prop','abpbc','res','pcipbc','cob'];
   const idx = tabNames.indexOf(name);
   if(idx>=0) switchTab(name, btns[idx]);
 }
@@ -2986,6 +3174,207 @@ function actualizarMapaIng(){actualizarMapa('i2','ing');}
 
 
 
+
+
+// ============================================================
+// PIV — POBLACIÓN INSCRITA Y VALIDADA
+// ============================================================
+function getPIV(d,anio){return anio==='total'?d.tw:gw(d,anio);}
+
+function kpisPIV(fd){
+  const anio=F.anio;
+  const total=fd.reduce((s,d)=>s+getPIV(d,anio),0);
+  const set=(id,v)=>{const el=document.getElementById(id);if(el)el.textContent=v;};
+  set('piv-kpi-total',fmt(total));
+  set('piv-kpi-total-sub',anio==='total'?'Período 2014–2025':'Año '+anio);
+  const con=fd.filter(d=>getPIV(d,anio)>0).length;
+  set('piv-kpi-estab',con.toLocaleString('es-CL'));
+  set('piv-kpi-prom',con>0?fmt(Math.round(total/con)):'—');
+  let bY='',bV=0;
+  YEARS.forEach((y,i)=>{const s=fd.reduce((a,d)=>a+(d.w[i]||0),0);if(s>bV){bV=s;bY=y;}});
+  set('piv-kpi-best-yr',bY);
+  set('piv-kpi-best-yr-val',fmt(bV)+' personas inscritas');
+  const bySS={};fd.forEach(d=>{bySS[d.s]=(bySS[d.s]||0)+getPIV(d,anio);});
+  const top=Object.entries(bySS).sort((a,b)=>b[1]-a[1])[0];
+  if(top){set('piv-kpi-top-ss',top[0].split(' ')[0]);set('piv-kpi-top-ss-val',fmt(top[1])+' personas');}
+}
+
+function grafPIV(fd){
+  const anio=F.anio;
+  const color='#2980b9';
+  const tV=YEARS.map((y,i)=>fd.reduce((s,d)=>s+(d.w[i]||0),0));
+  mkChart('piv-c-tend',{type:'line',data:{labels:YEARS,datasets:[{
+    label:'PIV',data:tV,borderColor:color,backgroundColor:'rgba(41,128,185,0.08)',
+    fill:true,tension:0.35,pointRadius:5,pointHoverRadius:8,borderWidth:3,
+    pointBackgroundColor:tV.map((v,i)=>v===Math.max(...tV)?'#2E8B57':color),
+    pointBorderColor:'#fff',pointBorderWidth:2}]},
+  options:{responsive:true,maintainAspectRatio:false,
+    plugins:{legend:{display:false},tooltip:{callbacks:{label:ctx=>' '+fmt(ctx.raw)+' personas'}}},
+    scales:{x:{ticks:{font:{size:11,weight:'bold'}}},y:{ticks:{callback:v=>fmt(v),font:{size:10}}}}}});
+  const ssTot={};fd.forEach(d=>{ssTot[d.s]=(ssTot[d.s]||0)+getPIV(d,anio);});
+  const ssSort=Object.entries(ssTot).sort((a,b)=>b[1]-a[1]);
+  mkChart('piv-c-ss',hbarCfg(ssSort.map(x=>x[0]),ssSort.map(x=>x[1]),PAL,color));
+  mkChart('piv-c-var',varChart(tV,color));
+  mkChart('piv-c-tipo-dona',donaCfg(fd,anio,'piv'));
+  mkChart('piv-c-tipo-linea',tipoLineaCfg(fd,'piv'));
+  mkChart('piv-c-dep',depStackedCfg(fd,'piv'));
+  const comTot={};fd.forEach(d=>{comTot[d.c]=(comTot[d.c]||0)+getPIV(d,anio);});
+  const comSort=Object.entries(comTot).sort((a,b)=>b[1]-a[1]).slice(0,20);
+  mkChart('piv-c-comunas',hbarCfg(comSort.map(x=>x[0]),comSort.map(x=>x[1]),PAL,color));
+  const topE=fd.slice().sort((a,b)=>getPIV(b,anio)-getPIV(a,anio)).slice(0,10);
+  mkChart('piv-c-top-estab',topEstabCfg(topE,anio,'piv'));
+  mkChart('piv-c-ss-anio',ssAnioCfg(fd,'piv'));
+}
+
+function tablaPIV(fd){
+  const anio=F.anio;
+  const sorted=fd.slice().sort((a,b)=>getPIV(b,anio)-getPIV(a,anio)).slice(0,100);
+  const maxV=sorted.length>0?getPIV(sorted[0],anio):1;
+  const el=document.getElementById('piv-tabla-body');if(!el)return;
+  el.innerHTML=sorted.map((d,i)=>`<tr>
+    <td class="rank">${i+1}</td><td>${d.n}</td><td>${d.c}</td><td>${d.s}</td>
+    <td><span style="background:${TIPO_C[d.t]||'#999'}22;color:${TIPO_C[d.t]||'#999'};font-weight:700;padding:2px 6px;border-radius:8px;font-size:10px">${d.t}</span></td>
+    <td>${d.dep.trim()}</td><td class="num">${fmt(getPIV(d,anio))}</td>
+    <td><div class="prog"><div class="prog-fill" style="width:${(getPIV(d,anio)/maxV*100).toFixed(1)}%;background:#2980b9"></div></div></td>
+  </tr>`).join('');
+  const badge=document.getElementById('piv-badge-tabla');if(badge)badge.textContent='Top '+sorted.length;
+}
+
+// ============================================================
+// COBERTURA SM APS — PBC / (PIV × 0,22) × 100
+// ============================================================
+const COB_PREV = 0.22; // Prevalencia SM Chile (Vicente et al., 2002)
+
+function getCob(pbc, piv){
+  if(!piv || piv===0 || !pbc) return null; // sin datos = null
+  return (pbc / (piv * COB_PREV)) * 100;
+}
+
+function kpisCob(fd){
+  const anio=F.anio;
+  const yi=anio==='total'?-1:YEARS.indexOf(anio);
+  const totPBC=yi===-1?fd.reduce((s,d)=>s+d.tp,0):fd.reduce((s,d)=>s+gp(d,anio),0);
+  const totPIV=yi===-1?fd.reduce((s,d)=>s+d.tw,0):fd.reduce((s,d)=>s+gw(d,anio),0);
+  const cobNac=getCob(totPBC,totPIV);
+  const set=(id,v)=>{const el=document.getElementById(id);if(el)el.textContent=v;};
+  set('cob-kpi-pct',cobNac!==null?cobNac.toFixed(1)+'%':'Sin datos');
+  set('cob-kpi-pct-sub',cobNac!==null?fmt(totPBC)+' PBC / '+fmt(Math.round(totPIV*COB_PREV))+' esperados':'PBC o PIV = 0');
+  // Por año
+  const cobByYr=YEARS.map((y,i)=>{const p=fd.reduce((s,d)=>s+(d.p[i]||0),0);const w=fd.reduce((s,d)=>s+(d.w[i]||0),0);return getCob(p,w);});
+  const cobValidos=cobByYr.filter(v=>v!==null&&v>0);
+  if(cobValidos.length>0){
+    const maxC=Math.max(...cobValidos);
+    set('cob-kpi-best-yr',YEARS[cobByYr.indexOf(maxC)]||'—');
+    set('cob-kpi-best-yr-val',maxC.toFixed(1)+'%');
+  }
+  const conDatos=fd.filter(d=>{const p=yi===-1?d.tp:gp(d,anio);const w=yi===-1?d.tw:gw(d,anio);return p>0&&w>0;}).length;
+  const sinDatos=fd.length-conDatos;
+  set('cob-kpi-estab',conDatos.toLocaleString('es-CL'));
+  set('cob-kpi-estab-sub',`Con PBC y PIV > 0 · ${sinDatos} sin datos suficientes`);
+  // Por SS
+  const bySS={};
+  fd.forEach(d=>{
+    if(!bySS[d.s])bySS[d.s]={p:0,w:0};
+    if(yi===-1){bySS[d.s].p+=d.tp;bySS[d.s].w+=d.tw;}
+    else{bySS[d.s].p+=gp(d,anio);bySS[d.s].w+=gw(d,anio);}
+  });
+  const ssCob=Object.entries(bySS).map(([ss,v])=>({ss,c:getCob(v.p,v.w)})).filter(x=>x.c!==null&&x.c>0).sort((a,b)=>b.c-a.c);
+  if(ssCob.length>0){
+    set('cob-kpi-top-ss',ssCob[0].ss.split(' ')[0]);set('cob-kpi-top-ss-val',ssCob[0].c.toFixed(1)+'%');
+    const bot=ssCob[ssCob.length-1];
+    set('cob-kpi-bot-ss',bot.ss.split(' ')[0]);set('cob-kpi-bot-ss-val',bot.c.toFixed(1)+'%');
+  }
+}
+
+function grafCob(fd){
+  const anio=F.anio;
+  const yi=anio==='total'?-1:YEARS.indexOf(anio);
+  // Tendencia
+  const cobV=YEARS.map((y,i)=>{const p=fd.reduce((s,d)=>s+(d.p[i]||0),0);const w=fd.reduce((s,d)=>s+(d.w[i]||0),0);const c=getCob(p,w);return c!==null?parseFloat(c.toFixed(2)):null;});
+  mkChart('cob-c-tend',{type:'line',data:{labels:YEARS,datasets:[{
+    label:'% Cobertura SM',data:cobV,borderColor:'#27ae60',backgroundColor:'rgba(39,174,96,0.08)',
+    fill:true,tension:0.35,pointRadius:5,pointHoverRadius:8,borderWidth:3,
+    pointBackgroundColor:cobV.map((v,i)=>v===null?'transparent':i===6?'#D0222A':v===Math.max(...cobV.filter(x=>x!==null))?'#2E8B57':'#27ae60'),
+    pointBorderColor:'#fff',pointBorderWidth:2,spanGaps:true}]},
+  options:{responsive:true,maintainAspectRatio:false,
+    plugins:{legend:{display:false},tooltip:{callbacks:{label:ctx=>ctx.raw!==null?` ${ctx.raw.toFixed(1)}% cobertura`:'Sin datos'}}},
+    scales:{x:{ticks:{font:{size:11,weight:'bold'}}},y:{ticks:{callback:v=>v!==null?v.toFixed(1)+'%':'',font:{size:10}},beginAtZero:true}}}});
+
+  // SS cobertura
+  const bySS={};
+  fd.forEach(d=>{if(!bySS[d.s])bySS[d.s]={p:0,w:0};if(yi===-1){bySS[d.s].p+=d.tp;bySS[d.s].w+=d.tw;}else{bySS[d.s].p+=gp(d,anio);bySS[d.s].w+=gw(d,anio);}});
+  const ssData=Object.entries(bySS).map(([ss,v])=>({ss,c:getCob(v.p,v.w),p:v.p,w:v.w})).filter(x=>x.c!==null&&x.c>0).sort((a,b)=>b.c-a.c);
+  const cScaleG=(c,arr)=>{const vals=arr.map(x=>x.c),mn=Math.min(...vals),mx=Math.max(...vals);const n=(c-mn)/(mx-mn||1);return `rgba(${Math.round(208-(208-46)*n)},${Math.round(34+(139-34)*n)},${Math.round(42+(87-42)*n)},0.8)`;};
+  mkChart('cob-c-ss',{type:'bar',data:{labels:ssData.map(x=>x.ss),datasets:[{label:'% Cobertura',data:ssData.map(x=>parseFloat(x.c.toFixed(2))),backgroundColor:ssData.map(x=>cScaleG(x.c,ssData)),borderRadius:4}]},
+  options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,
+    plugins:{legend:{display:false},tooltip:{callbacks:{label:ctx=>{const d=ssData[ctx.dataIndex];return [` ${ctx.raw.toFixed(1)}% cobertura`,` ${fmt(d.p)} PBC / ${fmt(Math.round(d.w*COB_PREV))} esperados`];}}}},
+    scales:{x:{ticks:{callback:v=>v.toFixed(0)+'%',font:{size:9}}},y:{ticks:{font:{size:9}}}}}});
+
+  // Dual: PBC vs PIV×0.22
+  const pbcVals=YEARS.map((y,i)=>fd.reduce((s,d)=>s+(d.p[i]||0),0));
+  const espVals=YEARS.map((y,i)=>Math.round(fd.reduce((s,d)=>s+(d.w[i]||0),0)*COB_PREV));
+  mkChart('cob-c-dual',{type:'bar',data:{labels:YEARS,datasets:[
+    {label:'PBC (bajo control)',data:pbcVals,backgroundColor:'rgba(46,139,87,0.7)',borderRadius:3,order:2},
+    {label:'PIV×0,22 (necesidad estimada)',data:espVals,backgroundColor:'rgba(41,128,185,0.3)',borderRadius:3,order:3},
+    {label:'% Cobertura',data:cobV,type:'line',borderColor:'#27ae60',backgroundColor:'transparent',pointRadius:4,borderWidth:2.5,yAxisID:'y2',order:1,spanGaps:true}
+  ]},options:{responsive:true,maintainAspectRatio:false,
+    plugins:{legend:{position:'bottom',labels:{font:{size:10},boxWidth:12}},tooltip:{mode:'index',intersect:false}},
+    scales:{x:{ticks:{font:{size:10}}},y:{ticks:{callback:v=>fmt(v),font:{size:9}},position:'left'},y2:{ticks:{callback:v=>v!==null?v.toFixed(1)+'%':'',font:{size:9}},position:'right',grid:{display:false}}}}});
+
+  // Tipo
+  const byTipo={};fd.forEach(d=>{if(!byTipo[d.t])byTipo[d.t]={p:0,w:0};if(yi===-1){byTipo[d.t].p+=d.tp;byTipo[d.t].w+=d.tw;}else{byTipo[d.t].p+=gp(d,anio);byTipo[d.t].w+=gw(d,anio);}});
+  const tipoData=Object.entries(byTipo).map(([t,v])=>({t,c:getCob(v.p,v.w)})).filter(x=>x.c!==null&&x.c>0).sort((a,b)=>b.c-a.c);
+  mkChart('cob-c-tipo',{type:'bar',data:{labels:tipoData.map(x=>x.t),datasets:[{label:'% Cobertura',data:tipoData.map(x=>parseFloat(x.c.toFixed(2))),backgroundColor:tipoData.map(x=>(TIPO_C[x.t]||'#999')+'CC'),borderRadius:4}]},
+  options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:ctx=>` ${ctx.raw.toFixed(1)}%`}}},scales:{x:{ticks:{font:{size:10}}},y:{ticks:{callback:v=>v.toFixed(1)+'%',font:{size:10}},beginAtZero:true}}}});
+
+  // Dep
+  const byDep={};fd.forEach(d=>{const dep=d.dep.trim();if(!byDep[dep])byDep[dep]={p:0,w:0};if(yi===-1){byDep[dep].p+=d.tp;byDep[dep].w+=d.tw;}else{byDep[dep].p+=gp(d,anio);byDep[dep].w+=gw(d,anio);}});
+  const depData=Object.entries(byDep).map(([dep,v])=>({dep,c:getCob(v.p,v.w)})).filter(x=>x.c!==null&&x.c>0).sort((a,b)=>b.c-a.c);
+  mkChart('cob-c-dep',{type:'bar',data:{labels:depData.map(x=>x.dep),datasets:[{label:'% Cobertura',data:depData.map(x=>parseFloat(x.c.toFixed(2))),backgroundColor:depData.map(x=>(DEP_C[x.dep]||'#999')+'CC'),borderRadius:4}]},
+  options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:ctx=>` ${ctx.raw.toFixed(1)}%`}}},scales:{x:{ticks:{font:{size:10}}},y:{ticks:{callback:v=>v.toFixed(1)+'%',font:{size:10}},beginAtZero:true}}}});
+
+  // SS líneas
+  const allSS=[...new Set(fd.map(d=>d.s))].filter(Boolean);
+  const ssTots={};allSS.forEach(ss=>{ssTots[ss]=fd.filter(d=>d.s===ss).reduce((s,d)=>s+d.tp+d.tw,0);});
+  const top15=allSS.sort((a,b)=>ssTots[b]-ssTots[a]).slice(0,15);
+  mkChart('cob-c-ss-linea',{type:'line',data:{labels:YEARS,datasets:top15.map((ss,i)=>({
+    label:ss,data:YEARS.map((y,j)=>{const p=fd.filter(d=>d.s===ss).reduce((s,d)=>s+(d.p[j]||0),0);const w=fd.filter(d=>d.s===ss).reduce((s,d)=>s+(d.w[j]||0),0);const c=getCob(p,w);return c!==null?parseFloat(c.toFixed(2)):null;}),
+    borderColor:PAL[i%PAL.length],backgroundColor:'transparent',tension:0.3,pointRadius:5,pointHoverRadius:8,borderWidth:2,spanGaps:true}))},
+  options:{responsive:true,maintainAspectRatio:false,
+    plugins:{legend:{position:'bottom',labels:{font:{size:9},boxWidth:10,padding:5}},
+      tooltip:{mode:'nearest',intersect:true,callbacks:{label:ctx=>ctx.raw!==null?` ${ctx.dataset.label}: ${ctx.raw.toFixed(1)}%`:null,title:items=>`${items[0].dataset.label} · Año ${items[0].label}`}}},
+    scales:{x:{ticks:{font:{size:10}}},y:{ticks:{callback:v=>v!==null?v.toFixed(1)+'%':'',font:{size:10}},beginAtZero:true}}}});
+}
+
+function tablaCob(fd){
+  const anio=F.anio;
+  const yi=anio==='total'?-1:YEARS.indexOf(anio);
+  // Solo establecimientos con PBC>0 Y PIV>0
+  const conDatos=fd.filter(d=>{
+    const p=yi===-1?d.tp:gp(d,anio);
+    const w=yi===-1?d.tw:gw(d,anio);
+    return p>0&&w>0;
+  });
+  const sinDatos=fd.length-conDatos.length;
+  const sorted=conDatos.map(d=>{
+    const p=yi===-1?d.tp:gp(d,anio);
+    const w=yi===-1?d.tw:gw(d,anio);
+    return {...d,_p:p,_w:w,_esp:Math.round(w*COB_PREV),_c:getCob(p,w)};
+  }).sort((a,b)=>b._c-a._c).slice(0,100);
+  const maxC=sorted.length>0?sorted[0]._c:1;
+  const set=(id,v)=>{const el=document.getElementById(id);if(el)el.textContent=v;};
+  set('cob-badge-tabla',`${sorted.length} establecimientos calculables · ${sinDatos} excluidos por PBC o PIV = 0`);
+  const el=document.getElementById('cob-tabla-body');if(!el)return;
+  el.innerHTML=sorted.map((d,i)=>`<tr>
+    <td class="rank">${i+1}</td><td>${d.n}</td><td>${d.c}</td><td>${d.s}</td>
+    <td><span style="background:${TIPO_C[d.t]||'#999'}22;color:${TIPO_C[d.t]||'#999'};font-weight:700;padding:2px 6px;border-radius:8px;font-size:10px">${d.t}</span></td>
+    <td class="num">${fmt(d._p)}</td>
+    <td class="num">${fmt(d._w)}</td>
+    <td class="num">${fmt(d._esp)}</td>
+    <td class="num" style="font-weight:800;color:${d._c>=50?'#2E8B57':d._c>=25?'#E67E22':'#D0222A'}">${d._c.toFixed(1)}%</td>
+    <td><div class="prog"><div class="prog-fill" style="width:${Math.min(d._c/maxC*100,100).toFixed(1)}%;background:${d._c>=50?'#2E8B57':d._c>=25?'#E67E22':'#D0222A'}"></div></div></td>
+  </tr>`).join('');
+}
 
 // ============================================================
 // PCI — PLAN DE CUIDADO INTEGRAL
@@ -4338,6 +4727,12 @@ function renderFicha(){
   set('ficha-lbl-pci','PCI 2020–2025');
   set('ficha-kpi-pci',fmt(pciVal));
   set('ficha-kpi-pcipbc',pcipbcVal.toFixed(1)+'%');
+  // PIV y Cobertura SM
+  const pivVal=fAnio==='total'?fd.reduce((s,d)=>s+d.tw,0):fd.reduce((s,d)=>s+gw(d,fAnio),0);
+  const cobCalc=getCob(pbcVal,pivVal);
+  set('ficha-lbl-piv','PIV '+anioLabel);
+  set('ficha-kpi-piv',fmt(pivVal));
+  set('ficha-kpi-cob',cobCalc!==null?cobCalc.toFixed(1)+'%':'Sin datos');
   const aV=YEARS.map(y=>fd.reduce((s,d)=>s+ga(d,y),0));
   const pV=YEARS.map(y=>fd.reduce((s,d)=>s+gp(d,y),0));
   const pctV=YEARS.map((y,i)=>pV[i]>0?parseFloat((aV[i]/pV[i]*100).toFixed(2)):0);
@@ -4457,6 +4852,26 @@ function renderFicha(){
     type:'line',data:{labels:PY,datasets:[{data:pcipbcMV,borderColor:'#6c3483',
       backgroundColor:'rgba(108,52,131,.08)',fill:true,tension:0.35,pointRadius:3,borderWidth:2,
       pointBackgroundColor:'#6c3483'}]},
+    options:mOpts(true)});
+
+  // PIV mini chart
+  const pivMV=YEARS.map(y=>fd.reduce((s,d)=>s+gw(d,y),0));
+  if(fichaCharts.piv)fichaCharts.piv.destroy();
+  const cPiv=document.getElementById('ficha-c-piv');
+  if(cPiv) fichaCharts.piv=new Chart(cPiv.getContext('2d'),{
+    type:'bar',data:{labels:YEARS,datasets:[{data:pivMV,
+      backgroundColor:'rgba(41,128,185,.7)',borderRadius:2}]},
+    options:mOpts(false)});
+
+  // Cobertura SM mini chart
+  const cobMV=YEARS.map((y,i)=>{const p=aV[i]||0,w=pivMV[i];const c=getCob(p>0?fd.reduce((s,d)=>s+gp(d,y),0):0,w);return c!==null?parseFloat(c.toFixed(2)):null;});
+  const cobMV2=YEARS.map((y,i)=>{const p=fd.reduce((s,d)=>s+gp(d,y),0),w=pivMV[i];return getCob(p,w)!==null?parseFloat(getCob(p,w).toFixed(2)):null;});
+  if(fichaCharts.cob)fichaCharts.cob.destroy();
+  const cCob=document.getElementById('ficha-c-cob');
+  if(cCob) fichaCharts.cob=new Chart(cCob.getContext('2d'),{
+    type:'line',data:{labels:YEARS,datasets:[{data:cobMV2,borderColor:'#27ae60',
+      backgroundColor:'rgba(39,174,96,.08)',fill:true,tension:0.35,pointRadius:3,borderWidth:2,
+      pointBackgroundColor:'#27ae60',spanGaps:true}]},
     options:mOpts(true)});
 }
 function verFichaCompleta(){
