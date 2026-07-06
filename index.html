@@ -2108,14 +2108,49 @@ function downloadNearestChart(btn){
   for(const c of canvases){if(c.width>0&&c.height>0){canvas=c;break;}}
   if(!canvas)canvas=canvases[0];
   const titleEl=card.querySelector('.chart-title');
-  const title=titleEl?titleEl.textContent.replace(/[^\w\sáéíóúñÁÉÍÓÚÑ]/g,'').trim().slice(0,50):'grafico';
+  const subEl=card.querySelector('.chart-sub');
+  const titleText=titleEl?titleEl.textContent.trim():'Dashboard Salud Mental APS';
+  const subText=subEl?subEl.textContent.trim():'';
+  const filename=titleText.replace(/[^\w\sáéíóúñÁÉÍÓÚÑ]/g,'').trim().slice(0,60).replace(/\s+/g,'_');
+
+  // Add title bar above chart
+  const PAD=14, TITLE_H=52;
   const tmp=document.createElement('canvas');
-  tmp.width=canvas.width;tmp.height=canvas.height;
+  tmp.width=canvas.width;
+  tmp.height=canvas.height+TITLE_H;
   const ctx=tmp.getContext('2d');
-  ctx.fillStyle='#FFFFFF';ctx.fillRect(0,0,tmp.width,tmp.height);
-  ctx.drawImage(canvas,0,0);
+
+  // White background
+  ctx.fillStyle='#FFFFFF';
+  ctx.fillRect(0,0,tmp.width,tmp.height);
+
+  // Blue title bar
+  ctx.fillStyle='#25306B';
+  ctx.fillRect(0,0,tmp.width,TITLE_H);
+
+  // Title text
+  ctx.fillStyle='#FFFFFF';
+  ctx.font='bold 15px Segoe UI, Calibri, sans-serif';
+  ctx.fillText(titleText,PAD,22);
+
+  // Subtitle text
+  if(subText){
+    ctx.fillStyle='rgba(255,255,255,0.72)';
+    ctx.font='11px Segoe UI, Calibri, sans-serif';
+    ctx.fillText(subText.slice(0,90),PAD,40);
+  }
+
+  // Draw chart below title bar
+  ctx.drawImage(canvas,0,TITLE_H);
+
+  // DIVAP watermark bottom right
+  ctx.fillStyle='rgba(0,0,0,0.25)';
+  ctx.font='10px Segoe UI, Calibri, sans-serif';
+  ctx.textAlign='right';
+  ctx.fillText('División de Atención Primaria (DIVAP) · MINSAL Chile',tmp.width-PAD,tmp.height-6);
+
   const a=document.createElement('a');
-  a.download=title.replace(/\s+/g,'_')+'.png';
+  a.download=filename+'.png';
   a.href=tmp.toDataURL('image/png');
   a.click();
 }
