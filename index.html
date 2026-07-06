@@ -2111,10 +2111,21 @@ function downloadNearestChart(btn){
   const subEl=card.querySelector('.chart-sub');
   const titleText=titleEl?titleEl.textContent.trim():'Dashboard Salud Mental APS';
   const subText=subEl?subEl.textContent.trim():'';
-  const filename=titleText.replace(/[^\w\sáéíóúñÁÉÍÓÚÑ]/g,'').trim().slice(0,60).replace(/\s+/g,'_');
+  // Build context from active filters
+  const parts=[];
+  if(typeof F!=='undefined'){
+    if(F.estab&&F.estab!=='all') parts.push(F.estab);
+    else if(F.com&&F.com!=='all') parts.push('Comuna: '+F.com);
+    else if(F.ss&&F.ss!=='all') parts.push('SS: '+F.ss);
+    else parts.push('Nacional');
+    if(F.anio&&F.anio!=='total') parts.push('Año '+F.anio);
+    else parts.push('2014–2025');
+  }
+  const contextStr = parts.join(' · ');
+  const filename=titleText.replace(/[^\w\sáéíóúñÁÉÍÓÚÑ]/g,'').trim().slice(0,50).replace(/\s+/g,'_')+'_'+contextStr.replace(/[^\w\sáéíóúñÁÉÍÓÚÑ]/g,'').replace(/\s+/g,'_').slice(0,30);
 
   // Add title bar above chart
-  const PAD=14, TITLE_H=52;
+  const PAD=14, TITLE_H=62;
   const tmp=document.createElement('canvas');
   tmp.width=canvas.width;
   tmp.height=canvas.height+TITLE_H;
@@ -2131,13 +2142,18 @@ function downloadNearestChart(btn){
   // Title text
   ctx.fillStyle='#FFFFFF';
   ctx.font='bold 15px Segoe UI, Calibri, sans-serif';
-  ctx.fillText(titleText,PAD,22);
+  ctx.fillText(titleText,PAD,20);
 
-  // Subtitle text
+  // Context (filters)
+  ctx.fillStyle='rgba(255,255,255,0.85)';
+  ctx.font='bold 11px Segoe UI, Calibri, sans-serif';
+  ctx.fillText(contextStr,PAD,36);
+
+  // Subtitle
   if(subText){
-    ctx.fillStyle='rgba(255,255,255,0.72)';
-    ctx.font='11px Segoe UI, Calibri, sans-serif';
-    ctx.fillText(subText.slice(0,90),PAD,40);
+    ctx.fillStyle='rgba(255,255,255,0.55)';
+    ctx.font='10px Segoe UI, Calibri, sans-serif';
+    ctx.fillText(subText.slice(0,100),PAD,50);
   }
 
   // Draw chart below title bar
