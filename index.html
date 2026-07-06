@@ -2329,7 +2329,7 @@ function actualizarTodo() {
   const ctxParts = [];
   if(F.estab && F.estab!=='all') ctxParts.push(F.estab);
   else if(F.comuna && F.comuna!=='all') ctxParts.push('Comuna: '+F.comuna);
-  else if(F.ss && F.ss!=='all') ctxParts.push(F.ss);
+  else if(F.ss && F.ss!=='all') ctxParts.push('SS '+F.ss);
   else ctxParts.push('Nacional');
   if(F.anio && F.anio!=='total') ctxParts.push('Año '+F.anio);
   else ctxParts.push('2014–2025');
