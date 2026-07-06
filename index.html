@@ -2328,14 +2328,23 @@ function actualizarTodo() {
   // Update chart subtitle context for PNG downloads
   const ctxParts = [];
   if(F.estab && F.estab!=='all'){
-    // Look up establishment name from DATA
     const estabData = window.DATA ? window.DATA.find(d=>String(d.id)===String(F.estab)) : null;
-    ctxParts.push(estabData ? estabData.n : F.estab);
-  } else if(F.comuna && F.comuna!=='all') ctxParts.push('Comuna: '+F.comuna);
-  else if(F.ss && F.ss!=='all') ctxParts.push('SS '+F.ss);
+    if(estabData){
+      ctxParts.push(estabData.n);
+      // Second line: comuna · SS
+      const anioStr = (F.anio && F.anio!=='total') ? F.anio : '2014–2025';
+      const lugar = ['Comuna: '+estabData.c, 'SS '+estabData.s, anioStr].filter(Boolean).join(' - ');
+      if(lugar) ctxParts.push(lugar);
+    } else ctxParts.push(F.estab);
+  } else if(F.comuna && F.comuna!=='all'){
+    ctxParts.push('Comuna: '+F.comuna);
+    if(F.ss && F.ss!=='all') ctxParts.push('SS '+F.ss);
+  } else if(F.ss && F.ss!=='all') ctxParts.push('SS '+F.ss);
   else ctxParts.push('Nacional');
-  if(F.anio && F.anio!=='total') ctxParts.push('Año '+F.anio);
-  else ctxParts.push('2014–2025');
+  if(!F.estab || F.estab==='all'){
+    if(F.anio && F.anio!=='total') ctxParts.push('Año '+F.anio);
+    else ctxParts.push('2014–2025');
+  }
   window._chartContext = ctxParts.join(' · ');
   // Update all dynamic chart subtitles
   document.querySelectorAll('.chart-sub-filtro').forEach(el=>{
