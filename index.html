@@ -82,6 +82,8 @@ select.filtro:focus{border-color:var(--az2);background:#fff}
 .chart-title{font-size:12px;font-weight:700;color:var(--texto);line-height:1.3}
 .chart-sub{font-size:10px;color:var(--texto-s);margin-top:2px}
 .chart-badge{background:var(--celeste);color:var(--az2);font-size:10px;font-weight:700;padding:3px 8px;border-radius:10px;white-space:nowrap;flex-shrink:0}
+.btn-png{background:white;border:1.5px solid #D0DCE8;border-radius:8px;padding:3px 8px;font-size:10px;font-weight:600;color:#4A6080;cursor:pointer;display:flex;align-items:center;gap:3px;transition:all .15s;white-space:nowrap;flex-shrink:0}
+.btn-png:hover{background:#EBF5FF;border-color:#005F9E;color:#005F9E}
 .cw{flex:1;position:relative;min-height:200px}
 .cw.t{min-height:290px}.cw.xt{min-height:380px}.cw.xxl{min-height:460px}.cw.xxxl{min-height:520px}
 
@@ -487,7 +489,7 @@ tbody td.rank{font-weight:800;color:var(--az2);text-align:center}
     <div class="chart-card">
       <div class="chart-header">
         <div><div class="chart-title">Evolución Total de Altas Clínicas SM por Año (2014–2025)</div><div class="chart-sub">Total nacional según filtros activos · Impacto COVID-19 visible en 2020</div></div>
-        <div class="chart-badge" id="a-badge-tend">Nacional</div>
+        <div style="display:flex;gap:6px;align-items:center;flex-shrink:0"><div class="chart-badge" id="a-badge-tend">Nacional</div><button class="btn-png" onclick="downloadNearestChart(this)" title="Descargar PNG">📥 PNG</button></div>
       </div>
       <div class="cw t"><canvas id="a-c-tend"></canvas></div>
     </div>
@@ -495,11 +497,11 @@ tbody td.rank{font-weight:800;color:var(--az2);text-align:center}
 
   <div class="charts-grid g2">
     <div class="chart-card">
-      <div class="chart-header"><div><div class="chart-title">Altas Clínicas SM por Servicio de Salud</div><div class="chart-sub">Comparación entre los 29 SS</div></div><div class="chart-badge" id="a-badge-ss">SS</div></div>
+      <div class="chart-header"><div><div class="chart-title">Altas Clínicas SM por Servicio de Salud</div><div class="chart-sub">Comparación entre los 29 SS</div></div><div style="display:flex;gap:6px;align-items:center;flex-shrink:0"><div class="chart-badge" id="a-badge-ss">SS</div><button class="btn-png" onclick="downloadNearestChart(this)" title="Descargar PNG">📥 PNG</button></div></div>
       <div class="cw xt"><canvas id="a-c-ss"></canvas></div>
     </div>
     <div class="chart-card">
-      <div class="chart-header"><div><div class="chart-title">Variación % Año a Año</div><div class="chart-sub">Cambio porcentual respecto al año anterior</div></div><div class="chart-badge">Δ% anual</div></div>
+      <div class="chart-header"><div><div class="chart-title">Variación % Año a Año</div><div class="chart-sub">Cambio porcentual respecto al año anterior</div></div><div style="display:flex;align-items:center;gap:6px"><div class="chart-badge">Δ% anual</div><button class="btn-png" onclick="downloadNearestChart(this)" title="Descargar como PNG">⬇️ PNG</button></div></div>
       <div class="cw t"><canvas id="a-c-var"></canvas></div>
     </div>
   </div>
@@ -507,15 +509,15 @@ tbody td.rank{font-weight:800;color:var(--az2);text-align:center}
   <div class="sec-title" style="margin-top:22px">🏥 Análisis por Tipo y Dependencia</div><div class="sec-sep"></div>
   <div class="charts-grid g3">
     <div class="chart-card">
-      <div class="chart-header"><div><div class="chart-title">Distribución por Tipo de Establecimiento</div><div class="chart-sub">Participación en el total de altas</div></div><div class="chart-badge">Tipo</div></div>
+      <div class="chart-header"><div><div class="chart-title">Distribución por Tipo de Establecimiento</div><div class="chart-sub">Participación en el total de altas</div></div><div style="display:flex;align-items:center;gap:6px"><div class="chart-badge">Tipo</div><button class="btn-png" onclick="downloadNearestChart(this)" title="Descargar como PNG">⬇️ PNG</button></div></div>
       <div class="cw t"><canvas id="a-c-tipo-dona"></canvas></div>
     </div>
     <div class="chart-card">
-      <div class="chart-header"><div><div class="chart-title">Evolución por Tipo de Establecimiento</div><div class="chart-sub">CESFAM, CECOSF, Posta, Hospital Comunitario</div></div><div class="chart-badge">Tendencia</div></div>
+      <div class="chart-header"><div><div class="chart-title">Evolución por Tipo de Establecimiento</div><div class="chart-sub">CESFAM, CECOSF, Posta, Hospital Comunitario</div></div><div style="display:flex;align-items:center;gap:6px"><div class="chart-badge">Tendencia</div><button class="btn-png" onclick="downloadNearestChart(this)" title="Descargar como PNG">⬇️ PNG</button></div></div>
       <div class="cw t"><canvas id="a-c-tipo-linea"></canvas></div>
     </div>
     <div class="chart-card">
-      <div class="chart-header"><div><div class="chart-title">Altas por Dependencia Administrativa</div><div class="chart-sub">Municipal vs. Servicio de Salud vs. Otra</div></div><div class="chart-badge">Dependencia</div></div>
+      <div class="chart-header"><div><div class="chart-title">Altas por Dependencia Administrativa</div><div class="chart-sub">Municipal vs. Servicio de Salud vs. Otra</div></div><div style="display:flex;align-items:center;gap:6px"><div class="chart-badge">Dependencia</div><button class="btn-png" onclick="downloadNearestChart(this)" title="Descargar como PNG">⬇️ PNG</button></div></div>
       <div class="cw t"><canvas id="a-c-dep"></canvas></div>
     </div>
   </div>
@@ -523,11 +525,11 @@ tbody td.rank{font-weight:800;color:var(--az2);text-align:center}
   <div class="sec-title" style="margin-top:22px">🌆 Análisis Comunal y por Establecimiento</div><div class="sec-sep"></div>
   <div class="charts-grid g2c">
     <div class="chart-card">
-      <div class="chart-header"><div><div class="chart-title">Top 20 Comunas con Mayor Número de Altas Clínicas SM</div><div class="chart-sub">Ordenadas por total acumulado</div></div><div class="chart-badge">Top 20</div></div>
+      <div class="chart-header"><div><div class="chart-title">Top 20 Comunas con Mayor Número de Altas Clínicas SM</div><div class="chart-sub">Ordenadas por total acumulado</div></div><div style="display:flex;align-items:center;gap:6px"><div class="chart-badge">Top 20</div><button class="btn-png" onclick="downloadNearestChart(this)" title="Descargar como PNG">⬇️ PNG</button></div></div>
       <div class="cw xxxl"><canvas id="a-c-comunas"></canvas></div>
     </div>
     <div class="chart-card">
-      <div class="chart-header"><div><div class="chart-title">Top 10 Establecimientos</div><div class="chart-sub">Centros con mayor número de altas</div></div><div class="chart-badge">Ranking</div></div>
+      <div class="chart-header"><div><div class="chart-title">Top 10 Establecimientos</div><div class="chart-sub">Centros con mayor número de altas</div></div><div style="display:flex;align-items:center;gap:6px"><div class="chart-badge">Ranking</div><button class="btn-png" onclick="downloadNearestChart(this)" title="Descargar como PNG">⬇️ PNG</button></div></div>
       <div class="cw xxxl"><canvas id="a-c-top-estab"></canvas></div>
     </div>
   </div>
@@ -535,7 +537,7 @@ tbody td.rank{font-weight:800;color:var(--az2);text-align:center}
   <div class="sec-title" style="margin-top:22px">🔥 Distribución Temporal por Servicio de Salud</div><div class="sec-sep"></div>
   <div class="charts-grid g1">
     <div class="chart-card">
-      <div class="chart-header"><div><div class="chart-title">Altas Clínicas SM por Servicio de Salud y Año — Barras Apiladas</div><div class="chart-sub">Comparación multianual de todos los SS</div></div><div class="chart-badge">2014–2025</div></div>
+      <div class="chart-header"><div><div class="chart-title">Altas Clínicas SM por Servicio de Salud y Año — Barras Apiladas</div><div class="chart-sub">Comparación multianual de todos los SS</div></div><div style="display:flex;align-items:center;gap:6px"><div class="chart-badge">2014–2025</div><button class="btn-png" onclick="downloadNearestChart(this)" title="Descargar como PNG">⬇️ PNG</button></div></div>
       <div class="cw xxxl"><canvas id="a-c-ss-anio"></canvas></div>
     </div>
   </div>
@@ -543,7 +545,7 @@ tbody td.rank{font-weight:800;color:var(--az2);text-align:center}
   <div class="sec-title" style="margin-top:22px">🗺️ Georeferenciación de Establecimientos</div><div class="sec-sep"></div>
   <div class="charts-grid g1">
     <div class="chart-card">
-      <div class="chart-header"><div><div class="chart-title">Mapa de Altas Clínicas SM por Centro de Salud APS</div><div class="chart-sub">Tamaño proporcional al número de altas · Clic en cada punto para ver detalle</div></div><div class="chart-badge">Georreferenciado</div></div>
+      <div class="chart-header"><div><div class="chart-title">Mapa de Altas Clínicas SM por Centro de Salud APS</div><div class="chart-sub">Tamaño proporcional al número de altas · Clic en cada punto para ver detalle</div></div><div style="display:flex;align-items:center;gap:6px"><div class="chart-badge">Georreferenciado</div><button class="btn-png" onclick="downloadNearestChart(this)" title="Descargar como PNG">⬇️ PNG</button></div></div>
       <div class="map-ctrl">
         <label style="font-size:11px;font-weight:600;color:var(--texto-s)">Año mapa:</label>
         <select class="map-sel" id="a-map-year" onchange="actualizarMapaAltas()"><option value="total">Total 2014–2025</option></select>
@@ -562,7 +564,7 @@ tbody td.rank{font-weight:800;color:var(--az2);text-align:center}
   <div class="sec-title" style="margin-top:22px">📋 Tabla de Establecimientos</div><div class="sec-sep"></div>
   <div class="charts-grid g1">
     <div class="chart-card">
-      <div class="chart-header"><div><div class="chart-title">Detalle por Establecimiento — Altas Clínicas SM</div><div class="chart-sub">Top 100 · Haga clic en encabezados para ordenar</div></div><div class="chart-badge" id="a-badge-tabla">Top 100</div></div>
+      <div class="chart-header"><div><div class="chart-title">Detalle por Establecimiento — Altas Clínicas SM</div><div class="chart-sub">Top 100 · Haga clic en encabezados para ordenar</div></div><div style="display:flex;gap:6px;align-items:center;flex-shrink:0"><div class="chart-badge" id="a-badge-tabla">Top 100</div><button class="btn-png" onclick="downloadNearestChart(this)" title="Descargar PNG">📥 PNG</button></div></div>
       <div class="tabla-wrap">
         <table><thead><tr>
           <th onclick="sortTab('a-tabla-body',0)">#</th>
@@ -597,7 +599,7 @@ tbody td.rank{font-weight:800;color:var(--az2);text-align:center}
     <div class="chart-card">
       <div class="chart-header">
         <div><div class="chart-title">Evolución de la Población Bajo Control SM por Año (2014–2025)</div><div class="chart-sub">Personas en tratamiento de salud mental registradas en diciembre de cada año</div></div>
-        <div class="chart-badge" id="p-badge-tend">Nacional</div>
+        <div style="display:flex;gap:6px;align-items:center;flex-shrink:0"><div class="chart-badge" id="p-badge-tend">Nacional</div><button class="btn-png" onclick="downloadNearestChart(this)" title="Descargar PNG">📥 PNG</button></div>
       </div>
       <div class="cw t"><canvas id="p-c-tend"></canvas></div>
     </div>
@@ -605,11 +607,11 @@ tbody td.rank{font-weight:800;color:var(--az2);text-align:center}
 
   <div class="charts-grid g2">
     <div class="chart-card">
-      <div class="chart-header"><div><div class="chart-title">Población Bajo Control por Servicio de Salud</div><div class="chart-sub">Comparación entre los 29 SS</div></div><div class="chart-badge">SS</div></div>
+      <div class="chart-header"><div><div class="chart-title">Población Bajo Control por Servicio de Salud</div><div class="chart-sub">Comparación entre los 29 SS</div></div><div style="display:flex;align-items:center;gap:6px"><div class="chart-badge">SS</div><button class="btn-png" onclick="downloadNearestChart(this)" title="Descargar como PNG">⬇️ PNG</button></div></div>
       <div class="cw xt"><canvas id="p-c-ss"></canvas></div>
     </div>
     <div class="chart-card">
-      <div class="chart-header"><div><div class="chart-title">Variación % Año a Año — PBC</div><div class="chart-sub">Cambio porcentual respecto al año anterior</div></div><div class="chart-badge">Δ% anual</div></div>
+      <div class="chart-header"><div><div class="chart-title">Variación % Año a Año — PBC</div><div class="chart-sub">Cambio porcentual respecto al año anterior</div></div><div style="display:flex;align-items:center;gap:6px"><div class="chart-badge">Δ% anual</div><button class="btn-png" onclick="downloadNearestChart(this)" title="Descargar como PNG">⬇️ PNG</button></div></div>
       <div class="cw t"><canvas id="p-c-var"></canvas></div>
     </div>
   </div>
@@ -617,15 +619,15 @@ tbody td.rank{font-weight:800;color:var(--az2);text-align:center}
   <div class="sec-title" style="margin-top:22px">🏥 Análisis por Tipo y Dependencia</div><div class="sec-sep"></div>
   <div class="charts-grid g3">
     <div class="chart-card">
-      <div class="chart-header"><div><div class="chart-title">Distribución PBC por Tipo de Establecimiento</div><div class="chart-sub">Participación en el total de personas bajo control</div></div><div class="chart-badge">Tipo</div></div>
+      <div class="chart-header"><div><div class="chart-title">Distribución PBC por Tipo de Establecimiento</div><div class="chart-sub">Participación en el total de personas bajo control</div></div><div style="display:flex;align-items:center;gap:6px"><div class="chart-badge">Tipo</div><button class="btn-png" onclick="downloadNearestChart(this)" title="Descargar como PNG">⬇️ PNG</button></div></div>
       <div class="cw t"><canvas id="p-c-tipo-dona"></canvas></div>
     </div>
     <div class="chart-card">
-      <div class="chart-header"><div><div class="chart-title">Evolución PBC por Tipo de Establecimiento</div><div class="chart-sub">Tendencia por CESFAM, CECOSF, Posta, Hospital</div></div><div class="chart-badge">Tendencia</div></div>
+      <div class="chart-header"><div><div class="chart-title">Evolución PBC por Tipo de Establecimiento</div><div class="chart-sub">Tendencia por CESFAM, CECOSF, Posta, Hospital</div></div><div style="display:flex;align-items:center;gap:6px"><div class="chart-badge">Tendencia</div><button class="btn-png" onclick="downloadNearestChart(this)" title="Descargar como PNG">⬇️ PNG</button></div></div>
       <div class="cw t"><canvas id="p-c-tipo-linea"></canvas></div>
     </div>
     <div class="chart-card">
-      <div class="chart-header"><div><div class="chart-title">PBC por Dependencia Administrativa</div><div class="chart-sub">Municipal vs. Servicio de Salud vs. Otra</div></div><div class="chart-badge">Dependencia</div></div>
+      <div class="chart-header"><div><div class="chart-title">PBC por Dependencia Administrativa</div><div class="chart-sub">Municipal vs. Servicio de Salud vs. Otra</div></div><div style="display:flex;align-items:center;gap:6px"><div class="chart-badge">Dependencia</div><button class="btn-png" onclick="downloadNearestChart(this)" title="Descargar como PNG">⬇️ PNG</button></div></div>
       <div class="cw t"><canvas id="p-c-dep"></canvas></div>
     </div>
   </div>
@@ -633,11 +635,11 @@ tbody td.rank{font-weight:800;color:var(--az2);text-align:center}
   <div class="sec-title" style="margin-top:22px">🌆 Análisis Comunal y por Establecimiento</div><div class="sec-sep"></div>
   <div class="charts-grid g2c">
     <div class="chart-card">
-      <div class="chart-header"><div><div class="chart-title">Top 20 Comunas — Población Bajo Control SM</div><div class="chart-sub">Ordenadas por total acumulado</div></div><div class="chart-badge">Top 20</div></div>
+      <div class="chart-header"><div><div class="chart-title">Top 20 Comunas — Población Bajo Control SM</div><div class="chart-sub">Ordenadas por total acumulado</div></div><div style="display:flex;align-items:center;gap:6px"><div class="chart-badge">Top 20</div><button class="btn-png" onclick="downloadNearestChart(this)" title="Descargar como PNG">⬇️ PNG</button></div></div>
       <div class="cw xxxl"><canvas id="p-c-comunas"></canvas></div>
     </div>
     <div class="chart-card">
-      <div class="chart-header"><div><div class="chart-title">Top 10 Establecimientos — PBC</div><div class="chart-sub">Centros con mayor población bajo control</div></div><div class="chart-badge">Ranking</div></div>
+      <div class="chart-header"><div><div class="chart-title">Top 10 Establecimientos — PBC</div><div class="chart-sub">Centros con mayor población bajo control</div></div><div style="display:flex;align-items:center;gap:6px"><div class="chart-badge">Ranking</div><button class="btn-png" onclick="downloadNearestChart(this)" title="Descargar como PNG">⬇️ PNG</button></div></div>
       <div class="cw xxxl"><canvas id="p-c-top-estab"></canvas></div>
     </div>
   </div>
@@ -645,7 +647,7 @@ tbody td.rank{font-weight:800;color:var(--az2);text-align:center}
   <div class="sec-title" style="margin-top:22px">🔥 Distribución Temporal por Servicio de Salud</div><div class="sec-sep"></div>
   <div class="charts-grid g1">
     <div class="chart-card">
-      <div class="chart-header"><div><div class="chart-title">PBC por Servicio de Salud y Año — Barras Apiladas</div><div class="chart-sub">Comparación multianual</div></div><div class="chart-badge">2014–2025</div></div>
+      <div class="chart-header"><div><div class="chart-title">PBC por Servicio de Salud y Año — Barras Apiladas</div><div class="chart-sub">Comparación multianual</div></div><div style="display:flex;align-items:center;gap:6px"><div class="chart-badge">2014–2025</div><button class="btn-png" onclick="downloadNearestChart(this)" title="Descargar como PNG">⬇️ PNG</button></div></div>
       <div class="cw xxxl"><canvas id="p-c-ss-anio"></canvas></div>
     </div>
   </div>
@@ -653,7 +655,7 @@ tbody td.rank{font-weight:800;color:var(--az2);text-align:center}
   <div class="sec-title" style="margin-top:22px">🗺️ Georeferenciación — Población Bajo Control</div><div class="sec-sep"></div>
   <div class="charts-grid g1">
     <div class="chart-card">
-      <div class="chart-header"><div><div class="chart-title">Mapa de Población Bajo Control SM por Centro de Salud APS</div><div class="chart-sub">Tamaño proporcional al PBC · Clic en cada punto para ver detalle</div></div><div class="chart-badge">Georreferenciado</div></div>
+      <div class="chart-header"><div><div class="chart-title">Mapa de Población Bajo Control SM por Centro de Salud APS</div><div class="chart-sub">Tamaño proporcional al PBC · Clic en cada punto para ver detalle</div></div><div style="display:flex;align-items:center;gap:6px"><div class="chart-badge">Georreferenciado</div><button class="btn-png" onclick="downloadNearestChart(this)" title="Descargar como PNG">⬇️ PNG</button></div></div>
       <div class="map-ctrl">
         <label style="font-size:11px;font-weight:600;color:var(--texto-s)">Año mapa:</label>
         <select class="map-sel" id="p-map-year" onchange="actualizarMapaPBC()"><option value="total">Total 2014–2025</option></select>
@@ -672,7 +674,7 @@ tbody td.rank{font-weight:800;color:var(--az2);text-align:center}
   <div class="sec-title" style="margin-top:22px">📋 Tabla de Establecimientos — PBC</div><div class="sec-sep"></div>
   <div class="charts-grid g1">
     <div class="chart-card">
-      <div class="chart-header"><div><div class="chart-title">Detalle por Establecimiento — Población Bajo Control SM</div><div class="chart-sub">Top 100 · Haga clic en encabezados para ordenar</div></div><div class="chart-badge" id="p-badge-tabla">Top 100</div></div>
+      <div class="chart-header"><div><div class="chart-title">Detalle por Establecimiento — Población Bajo Control SM</div><div class="chart-sub">Top 100 · Haga clic en encabezados para ordenar</div></div><div style="display:flex;gap:6px;align-items:center;flex-shrink:0"><div class="chart-badge" id="p-badge-tabla">Top 100</div><button class="btn-png" onclick="downloadNearestChart(this)" title="Descargar PNG">📥 PNG</button></div></div>
       <div class="tabla-wrap">
         <table><thead><tr>
           <th onclick="sortTab('p-tabla-body',0)">#</th>
@@ -719,11 +721,11 @@ tbody td.rank{font-weight:800;color:var(--az2);text-align:center}
 
   <div class="charts-grid g2">
     <div class="chart-card">
-      <div class="chart-header"><div><div class="chart-title">% Altas / PBC por Servicio de Salud</div><div class="chart-sub">Comparación del indicador entre todos los SS</div></div><div class="chart-badge">SS</div></div>
+      <div class="chart-header"><div><div class="chart-title">% Altas / PBC por Servicio de Salud</div><div class="chart-sub">Comparación del indicador entre todos los SS</div></div><div style="display:flex;align-items:center;gap:6px"><div class="chart-badge">SS</div><button class="btn-png" onclick="downloadNearestChart(this)" title="Descargar como PNG">⬇️ PNG</button></div></div>
       <div class="cw xt"><canvas id="i-c-ss"></canvas></div>
     </div>
     <div class="chart-card">
-      <div class="chart-header"><div><div class="chart-title">Comparativa Altas vs PBC por Año</div><div class="chart-sub">Doble eje — volumen y relación entre ambas variables</div></div><div class="chart-badge">Dual</div></div>
+      <div class="chart-header"><div><div class="chart-title">Comparativa Altas vs PBC por Año</div><div class="chart-sub">Doble eje — volumen y relación entre ambas variables</div></div><div style="display:flex;align-items:center;gap:6px"><div class="chart-badge">Dual</div><button class="btn-png" onclick="downloadNearestChart(this)" title="Descargar como PNG">⬇️ PNG</button></div></div>
       <div class="cw t"><canvas id="i-c-dual"></canvas></div>
     </div>
   </div>
@@ -731,11 +733,11 @@ tbody td.rank{font-weight:800;color:var(--az2);text-align:center}
   <div class="sec-title" style="margin-top:22px">🏥 Indicador por Tipo y Dependencia</div><div class="sec-sep"></div>
   <div class="charts-grid g2">
     <div class="chart-card">
-      <div class="chart-header"><div><div class="chart-title">% Altas / PBC por Tipo de Establecimiento</div><div class="chart-sub">Eficiencia clínica comparada según tipo de centro</div></div><div class="chart-badge">Tipo</div></div>
+      <div class="chart-header"><div><div class="chart-title">% Altas / PBC por Tipo de Establecimiento</div><div class="chart-sub">Eficiencia clínica comparada según tipo de centro</div></div><div style="display:flex;align-items:center;gap:6px"><div class="chart-badge">Tipo</div><button class="btn-png" onclick="downloadNearestChart(this)" title="Descargar como PNG">⬇️ PNG</button></div></div>
       <div class="cw t"><canvas id="i-c-tipo"></canvas></div>
     </div>
     <div class="chart-card">
-      <div class="chart-header"><div><div class="chart-title">% Altas / PBC por Dependencia Administrativa</div><div class="chart-sub">Municipal vs. Servicio de Salud vs. Otra</div></div><div class="chart-badge">Dependencia</div></div>
+      <div class="chart-header"><div><div class="chart-title">% Altas / PBC por Dependencia Administrativa</div><div class="chart-sub">Municipal vs. Servicio de Salud vs. Otra</div></div><div style="display:flex;align-items:center;gap:6px"><div class="chart-badge">Dependencia</div><button class="btn-png" onclick="downloadNearestChart(this)" title="Descargar como PNG">⬇️ PNG</button></div></div>
       <div class="cw t"><canvas id="i-c-dep"></canvas></div>
     </div>
   </div>
@@ -743,7 +745,7 @@ tbody td.rank{font-weight:800;color:var(--az2);text-align:center}
   <div class="sec-title" style="margin-top:22px">🌆 Indicador por SS y Año — Evolución Detallada</div><div class="sec-sep"></div>
   <div class="charts-grid g1">
     <div class="chart-card">
-      <div class="chart-header"><div><div class="chart-title">% Altas / PBC por Servicio de Salud y Año</div><div class="chart-sub">Líneas múltiples — permite comparar la trayectoria de cada SS en el tiempo</div></div><div class="chart-badge">2014–2025</div></div>
+      <div class="chart-header"><div><div class="chart-title">% Altas / PBC por Servicio de Salud y Año</div><div class="chart-sub">Líneas múltiples — permite comparar la trayectoria de cada SS en el tiempo</div></div><div style="display:flex;align-items:center;gap:6px"><div class="chart-badge">2014–2025</div><button class="btn-png" onclick="downloadNearestChart(this)" title="Descargar como PNG">⬇️ PNG</button></div></div>
       <div class="cw xxxl"><canvas id="i-c-ss-linea"></canvas></div>
     </div>
   </div>
@@ -751,7 +753,7 @@ tbody td.rank{font-weight:800;color:var(--az2);text-align:center}
   <div class="sec-title" style="margin-top:22px">📋 Tabla del Indicador por Establecimiento</div><div class="sec-sep"></div>
   <div class="charts-grid g1">
     <div class="chart-card">
-      <div class="chart-header"><div><div class="chart-title">% Altas / PBC por Establecimiento</div><div class="chart-sub">Ordenado por indicador · Solo establecimientos con PBC > 0</div></div><div class="chart-badge" id="i-badge-tabla">—</div></div>
+      <div class="chart-header"><div><div class="chart-title">% Altas / PBC por Establecimiento</div><div class="chart-sub">Ordenado por indicador · Solo establecimientos con PBC > 0</div></div><div style="display:flex;gap:6px;align-items:center;flex-shrink:0"><div class="chart-badge" id="i-badge-tabla">—</div><button class="btn-png" onclick="downloadNearestChart(this)" title="Descargar PNG">📥 PNG</button></div></div>
       <div class="tabla-wrap">
         <table><thead><tr>
           <th onclick="sortTab('i-tabla-body',0)">#</th>
@@ -792,11 +794,11 @@ tbody td.rank{font-weight:800;color:var(--az2);text-align:center}
   <div class="sec-title">🗂️ Distribución por Categoría</div><div class="sec-sep"></div>
   <div class="charts-grid g2">
     <div class="chart-card">
-      <div class="chart-header"><div><div class="chart-title">Total de Personas por Categoría (N0–N4)</div><div class="chart-sub">Distribución absoluta de categorizados según nivel de complejidad</div></div><div class="chart-badge">Categoría</div></div>
+      <div class="chart-header"><div><div class="chart-title">Total de Personas por Categoría (N0–N4)</div><div class="chart-sub">Distribución absoluta de categorizados según nivel de complejidad</div></div><div style="display:flex;align-items:center;gap:6px"><div class="chart-badge">Categoría</div><button class="btn-png" onclick="downloadNearestChart(this)" title="Descargar como PNG">⬇️ PNG</button></div></div>
       <div class="cw t"><canvas id="c-c-barras"></canvas></div>
     </div>
     <div class="chart-card">
-      <div class="chart-header"><div><div class="chart-title">Distribución Porcentual por Categoría</div><div class="chart-sub">Participación de cada nivel en el total de categorizados</div></div><div class="chart-badge">% Dona</div></div>
+      <div class="chart-header"><div><div class="chart-title">Distribución Porcentual por Categoría</div><div class="chart-sub">Participación de cada nivel en el total de categorizados</div></div><div style="display:flex;align-items:center;gap:6px"><div class="chart-badge">% Dona</div><button class="btn-png" onclick="downloadNearestChart(this)" title="Descargar como PNG">⬇️ PNG</button></div></div>
       <div class="cw t"><canvas id="c-c-dona"></canvas></div>
     </div>
   </div>
@@ -804,11 +806,11 @@ tbody td.rank{font-weight:800;color:var(--az2);text-align:center}
   <div class="sec-title" style="margin-top:22px">🗺️ Análisis por Servicio de Salud</div><div class="sec-sep"></div>
   <div class="charts-grid g2">
     <div class="chart-card">
-      <div class="chart-header"><div><div class="chart-title">Total Categorizados por Servicio de Salud</div><div class="chart-sub">Comparación entre los SS con implementación</div></div><div class="chart-badge">SS</div></div>
+      <div class="chart-header"><div><div class="chart-title">Total Categorizados por Servicio de Salud</div><div class="chart-sub">Comparación entre los SS con implementación</div></div><div style="display:flex;align-items:center;gap:6px"><div class="chart-badge">SS</div><button class="btn-png" onclick="downloadNearestChart(this)" title="Descargar como PNG">⬇️ PNG</button></div></div>
       <div class="cw xt"><canvas id="c-c-ss"></canvas></div>
     </div>
     <div class="chart-card">
-      <div class="chart-header"><div><div class="chart-title">Distribución N0–N4 por Servicio de Salud</div><div class="chart-sub">Barras apiladas con composición de categorías por SS</div></div><div class="chart-badge">Apilado</div></div>
+      <div class="chart-header"><div><div class="chart-title">Distribución N0–N4 por Servicio de Salud</div><div class="chart-sub">Barras apiladas con composición de categorías por SS</div></div><div style="display:flex;align-items:center;gap:6px"><div class="chart-badge">Apilado</div><button class="btn-png" onclick="downloadNearestChart(this)" title="Descargar como PNG">⬇️ PNG</button></div></div>
       <div class="cw xt"><canvas id="c-c-ss-apilado"></canvas></div>
     </div>
   </div>
@@ -816,11 +818,11 @@ tbody td.rank{font-weight:800;color:var(--az2);text-align:center}
   <div class="sec-title" style="margin-top:22px">🏥 Análisis por Tipo y Dependencia</div><div class="sec-sep"></div>
   <div class="charts-grid g2">
     <div class="chart-card">
-      <div class="chart-header"><div><div class="chart-title">Categorizados por Tipo de Establecimiento</div><div class="chart-sub">CESFAM, CECOSF, Posta, Hospital Comunitario</div></div><div class="chart-badge">Tipo</div></div>
+      <div class="chart-header"><div><div class="chart-title">Categorizados por Tipo de Establecimiento</div><div class="chart-sub">CESFAM, CECOSF, Posta, Hospital Comunitario</div></div><div style="display:flex;align-items:center;gap:6px"><div class="chart-badge">Tipo</div><button class="btn-png" onclick="downloadNearestChart(this)" title="Descargar como PNG">⬇️ PNG</button></div></div>
       <div class="cw t"><canvas id="c-c-tipo"></canvas></div>
     </div>
     <div class="chart-card">
-      <div class="chart-header"><div><div class="chart-title">Categorizados por Dependencia Administrativa</div><div class="chart-sub">Municipal vs. Servicio de Salud vs. Otra</div></div><div class="chart-badge">Dependencia</div></div>
+      <div class="chart-header"><div><div class="chart-title">Categorizados por Dependencia Administrativa</div><div class="chart-sub">Municipal vs. Servicio de Salud vs. Otra</div></div><div style="display:flex;align-items:center;gap:6px"><div class="chart-badge">Dependencia</div><button class="btn-png" onclick="downloadNearestChart(this)" title="Descargar como PNG">⬇️ PNG</button></div></div>
       <div class="cw t"><canvas id="c-c-dep"></canvas></div>
     </div>
   </div>
@@ -828,7 +830,7 @@ tbody td.rank{font-weight:800;color:var(--az2);text-align:center}
   <div class="sec-title" style="margin-top:22px">🗺️ Mapa de Categorización por Establecimiento</div><div class="sec-sep"></div>
   <div class="charts-grid g1">
     <div class="chart-card">
-      <div class="chart-header"><div><div class="chart-title">Mapa de Establecimientos con Categorización SM 2025</div><div class="chart-sub">Solo centros que han implementado la categorización · Tamaño proporcional al total categorizado</div></div><div class="chart-badge">Georreferenciado</div></div>
+      <div class="chart-header"><div><div class="chart-title">Mapa de Establecimientos con Categorización SM 2025</div><div class="chart-sub">Solo centros que han implementado la categorización · Tamaño proporcional al total categorizado</div></div><div style="display:flex;align-items:center;gap:6px"><div class="chart-badge">Georreferenciado</div><button class="btn-png" onclick="downloadNearestChart(this)" title="Descargar como PNG">⬇️ PNG</button></div></div>
       <div class="map-ctrl">
         <label style="font-size:11px;font-weight:600;color:var(--texto-s)">Color por:</label>
         <select class="map-sel" id="c-map-color" onchange="actualizarMapaCat()">
@@ -846,7 +848,7 @@ tbody td.rank{font-weight:800;color:var(--az2);text-align:center}
   <div class="sec-title" style="margin-top:22px">📋 Tabla de Establecimientos con Categorización</div><div class="sec-sep"></div>
   <div class="charts-grid g1">
     <div class="chart-card">
-      <div class="chart-header"><div><div class="chart-title">Detalle por Establecimiento — Categorización SM 2025</div><div class="chart-sub">Ordenado por total categorizado · Clic en encabezados para ordenar</div></div><div class="chart-badge" id="c-badge-tabla">—</div></div>
+      <div class="chart-header"><div><div class="chart-title">Detalle por Establecimiento — Categorización SM 2025</div><div class="chart-sub">Ordenado por total categorizado · Clic en encabezados para ordenar</div></div><div style="display:flex;gap:6px;align-items:center;flex-shrink:0"><div class="chart-badge" id="c-badge-tabla">—</div><button class="btn-png" onclick="downloadNearestChart(this)" title="Descargar PNG">📥 PNG</button></div></div>
       <div class="tabla-wrap">
         <table><thead><tr>
           <th onclick="sortTab('c-tabla-body',0)">#</th>
@@ -883,18 +885,18 @@ tbody td.rank{font-weight:800;color:var(--az2);text-align:center}
   <div class="sec-title">📈 Tendencia Temporal</div><div class="sec-sep"></div>
   <div class="charts-grid g1" style="margin-bottom:18px">
     <div class="chart-card">
-      <div class="chart-header"><div><div class="chart-title">Evolución Total de Ingresos SM por Año (2014–2025)</div><div class="chart-sub">Total nacional según filtros activos</div></div><div class="chart-badge" id="i2-badge-tend">Nacional</div></div>
+      <div class="chart-header"><div><div class="chart-title">Evolución Total de Ingresos SM por Año (2014–2025)</div><div class="chart-sub">Total nacional según filtros activos</div></div><div style="display:flex;gap:6px;align-items:center;flex-shrink:0"><div class="chart-badge" id="i2-badge-tend">Nacional</div><button class="btn-png" onclick="downloadNearestChart(this)" title="Descargar PNG">📥 PNG</button></div></div>
       <div class="cw t"><canvas id="i2-c-tend"></canvas></div>
     </div>
   </div>
 
   <div class="charts-grid g2">
     <div class="chart-card">
-      <div class="chart-header"><div><div class="chart-title">Ingresos SM por Servicio de Salud</div><div class="chart-sub">Comparación entre los 29 SS</div></div><div class="chart-badge">SS</div></div>
+      <div class="chart-header"><div><div class="chart-title">Ingresos SM por Servicio de Salud</div><div class="chart-sub">Comparación entre los 29 SS</div></div><div style="display:flex;align-items:center;gap:6px"><div class="chart-badge">SS</div><button class="btn-png" onclick="downloadNearestChart(this)" title="Descargar como PNG">⬇️ PNG</button></div></div>
       <div class="cw xt"><canvas id="i2-c-ss"></canvas></div>
     </div>
     <div class="chart-card">
-      <div class="chart-header"><div><div class="chart-title">Variación % Año a Año</div><div class="chart-sub">Cambio porcentual respecto al año anterior</div></div><div class="chart-badge">Δ%</div></div>
+      <div class="chart-header"><div><div class="chart-title">Variación % Año a Año</div><div class="chart-sub">Cambio porcentual respecto al año anterior</div></div><div style="display:flex;align-items:center;gap:6px"><div class="chart-badge">Δ%</div><button class="btn-png" onclick="downloadNearestChart(this)" title="Descargar como PNG">⬇️ PNG</button></div></div>
       <div class="cw t"><canvas id="i2-c-var"></canvas></div>
     </div>
   </div>
@@ -902,15 +904,15 @@ tbody td.rank{font-weight:800;color:var(--az2);text-align:center}
   <div class="sec-title" style="margin-top:22px">🏥 Análisis por Tipo y Dependencia</div><div class="sec-sep"></div>
   <div class="charts-grid g3">
     <div class="chart-card">
-      <div class="chart-header"><div><div class="chart-title">Distribución por Tipo de Establecimiento</div><div class="chart-sub">Participación en el total de ingresos</div></div><div class="chart-badge">Tipo</div></div>
+      <div class="chart-header"><div><div class="chart-title">Distribución por Tipo de Establecimiento</div><div class="chart-sub">Participación en el total de ingresos</div></div><div style="display:flex;align-items:center;gap:6px"><div class="chart-badge">Tipo</div><button class="btn-png" onclick="downloadNearestChart(this)" title="Descargar como PNG">⬇️ PNG</button></div></div>
       <div class="cw t"><canvas id="i2-c-tipo-dona"></canvas></div>
     </div>
     <div class="chart-card">
-      <div class="chart-header"><div><div class="chart-title">Evolución por Tipo de Establecimiento</div><div class="chart-sub">Tendencia 2014–2025</div></div><div class="chart-badge">Tendencia</div></div>
+      <div class="chart-header"><div><div class="chart-title">Evolución por Tipo de Establecimiento</div><div class="chart-sub">Tendencia 2014–2025</div></div><div style="display:flex;align-items:center;gap:6px"><div class="chart-badge">Tendencia</div><button class="btn-png" onclick="downloadNearestChart(this)" title="Descargar como PNG">⬇️ PNG</button></div></div>
       <div class="cw t"><canvas id="i2-c-tipo-linea"></canvas></div>
     </div>
     <div class="chart-card">
-      <div class="chart-header"><div><div class="chart-title">Ingresos por Dependencia</div><div class="chart-sub">Municipal vs SS vs Otra</div></div><div class="chart-badge">Dependencia</div></div>
+      <div class="chart-header"><div><div class="chart-title">Ingresos por Dependencia</div><div class="chart-sub">Municipal vs SS vs Otra</div></div><div style="display:flex;align-items:center;gap:6px"><div class="chart-badge">Dependencia</div><button class="btn-png" onclick="downloadNearestChart(this)" title="Descargar como PNG">⬇️ PNG</button></div></div>
       <div class="cw t"><canvas id="i2-c-dep"></canvas></div>
     </div>
   </div>
@@ -918,11 +920,11 @@ tbody td.rank{font-weight:800;color:var(--az2);text-align:center}
   <div class="sec-title" style="margin-top:22px">🌆 Análisis Comunal y por Establecimiento</div><div class="sec-sep"></div>
   <div class="charts-grid g2c">
     <div class="chart-card">
-      <div class="chart-header"><div><div class="chart-title">Top 20 Comunas — Ingresos SM</div><div class="chart-sub">Ordenadas por total acumulado</div></div><div class="chart-badge">Top 20</div></div>
+      <div class="chart-header"><div><div class="chart-title">Top 20 Comunas — Ingresos SM</div><div class="chart-sub">Ordenadas por total acumulado</div></div><div style="display:flex;align-items:center;gap:6px"><div class="chart-badge">Top 20</div><button class="btn-png" onclick="downloadNearestChart(this)" title="Descargar como PNG">⬇️ PNG</button></div></div>
       <div class="cw xxxl"><canvas id="i2-c-comunas"></canvas></div>
     </div>
     <div class="chart-card">
-      <div class="chart-header"><div><div class="chart-title">Top 10 Establecimientos</div><div class="chart-sub">Centros con más ingresos</div></div><div class="chart-badge">Ranking</div></div>
+      <div class="chart-header"><div><div class="chart-title">Top 10 Establecimientos</div><div class="chart-sub">Centros con más ingresos</div></div><div style="display:flex;align-items:center;gap:6px"><div class="chart-badge">Ranking</div><button class="btn-png" onclick="downloadNearestChart(this)" title="Descargar como PNG">⬇️ PNG</button></div></div>
       <div class="cw xxxl"><canvas id="i2-c-top-estab"></canvas></div>
     </div>
   </div>
@@ -930,7 +932,7 @@ tbody td.rank{font-weight:800;color:var(--az2);text-align:center}
   <div class="sec-title" style="margin-top:22px">🔥 Distribución Temporal por Servicio de Salud</div><div class="sec-sep"></div>
   <div class="charts-grid g1">
     <div class="chart-card">
-      <div class="chart-header"><div><div class="chart-title">Ingresos SM por SS y Año — Barras Apiladas</div><div class="chart-sub">Comparación multianual</div></div><div class="chart-badge">2014–2025</div></div>
+      <div class="chart-header"><div><div class="chart-title">Ingresos SM por SS y Año — Barras Apiladas</div><div class="chart-sub">Comparación multianual</div></div><div style="display:flex;align-items:center;gap:6px"><div class="chart-badge">2014–2025</div><button class="btn-png" onclick="downloadNearestChart(this)" title="Descargar como PNG">⬇️ PNG</button></div></div>
       <div class="cw xxxl"><canvas id="i2-c-ss-anio"></canvas></div>
     </div>
   </div>
@@ -938,7 +940,7 @@ tbody td.rank{font-weight:800;color:var(--az2);text-align:center}
   <div class="sec-title" style="margin-top:22px">🗺️ Mapa de Ingresos por Establecimiento</div><div class="sec-sep"></div>
   <div class="charts-grid g1">
     <div class="chart-card">
-      <div class="chart-header"><div><div class="chart-title">Mapa de Ingresos SM por Centro de Salud APS</div><div class="chart-sub">Tamaño proporcional al número de ingresos</div></div><div class="chart-badge">Georreferenciado</div></div>
+      <div class="chart-header"><div><div class="chart-title">Mapa de Ingresos SM por Centro de Salud APS</div><div class="chart-sub">Tamaño proporcional al número de ingresos</div></div><div style="display:flex;align-items:center;gap:6px"><div class="chart-badge">Georreferenciado</div><button class="btn-png" onclick="downloadNearestChart(this)" title="Descargar como PNG">⬇️ PNG</button></div></div>
       <div class="map-ctrl">
         <label style="font-size:11px;font-weight:600;color:var(--texto-s)">Año mapa:</label>
         <select class="map-sel" id="i2-map-year" onchange="actualizarMapaIng()"><option value="total">Total 2014–2025</option></select>
@@ -957,7 +959,7 @@ tbody td.rank{font-weight:800;color:var(--az2);text-align:center}
   <div class="sec-title" style="margin-top:22px">📋 Tabla de Establecimientos — Ingresos</div><div class="sec-sep"></div>
   <div class="charts-grid g1">
     <div class="chart-card">
-      <div class="chart-header"><div><div class="chart-title">Detalle por Establecimiento — Ingresos SM</div><div class="chart-sub">Top 100 · Clic en encabezados para ordenar</div></div><div class="chart-badge" id="i2-badge-tabla">Top 100</div></div>
+      <div class="chart-header"><div><div class="chart-title">Detalle por Establecimiento — Ingresos SM</div><div class="chart-sub">Top 100 · Clic en encabezados para ordenar</div></div><div style="display:flex;gap:6px;align-items:center;flex-shrink:0"><div class="chart-badge" id="i2-badge-tabla">Top 100</div><button class="btn-png" onclick="downloadNearestChart(this)" title="Descargar PNG">📥 PNG</button></div></div>
       <div class="tabla-wrap">
         <table><thead><tr>
           <th onclick="sortTab('i2-tabla-body',0)">#</th>
@@ -994,11 +996,11 @@ tbody td.rank{font-weight:800;color:var(--az2);text-align:center}
   <div class="sec-title">📈 Indicador por Servicio de Salud</div><div class="sec-sep"></div>
   <div class="charts-grid g2">
     <div class="chart-card">
-      <div class="chart-header"><div><div class="chart-title">% Categorizados / Ingresos por Servicio de Salud</div><div class="chart-sub">Ordenado de mayor a menor · Solo SS con ambos datos en 2025</div></div><div class="chart-badge">SS</div></div>
+      <div class="chart-header"><div><div class="chart-title">% Categorizados / Ingresos por Servicio de Salud</div><div class="chart-sub">Ordenado de mayor a menor · Solo SS con ambos datos en 2025</div></div><div style="display:flex;align-items:center;gap:6px"><div class="chart-badge">SS</div><button class="btn-png" onclick="downloadNearestChart(this)" title="Descargar como PNG">⬇️ PNG</button></div></div>
       <div class="cw xt"><canvas id="ci-c-ss"></canvas></div>
     </div>
     <div class="chart-card">
-      <div class="chart-header"><div><div class="chart-title">Comparativa Categorizados vs Ingresos 2025</div><div class="chart-sub">Volumen absoluto de ambas variables con % superpuesto</div></div><div class="chart-badge">Dual</div></div>
+      <div class="chart-header"><div><div class="chart-title">Comparativa Categorizados vs Ingresos 2025</div><div class="chart-sub">Volumen absoluto de ambas variables con % superpuesto</div></div><div style="display:flex;align-items:center;gap:6px"><div class="chart-badge">Dual</div><button class="btn-png" onclick="downloadNearestChart(this)" title="Descargar como PNG">⬇️ PNG</button></div></div>
       <div class="cw t"><canvas id="ci-c-dual"></canvas></div>
     </div>
   </div>
@@ -1006,11 +1008,11 @@ tbody td.rank{font-weight:800;color:var(--az2);text-align:center}
   <div class="sec-title" style="margin-top:22px">🏥 Indicador por Tipo y Dependencia</div><div class="sec-sep"></div>
   <div class="charts-grid g2">
     <div class="chart-card">
-      <div class="chart-header"><div><div class="chart-title">% Categ./Ingresos por Tipo de Establecimiento</div><div class="chart-sub">Cobertura de categorización según tipo de centro</div></div><div class="chart-badge">Tipo</div></div>
+      <div class="chart-header"><div><div class="chart-title">% Categ./Ingresos por Tipo de Establecimiento</div><div class="chart-sub">Cobertura de categorización según tipo de centro</div></div><div style="display:flex;align-items:center;gap:6px"><div class="chart-badge">Tipo</div><button class="btn-png" onclick="downloadNearestChart(this)" title="Descargar como PNG">⬇️ PNG</button></div></div>
       <div class="cw t"><canvas id="ci-c-tipo"></canvas></div>
     </div>
     <div class="chart-card">
-      <div class="chart-header"><div><div class="chart-title">% Categ./Ingresos por Dependencia Administrativa</div><div class="chart-sub">Municipal vs. Servicio de Salud vs. Otra</div></div><div class="chart-badge">Dependencia</div></div>
+      <div class="chart-header"><div><div class="chart-title">% Categ./Ingresos por Dependencia Administrativa</div><div class="chart-sub">Municipal vs. Servicio de Salud vs. Otra</div></div><div style="display:flex;align-items:center;gap:6px"><div class="chart-badge">Dependencia</div><button class="btn-png" onclick="downloadNearestChart(this)" title="Descargar como PNG">⬇️ PNG</button></div></div>
       <div class="cw t"><canvas id="ci-c-dep"></canvas></div>
     </div>
   </div>
@@ -1018,7 +1020,7 @@ tbody td.rank{font-weight:800;color:var(--az2);text-align:center}
   <div class="sec-title" style="margin-top:22px">🌆 Indicador por Comunas — Top 20</div><div class="sec-sep"></div>
   <div class="charts-grid g1">
     <div class="chart-card">
-      <div class="chart-header"><div><div class="chart-title">% Categ./Ingresos por Comuna</div><div class="chart-sub">Top 20 comunas con mayor porcentaje · Solo comunas con ambos datos</div></div><div class="chart-badge">Top 20</div></div>
+      <div class="chart-header"><div><div class="chart-title">% Categ./Ingresos por Comuna</div><div class="chart-sub">Top 20 comunas con mayor porcentaje · Solo comunas con ambos datos</div></div><div style="display:flex;align-items:center;gap:6px"><div class="chart-badge">Top 20</div><button class="btn-png" onclick="downloadNearestChart(this)" title="Descargar como PNG">⬇️ PNG</button></div></div>
       <div class="cw xt"><canvas id="ci-c-comunas"></canvas></div>
     </div>
   </div>
@@ -1026,7 +1028,7 @@ tbody td.rank{font-weight:800;color:var(--az2);text-align:center}
   <div class="sec-title" style="margin-top:22px">📋 Tabla por Establecimiento</div><div class="sec-sep"></div>
   <div class="charts-grid g1">
     <div class="chart-card">
-      <div class="chart-header"><div><div class="chart-title">% Categ./Ingresos por Establecimiento — 2025</div><div class="chart-sub">Solo establecimientos con categorización e ingresos · Ordenar haciendo clic en encabezados</div></div><div class="chart-badge" id="ci-badge-tabla">—</div></div>
+      <div class="chart-header"><div><div class="chart-title">% Categ./Ingresos por Establecimiento — 2025</div><div class="chart-sub">Solo establecimientos con categorización e ingresos · Ordenar haciendo clic en encabezados</div></div><div style="display:flex;gap:6px;align-items:center;flex-shrink:0"><div class="chart-badge" id="ci-badge-tabla">—</div><button class="btn-png" onclick="downloadNearestChart(this)" title="Descargar PNG">📥 PNG</button></div></div>
       <div class="tabla-wrap">
         <table><thead><tr>
           <th onclick="sortTab('ci-tabla-body',0)">#</th>
@@ -1064,18 +1066,18 @@ tbody td.rank{font-weight:800;color:var(--az2);text-align:center}
   <div class="sec-title">📈 Tendencia Temporal</div><div class="sec-sep"></div>
   <div class="charts-grid g1" style="margin-bottom:18px">
     <div class="chart-card">
-      <div class="chart-header"><div><div class="chart-title">Evolución Total de IPG por Año (2014–2025)</div><div class="chart-sub">Total nacional según filtros activos · Impacto COVID-19 visible en 2020–2021</div></div><div class="chart-badge">Nacional</div></div>
+      <div class="chart-header"><div><div class="chart-title">Evolución Total de IPG por Año (2014–2025)</div><div class="chart-sub">Total nacional según filtros activos · Impacto COVID-19 visible en 2020–2021</div></div><div style="display:flex;align-items:center;gap:6px"><div class="chart-badge">Nacional</div><button class="btn-png" onclick="downloadNearestChart(this)" title="Descargar como PNG">⬇️ PNG</button></div></div>
       <div class="cw t"><canvas id="ipg-c-tend"></canvas></div>
     </div>
   </div>
 
   <div class="charts-grid g2">
     <div class="chart-card">
-      <div class="chart-header"><div><div class="chart-title">IPG por Servicio de Salud</div><div class="chart-sub">Comparación entre los 29 SS</div></div><div class="chart-badge">SS</div></div>
+      <div class="chart-header"><div><div class="chart-title">IPG por Servicio de Salud</div><div class="chart-sub">Comparación entre los 29 SS</div></div><div style="display:flex;align-items:center;gap:6px"><div class="chart-badge">SS</div><button class="btn-png" onclick="downloadNearestChart(this)" title="Descargar como PNG">⬇️ PNG</button></div></div>
       <div class="cw xt"><canvas id="ipg-c-ss"></canvas></div>
     </div>
     <div class="chart-card">
-      <div class="chart-header"><div><div class="chart-title">Variación % Año a Año</div><div class="chart-sub">Cambio porcentual respecto al año anterior</div></div><div class="chart-badge">Δ%</div></div>
+      <div class="chart-header"><div><div class="chart-title">Variación % Año a Año</div><div class="chart-sub">Cambio porcentual respecto al año anterior</div></div><div style="display:flex;align-items:center;gap:6px"><div class="chart-badge">Δ%</div><button class="btn-png" onclick="downloadNearestChart(this)" title="Descargar como PNG">⬇️ PNG</button></div></div>
       <div class="cw t"><canvas id="ipg-c-var"></canvas></div>
     </div>
   </div>
@@ -1083,15 +1085,15 @@ tbody td.rank{font-weight:800;color:var(--az2);text-align:center}
   <div class="sec-title" style="margin-top:22px">🏥 Análisis por Tipo y Dependencia</div><div class="sec-sep"></div>
   <div class="charts-grid g3">
     <div class="chart-card">
-      <div class="chart-header"><div><div class="chart-title">Distribución por Tipo de Establecimiento</div><div class="chart-sub">Participación en el total de IPG</div></div><div class="chart-badge">Tipo</div></div>
+      <div class="chart-header"><div><div class="chart-title">Distribución por Tipo de Establecimiento</div><div class="chart-sub">Participación en el total de IPG</div></div><div style="display:flex;align-items:center;gap:6px"><div class="chart-badge">Tipo</div><button class="btn-png" onclick="downloadNearestChart(this)" title="Descargar como PNG">⬇️ PNG</button></div></div>
       <div class="cw t"><canvas id="ipg-c-tipo-dona"></canvas></div>
     </div>
     <div class="chart-card">
-      <div class="chart-header"><div><div class="chart-title">Evolución por Tipo de Establecimiento</div><div class="chart-sub">Tendencia 2014–2025</div></div><div class="chart-badge">Tendencia</div></div>
+      <div class="chart-header"><div><div class="chart-title">Evolución por Tipo de Establecimiento</div><div class="chart-sub">Tendencia 2014–2025</div></div><div style="display:flex;align-items:center;gap:6px"><div class="chart-badge">Tendencia</div><button class="btn-png" onclick="downloadNearestChart(this)" title="Descargar como PNG">⬇️ PNG</button></div></div>
       <div class="cw t"><canvas id="ipg-c-tipo-linea"></canvas></div>
     </div>
     <div class="chart-card">
-      <div class="chart-header"><div><div class="chart-title">IPG por Dependencia</div><div class="chart-sub">Municipal vs SS vs Otra</div></div><div class="chart-badge">Dependencia</div></div>
+      <div class="chart-header"><div><div class="chart-title">IPG por Dependencia</div><div class="chart-sub">Municipal vs SS vs Otra</div></div><div style="display:flex;align-items:center;gap:6px"><div class="chart-badge">Dependencia</div><button class="btn-png" onclick="downloadNearestChart(this)" title="Descargar como PNG">⬇️ PNG</button></div></div>
       <div class="cw t"><canvas id="ipg-c-dep"></canvas></div>
     </div>
   </div>
@@ -1099,11 +1101,11 @@ tbody td.rank{font-weight:800;color:var(--az2);text-align:center}
   <div class="sec-title" style="margin-top:22px">🌆 Análisis Comunal y por Establecimiento</div><div class="sec-sep"></div>
   <div class="charts-grid g2c">
     <div class="chart-card">
-      <div class="chart-header"><div><div class="chart-title">Top 20 Comunas — IPG</div><div class="chart-sub">Ordenadas por total acumulado</div></div><div class="chart-badge">Top 20</div></div>
+      <div class="chart-header"><div><div class="chart-title">Top 20 Comunas — IPG</div><div class="chart-sub">Ordenadas por total acumulado</div></div><div style="display:flex;align-items:center;gap:6px"><div class="chart-badge">Top 20</div><button class="btn-png" onclick="downloadNearestChart(this)" title="Descargar como PNG">⬇️ PNG</button></div></div>
       <div class="cw xxxl"><canvas id="ipg-c-comunas"></canvas></div>
     </div>
     <div class="chart-card">
-      <div class="chart-header"><div><div class="chart-title">Top 10 Establecimientos</div><div class="chart-sub">Centros con más IPG</div></div><div class="chart-badge">Ranking</div></div>
+      <div class="chart-header"><div><div class="chart-title">Top 10 Establecimientos</div><div class="chart-sub">Centros con más IPG</div></div><div style="display:flex;align-items:center;gap:6px"><div class="chart-badge">Ranking</div><button class="btn-png" onclick="downloadNearestChart(this)" title="Descargar como PNG">⬇️ PNG</button></div></div>
       <div class="cw xxxl"><canvas id="ipg-c-top-estab"></canvas></div>
     </div>
   </div>
@@ -1111,7 +1113,7 @@ tbody td.rank{font-weight:800;color:var(--az2);text-align:center}
   <div class="sec-title" style="margin-top:22px">🔥 Distribución Temporal por Servicio de Salud</div><div class="sec-sep"></div>
   <div class="charts-grid g1">
     <div class="chart-card">
-      <div class="chart-header"><div><div class="chart-title">IPG por SS y Año — Barras Apiladas</div><div class="chart-sub">Comparación multianual de todos los SS</div></div><div class="chart-badge">2014–2025</div></div>
+      <div class="chart-header"><div><div class="chart-title">IPG por SS y Año — Barras Apiladas</div><div class="chart-sub">Comparación multianual de todos los SS</div></div><div style="display:flex;align-items:center;gap:6px"><div class="chart-badge">2014–2025</div><button class="btn-png" onclick="downloadNearestChart(this)" title="Descargar como PNG">⬇️ PNG</button></div></div>
       <div class="cw xxxl"><canvas id="ipg-c-ss-anio"></canvas></div>
     </div>
   </div>
@@ -1119,7 +1121,7 @@ tbody td.rank{font-weight:800;color:var(--az2);text-align:center}
   <div class="sec-title" style="margin-top:22px">🗺️ Mapa de IPG por Establecimiento</div><div class="sec-sep"></div>
   <div class="charts-grid g1">
     <div class="chart-card">
-      <div class="chart-header"><div><div class="chart-title">Mapa de IPG por Centro de Salud APS</div><div class="chart-sub">Tamaño proporcional al número de IPG · Clic en cada punto para ver detalle</div></div><div class="chart-badge">Georreferenciado</div></div>
+      <div class="chart-header"><div><div class="chart-title">Mapa de IPG por Centro de Salud APS</div><div class="chart-sub">Tamaño proporcional al número de IPG · Clic en cada punto para ver detalle</div></div><div style="display:flex;align-items:center;gap:6px"><div class="chart-badge">Georreferenciado</div><button class="btn-png" onclick="downloadNearestChart(this)" title="Descargar como PNG">⬇️ PNG</button></div></div>
       <div class="map-ctrl">
         <label style="font-size:11px;font-weight:600;color:var(--texto-s)">Año mapa:</label>
         <select class="map-sel" id="ipg-map-year" onchange="actualizarMapaIPG()"><option value="total">Total 2014–2025</option></select>
@@ -1138,7 +1140,7 @@ tbody td.rank{font-weight:800;color:var(--az2);text-align:center}
   <div class="sec-title" style="margin-top:22px">📋 Tabla de Establecimientos — IPG</div><div class="sec-sep"></div>
   <div class="charts-grid g1">
     <div class="chart-card">
-      <div class="chart-header"><div><div class="chart-title">Detalle por Establecimiento — IPG</div><div class="chart-sub">Top 100 · Clic en encabezados para ordenar</div></div><div class="chart-badge" id="ipg-badge-tabla">Top 100</div></div>
+      <div class="chart-header"><div><div class="chart-title">Detalle por Establecimiento — IPG</div><div class="chart-sub">Top 100 · Clic en encabezados para ordenar</div></div><div style="display:flex;gap:6px;align-items:center;flex-shrink:0"><div class="chart-badge" id="ipg-badge-tabla">Top 100</div><button class="btn-png" onclick="downloadNearestChart(this)" title="Descargar PNG">📥 PNG</button></div></div>
       <div class="tabla-wrap">
         <table><thead><tr>
           <th onclick="sortTab('ipg-tabla-body',0)">#</th>
@@ -1173,57 +1175,57 @@ tbody td.rank{font-weight:800;color:var(--az2);text-align:center}
   <div class="sec-title">📈 Tendencia Temporal</div><div class="sec-sep"></div>
   <div class="charts-grid g1" style="margin-bottom:18px">
     <div class="chart-card">
-      <div class="chart-header"><div><div class="chart-title">Evolución Total de Actividades SM por Año (2014–2025)</div><div class="chart-sub">Total nacional · Caída COVID-19 en 2020 y recuperación sostenida posterior</div></div><div class="chart-badge">Nacional</div></div>
+      <div class="chart-header"><div><div class="chart-title">Evolución Total de Actividades SM por Año (2014–2025)</div><div class="chart-sub">Total nacional · Caída COVID-19 en 2020 y recuperación sostenida posterior</div></div><div style="display:flex;align-items:center;gap:6px"><div class="chart-badge">Nacional</div><button class="btn-png" onclick="downloadNearestChart(this)" title="Descargar como PNG">⬇️ PNG</button></div></div>
       <div class="cw t"><canvas id="act-c-tend"></canvas></div>
     </div>
   </div>
   <div class="charts-grid g2">
     <div class="chart-card">
-      <div class="chart-header"><div><div class="chart-title">Actividades SM por Servicio de Salud</div><div class="chart-sub">Comparación entre los 29 SS</div></div><div class="chart-badge">SS</div></div>
+      <div class="chart-header"><div><div class="chart-title">Actividades SM por Servicio de Salud</div><div class="chart-sub">Comparación entre los 29 SS</div></div><div style="display:flex;align-items:center;gap:6px"><div class="chart-badge">SS</div><button class="btn-png" onclick="downloadNearestChart(this)" title="Descargar como PNG">⬇️ PNG</button></div></div>
       <div class="cw xt"><canvas id="act-c-ss"></canvas></div>
     </div>
     <div class="chart-card">
-      <div class="chart-header"><div><div class="chart-title">Variación % Año a Año</div><div class="chart-sub">Cambio porcentual respecto al año anterior</div></div><div class="chart-badge">Δ%</div></div>
+      <div class="chart-header"><div><div class="chart-title">Variación % Año a Año</div><div class="chart-sub">Cambio porcentual respecto al año anterior</div></div><div style="display:flex;align-items:center;gap:6px"><div class="chart-badge">Δ%</div><button class="btn-png" onclick="downloadNearestChart(this)" title="Descargar como PNG">⬇️ PNG</button></div></div>
       <div class="cw t"><canvas id="act-c-var"></canvas></div>
     </div>
   </div>
   <div class="sec-title" style="margin-top:22px">🏥 Análisis por Tipo y Dependencia</div><div class="sec-sep"></div>
   <div class="charts-grid g3">
     <div class="chart-card">
-      <div class="chart-header"><div><div class="chart-title">Distribución por Tipo de Establecimiento</div><div class="chart-sub">Participación en el total de actividades</div></div><div class="chart-badge">Tipo</div></div>
+      <div class="chart-header"><div><div class="chart-title">Distribución por Tipo de Establecimiento</div><div class="chart-sub">Participación en el total de actividades</div></div><div style="display:flex;align-items:center;gap:6px"><div class="chart-badge">Tipo</div><button class="btn-png" onclick="downloadNearestChart(this)" title="Descargar como PNG">⬇️ PNG</button></div></div>
       <div class="cw t"><canvas id="act-c-tipo-dona"></canvas></div>
     </div>
     <div class="chart-card">
-      <div class="chart-header"><div><div class="chart-title">Evolución por Tipo de Establecimiento</div><div class="chart-sub">Tendencia 2014–2025</div></div><div class="chart-badge">Tendencia</div></div>
+      <div class="chart-header"><div><div class="chart-title">Evolución por Tipo de Establecimiento</div><div class="chart-sub">Tendencia 2014–2025</div></div><div style="display:flex;align-items:center;gap:6px"><div class="chart-badge">Tendencia</div><button class="btn-png" onclick="downloadNearestChart(this)" title="Descargar como PNG">⬇️ PNG</button></div></div>
       <div class="cw t"><canvas id="act-c-tipo-linea"></canvas></div>
     </div>
     <div class="chart-card">
-      <div class="chart-header"><div><div class="chart-title">Actividades por Dependencia</div><div class="chart-sub">Municipal vs SS vs Otra</div></div><div class="chart-badge">Dependencia</div></div>
+      <div class="chart-header"><div><div class="chart-title">Actividades por Dependencia</div><div class="chart-sub">Municipal vs SS vs Otra</div></div><div style="display:flex;align-items:center;gap:6px"><div class="chart-badge">Dependencia</div><button class="btn-png" onclick="downloadNearestChart(this)" title="Descargar como PNG">⬇️ PNG</button></div></div>
       <div class="cw t"><canvas id="act-c-dep"></canvas></div>
     </div>
   </div>
   <div class="sec-title" style="margin-top:22px">🌆 Análisis Comunal y por Establecimiento</div><div class="sec-sep"></div>
   <div class="charts-grid g2c">
     <div class="chart-card">
-      <div class="chart-header"><div><div class="chart-title">Top 20 Comunas — Actividades SM</div><div class="chart-sub">Ordenadas por total acumulado</div></div><div class="chart-badge">Top 20</div></div>
+      <div class="chart-header"><div><div class="chart-title">Top 20 Comunas — Actividades SM</div><div class="chart-sub">Ordenadas por total acumulado</div></div><div style="display:flex;align-items:center;gap:6px"><div class="chart-badge">Top 20</div><button class="btn-png" onclick="downloadNearestChart(this)" title="Descargar como PNG">⬇️ PNG</button></div></div>
       <div class="cw xxxl"><canvas id="act-c-comunas"></canvas></div>
     </div>
     <div class="chart-card">
-      <div class="chart-header"><div><div class="chart-title">Top 10 Establecimientos</div><div class="chart-sub">Centros con más actividades</div></div><div class="chart-badge">Ranking</div></div>
+      <div class="chart-header"><div><div class="chart-title">Top 10 Establecimientos</div><div class="chart-sub">Centros con más actividades</div></div><div style="display:flex;align-items:center;gap:6px"><div class="chart-badge">Ranking</div><button class="btn-png" onclick="downloadNearestChart(this)" title="Descargar como PNG">⬇️ PNG</button></div></div>
       <div class="cw xxxl"><canvas id="act-c-top-estab"></canvas></div>
     </div>
   </div>
   <div class="sec-title" style="margin-top:22px">🔥 Distribución Temporal por Servicio de Salud</div><div class="sec-sep"></div>
   <div class="charts-grid g1">
     <div class="chart-card">
-      <div class="chart-header"><div><div class="chart-title">Actividades SM por SS y Año — Barras Apiladas</div><div class="chart-sub">Comparación multianual</div></div><div class="chart-badge">2014–2025</div></div>
+      <div class="chart-header"><div><div class="chart-title">Actividades SM por SS y Año — Barras Apiladas</div><div class="chart-sub">Comparación multianual</div></div><div style="display:flex;align-items:center;gap:6px"><div class="chart-badge">2014–2025</div><button class="btn-png" onclick="downloadNearestChart(this)" title="Descargar como PNG">⬇️ PNG</button></div></div>
       <div class="cw xxxl"><canvas id="act-c-ss-anio"></canvas></div>
     </div>
   </div>
   <div class="sec-title" style="margin-top:22px">🗺️ Mapa de Actividades por Establecimiento</div><div class="sec-sep"></div>
   <div class="charts-grid g1">
     <div class="chart-card">
-      <div class="chart-header"><div><div class="chart-title">Mapa de Actividades SM por Centro APS</div><div class="chart-sub">Tamaño proporcional al número de actividades</div></div><div class="chart-badge">Georreferenciado</div></div>
+      <div class="chart-header"><div><div class="chart-title">Mapa de Actividades SM por Centro APS</div><div class="chart-sub">Tamaño proporcional al número de actividades</div></div><div style="display:flex;align-items:center;gap:6px"><div class="chart-badge">Georreferenciado</div><button class="btn-png" onclick="downloadNearestChart(this)" title="Descargar como PNG">⬇️ PNG</button></div></div>
       <div class="map-ctrl">
         <label style="font-size:11px;font-weight:600;color:var(--texto-s)">Año mapa:</label>
         <select class="map-sel" id="act-map-year" onchange="actualizarMapaAct()"><option value="total">Total 2014–2025</option></select>
@@ -1241,7 +1243,7 @@ tbody td.rank{font-weight:800;color:var(--az2);text-align:center}
   <div class="sec-title" style="margin-top:22px">📋 Tabla de Establecimientos</div><div class="sec-sep"></div>
   <div class="charts-grid g1">
     <div class="chart-card">
-      <div class="chart-header"><div><div class="chart-title">Detalle por Establecimiento — Actividades SM</div><div class="chart-sub">Top 100 · Clic en encabezados para ordenar</div></div><div class="chart-badge" id="act-badge-tabla">Top 100</div></div>
+      <div class="chart-header"><div><div class="chart-title">Detalle por Establecimiento — Actividades SM</div><div class="chart-sub">Top 100 · Clic en encabezados para ordenar</div></div><div style="display:flex;gap:6px;align-items:center;flex-shrink:0"><div class="chart-badge" id="act-badge-tabla">Top 100</div><button class="btn-png" onclick="downloadNearestChart(this)" title="Descargar PNG">📥 PNG</button></div></div>
       <div class="tabla-wrap">
         <table><thead><tr>
           <th onclick="sortTab('act-tabla-body',0)">#</th>
@@ -1276,42 +1278,42 @@ tbody td.rank{font-weight:800;color:var(--az2);text-align:center}
   <div class="sec-title">📈 Tendencia del Indicador</div><div class="sec-sep"></div>
   <div class="charts-grid g1" style="margin-bottom:18px">
     <div class="chart-card">
-      <div class="chart-header"><div><div class="chart-title">Evolución de la Concentración de Actividades SM (2014–2025)</div><div class="chart-sub">Actividades ÷ PBC por año · Nivel nacional según filtros activos</div></div><div class="chart-badge">Concentración</div></div>
+      <div class="chart-header"><div><div class="chart-title">Evolución de la Concentración de Actividades SM (2014–2025)</div><div class="chart-sub">Actividades ÷ PBC por año · Nivel nacional según filtros activos</div></div><div style="display:flex;align-items:center;gap:6px"><div class="chart-badge">Concentración</div><button class="btn-png" onclick="downloadNearestChart(this)" title="Descargar como PNG">⬇️ PNG</button></div></div>
       <div class="cw t"><canvas id="conc-c-tend"></canvas></div>
     </div>
   </div>
   <div class="charts-grid g2">
     <div class="chart-card">
-      <div class="chart-header"><div><div class="chart-title">Concentración por Servicio de Salud</div><div class="chart-sub">Comparación entre SS · escala de color verde→rojo</div></div><div class="chart-badge">SS</div></div>
+      <div class="chart-header"><div><div class="chart-title">Concentración por Servicio de Salud</div><div class="chart-sub">Comparación entre SS · escala de color verde→rojo</div></div><div style="display:flex;align-items:center;gap:6px"><div class="chart-badge">SS</div><button class="btn-png" onclick="downloadNearestChart(this)" title="Descargar como PNG">⬇️ PNG</button></div></div>
       <div class="cw xt"><canvas id="conc-c-ss"></canvas></div>
     </div>
     <div class="chart-card">
-      <div class="chart-header"><div><div class="chart-title">Comparativa Actividades vs PBC por Año</div><div class="chart-sub">Volumen absoluto con concentración superpuesta</div></div><div class="chart-badge">Dual</div></div>
+      <div class="chart-header"><div><div class="chart-title">Comparativa Actividades vs PBC por Año</div><div class="chart-sub">Volumen absoluto con concentración superpuesta</div></div><div style="display:flex;align-items:center;gap:6px"><div class="chart-badge">Dual</div><button class="btn-png" onclick="downloadNearestChart(this)" title="Descargar como PNG">⬇️ PNG</button></div></div>
       <div class="cw t"><canvas id="conc-c-dual"></canvas></div>
     </div>
   </div>
   <div class="sec-title" style="margin-top:22px">🏥 Concentración por Tipo y Dependencia</div><div class="sec-sep"></div>
   <div class="charts-grid g2">
     <div class="chart-card">
-      <div class="chart-header"><div><div class="chart-title">Concentración por Tipo de Establecimiento</div><div class="chart-sub">Intensidad de atención según tipo de centro</div></div><div class="chart-badge">Tipo</div></div>
+      <div class="chart-header"><div><div class="chart-title">Concentración por Tipo de Establecimiento</div><div class="chart-sub">Intensidad de atención según tipo de centro</div></div><div style="display:flex;align-items:center;gap:6px"><div class="chart-badge">Tipo</div><button class="btn-png" onclick="downloadNearestChart(this)" title="Descargar como PNG">⬇️ PNG</button></div></div>
       <div class="cw t"><canvas id="conc-c-tipo"></canvas></div>
     </div>
     <div class="chart-card">
-      <div class="chart-header"><div><div class="chart-title">Concentración por Dependencia Administrativa</div><div class="chart-sub">Municipal vs SS vs Otra</div></div><div class="chart-badge">Dependencia</div></div>
+      <div class="chart-header"><div><div class="chart-title">Concentración por Dependencia Administrativa</div><div class="chart-sub">Municipal vs SS vs Otra</div></div><div style="display:flex;align-items:center;gap:6px"><div class="chart-badge">Dependencia</div><button class="btn-png" onclick="downloadNearestChart(this)" title="Descargar como PNG">⬇️ PNG</button></div></div>
       <div class="cw t"><canvas id="conc-c-dep"></canvas></div>
     </div>
   </div>
   <div class="sec-title" style="margin-top:22px">📊 Evolución por Servicio de Salud</div><div class="sec-sep"></div>
   <div class="charts-grid g1">
     <div class="chart-card">
-      <div class="chart-header"><div><div class="chart-title">Concentración por SS y Año — Líneas Múltiples</div><div class="chart-sub">Trayectoria de cada SS en el tiempo · Top 15 SS</div></div><div class="chart-badge">2014–2025</div></div>
+      <div class="chart-header"><div><div class="chart-title">Concentración por SS y Año — Líneas Múltiples</div><div class="chart-sub">Trayectoria de cada SS en el tiempo · Top 15 SS</div></div><div style="display:flex;align-items:center;gap:6px"><div class="chart-badge">2014–2025</div><button class="btn-png" onclick="downloadNearestChart(this)" title="Descargar como PNG">⬇️ PNG</button></div></div>
       <div class="cw xxxl"><canvas id="conc-c-ss-linea"></canvas></div>
     </div>
   </div>
   <div class="sec-title" style="margin-top:22px">📋 Tabla del Indicador por Establecimiento</div><div class="sec-sep"></div>
   <div class="charts-grid g1">
     <div class="chart-card">
-      <div class="chart-header"><div><div class="chart-title">Concentración por Establecimiento</div><div class="chart-sub">Solo establecimientos con PBC > 0 · Clic en encabezados para ordenar</div></div><div class="chart-badge" id="conc-badge-tabla">—</div></div>
+      <div class="chart-header"><div><div class="chart-title">Concentración por Establecimiento</div><div class="chart-sub">Solo establecimientos con PBC > 0 · Clic en encabezados para ordenar</div></div><div style="display:flex;gap:6px;align-items:center;flex-shrink:0"><div class="chart-badge" id="conc-badge-tabla">—</div><button class="btn-png" onclick="downloadNearestChart(this)" title="Descargar PNG">📥 PNG</button></div></div>
       <div class="tabla-wrap">
         <table><thead><tr>
           <th onclick="sortTab('conc-tabla-body',0)">#</th>
@@ -1347,57 +1349,57 @@ tbody td.rank{font-weight:800;color:var(--az2);text-align:center}
   <div class="sec-title">📈 Tendencia Temporal</div><div class="sec-sep"></div>
   <div class="charts-grid g1" style="margin-bottom:18px">
     <div class="chart-card">
-      <div class="chart-header"><div><div class="chart-title">Evolución Total de Controles Individuales SM por Año (2014–2025)</div><div class="chart-sub">Total nacional · Impacto COVID-19 en 2020 y recuperación sostenida hasta 2025</div></div><div class="chart-badge">Nacional</div></div>
+      <div class="chart-header"><div><div class="chart-title">Evolución Total de Controles Individuales SM por Año (2014–2025)</div><div class="chart-sub">Total nacional · Impacto COVID-19 en 2020 y recuperación sostenida hasta 2025</div></div><div style="display:flex;align-items:center;gap:6px"><div class="chart-badge">Nacional</div><button class="btn-png" onclick="downloadNearestChart(this)" title="Descargar como PNG">⬇️ PNG</button></div></div>
       <div class="cw t"><canvas id="ctrl-c-tend"></canvas></div>
     </div>
   </div>
   <div class="charts-grid g2">
     <div class="chart-card">
-      <div class="chart-header"><div><div class="chart-title">Controles Individuales por Servicio de Salud</div><div class="chart-sub">Comparación entre los 29 SS</div></div><div class="chart-badge">SS</div></div>
+      <div class="chart-header"><div><div class="chart-title">Controles Individuales por Servicio de Salud</div><div class="chart-sub">Comparación entre los 29 SS</div></div><div style="display:flex;align-items:center;gap:6px"><div class="chart-badge">SS</div><button class="btn-png" onclick="downloadNearestChart(this)" title="Descargar como PNG">⬇️ PNG</button></div></div>
       <div class="cw xt"><canvas id="ctrl-c-ss"></canvas></div>
     </div>
     <div class="chart-card">
-      <div class="chart-header"><div><div class="chart-title">Variación % Año a Año</div><div class="chart-sub">Cambio porcentual respecto al año anterior</div></div><div class="chart-badge">Δ%</div></div>
+      <div class="chart-header"><div><div class="chart-title">Variación % Año a Año</div><div class="chart-sub">Cambio porcentual respecto al año anterior</div></div><div style="display:flex;align-items:center;gap:6px"><div class="chart-badge">Δ%</div><button class="btn-png" onclick="downloadNearestChart(this)" title="Descargar como PNG">⬇️ PNG</button></div></div>
       <div class="cw t"><canvas id="ctrl-c-var"></canvas></div>
     </div>
   </div>
   <div class="sec-title" style="margin-top:22px">🏥 Análisis por Tipo y Dependencia</div><div class="sec-sep"></div>
   <div class="charts-grid g3">
     <div class="chart-card">
-      <div class="chart-header"><div><div class="chart-title">Distribución por Tipo de Establecimiento</div><div class="chart-sub">Participación en el total de controles</div></div><div class="chart-badge">Tipo</div></div>
+      <div class="chart-header"><div><div class="chart-title">Distribución por Tipo de Establecimiento</div><div class="chart-sub">Participación en el total de controles</div></div><div style="display:flex;align-items:center;gap:6px"><div class="chart-badge">Tipo</div><button class="btn-png" onclick="downloadNearestChart(this)" title="Descargar como PNG">⬇️ PNG</button></div></div>
       <div class="cw t"><canvas id="ctrl-c-tipo-dona"></canvas></div>
     </div>
     <div class="chart-card">
-      <div class="chart-header"><div><div class="chart-title">Evolución por Tipo de Establecimiento</div><div class="chart-sub">Tendencia 2014–2025</div></div><div class="chart-badge">Tendencia</div></div>
+      <div class="chart-header"><div><div class="chart-title">Evolución por Tipo de Establecimiento</div><div class="chart-sub">Tendencia 2014–2025</div></div><div style="display:flex;align-items:center;gap:6px"><div class="chart-badge">Tendencia</div><button class="btn-png" onclick="downloadNearestChart(this)" title="Descargar como PNG">⬇️ PNG</button></div></div>
       <div class="cw t"><canvas id="ctrl-c-tipo-linea"></canvas></div>
     </div>
     <div class="chart-card">
-      <div class="chart-header"><div><div class="chart-title">Controles por Dependencia</div><div class="chart-sub">Municipal vs SS vs Otra</div></div><div class="chart-badge">Dependencia</div></div>
+      <div class="chart-header"><div><div class="chart-title">Controles por Dependencia</div><div class="chart-sub">Municipal vs SS vs Otra</div></div><div style="display:flex;align-items:center;gap:6px"><div class="chart-badge">Dependencia</div><button class="btn-png" onclick="downloadNearestChart(this)" title="Descargar como PNG">⬇️ PNG</button></div></div>
       <div class="cw t"><canvas id="ctrl-c-dep"></canvas></div>
     </div>
   </div>
   <div class="sec-title" style="margin-top:22px">🌆 Análisis Comunal y por Establecimiento</div><div class="sec-sep"></div>
   <div class="charts-grid g2c">
     <div class="chart-card">
-      <div class="chart-header"><div><div class="chart-title">Top 20 Comunas — Controles Individuales SM</div><div class="chart-sub">Ordenadas por total acumulado</div></div><div class="chart-badge">Top 20</div></div>
+      <div class="chart-header"><div><div class="chart-title">Top 20 Comunas — Controles Individuales SM</div><div class="chart-sub">Ordenadas por total acumulado</div></div><div style="display:flex;align-items:center;gap:6px"><div class="chart-badge">Top 20</div><button class="btn-png" onclick="downloadNearestChart(this)" title="Descargar como PNG">⬇️ PNG</button></div></div>
       <div class="cw xxxl"><canvas id="ctrl-c-comunas"></canvas></div>
     </div>
     <div class="chart-card">
-      <div class="chart-header"><div><div class="chart-title">Top 10 Establecimientos</div><div class="chart-sub">Centros con más controles individuales</div></div><div class="chart-badge">Ranking</div></div>
+      <div class="chart-header"><div><div class="chart-title">Top 10 Establecimientos</div><div class="chart-sub">Centros con más controles individuales</div></div><div style="display:flex;align-items:center;gap:6px"><div class="chart-badge">Ranking</div><button class="btn-png" onclick="downloadNearestChart(this)" title="Descargar como PNG">⬇️ PNG</button></div></div>
       <div class="cw xxxl"><canvas id="ctrl-c-top-estab"></canvas></div>
     </div>
   </div>
   <div class="sec-title" style="margin-top:22px">🔥 Distribución Temporal por Servicio de Salud</div><div class="sec-sep"></div>
   <div class="charts-grid g1">
     <div class="chart-card">
-      <div class="chart-header"><div><div class="chart-title">Controles Individuales por SS y Año — Barras Apiladas</div><div class="chart-sub">Comparación multianual</div></div><div class="chart-badge">2014–2025</div></div>
+      <div class="chart-header"><div><div class="chart-title">Controles Individuales por SS y Año — Barras Apiladas</div><div class="chart-sub">Comparación multianual</div></div><div style="display:flex;align-items:center;gap:6px"><div class="chart-badge">2014–2025</div><button class="btn-png" onclick="downloadNearestChart(this)" title="Descargar como PNG">⬇️ PNG</button></div></div>
       <div class="cw xxxl"><canvas id="ctrl-c-ss-anio"></canvas></div>
     </div>
   </div>
   <div class="sec-title" style="margin-top:22px">🗺️ Mapa de Controles por Establecimiento</div><div class="sec-sep"></div>
   <div class="charts-grid g1">
     <div class="chart-card">
-      <div class="chart-header"><div><div class="chart-title">Mapa de Controles Individuales SM por Centro APS</div><div class="chart-sub">Tamaño proporcional al número de controles</div></div><div class="chart-badge">Georreferenciado</div></div>
+      <div class="chart-header"><div><div class="chart-title">Mapa de Controles Individuales SM por Centro APS</div><div class="chart-sub">Tamaño proporcional al número de controles</div></div><div style="display:flex;align-items:center;gap:6px"><div class="chart-badge">Georreferenciado</div><button class="btn-png" onclick="downloadNearestChart(this)" title="Descargar como PNG">⬇️ PNG</button></div></div>
       <div class="map-ctrl">
         <label style="font-size:11px;font-weight:600;color:var(--texto-s)">Año mapa:</label>
         <select class="map-sel" id="ctrl-map-year" onchange="actualizarMapaCtrl()"><option value="total">Total 2014–2025</option></select>
@@ -1415,7 +1417,7 @@ tbody td.rank{font-weight:800;color:var(--az2);text-align:center}
   <div class="sec-title" style="margin-top:22px">📋 Tabla de Establecimientos</div><div class="sec-sep"></div>
   <div class="charts-grid g1">
     <div class="chart-card">
-      <div class="chart-header"><div><div class="chart-title">Detalle por Establecimiento — Controles Individuales SM</div><div class="chart-sub">Top 100 · Clic en encabezados para ordenar</div></div><div class="chart-badge" id="ctrl-badge-tabla">Top 100</div></div>
+      <div class="chart-header"><div><div class="chart-title">Detalle por Establecimiento — Controles Individuales SM</div><div class="chart-sub">Top 100 · Clic en encabezados para ordenar</div></div><div style="display:flex;gap:6px;align-items:center;flex-shrink:0"><div class="chart-badge" id="ctrl-badge-tabla">Top 100</div><button class="btn-png" onclick="downloadNearestChart(this)" title="Descargar PNG">📥 PNG</button></div></div>
       <div class="tabla-wrap">
         <table><thead><tr>
           <th onclick="sortTab('ctrl-tabla-body',0)">#</th>
@@ -1450,42 +1452,42 @@ tbody td.rank{font-weight:800;color:var(--az2);text-align:center}
   <div class="sec-title">📈 Tendencia del Indicador</div><div class="sec-sep"></div>
   <div class="charts-grid g1" style="margin-bottom:18px">
     <div class="chart-card">
-      <div class="chart-header"><div><div class="chart-title">Evolución de la Proporción IPG / Total Controles (2014–2025)</div><div class="chart-sub">% nacional · IPG ÷ (IPG + Controles Individuales) × 100</div></div><div class="chart-badge">% Proporción</div></div>
+      <div class="chart-header"><div><div class="chart-title">Evolución de la Proporción IPG / Total Controles (2014–2025)</div><div class="chart-sub">% nacional · IPG ÷ (IPG + Controles Individuales) × 100</div></div><div style="display:flex;align-items:center;gap:6px"><div class="chart-badge">% Proporción</div><button class="btn-png" onclick="downloadNearestChart(this)" title="Descargar como PNG">⬇️ PNG</button></div></div>
       <div class="cw t"><canvas id="prop-c-tend"></canvas></div>
     </div>
   </div>
   <div class="charts-grid g2">
     <div class="chart-card">
-      <div class="chart-header"><div><div class="chart-title">Proporción por Servicio de Salud</div><div class="chart-sub">Comparación entre SS · escala de color según nivel</div></div><div class="chart-badge">SS</div></div>
+      <div class="chart-header"><div><div class="chart-title">Proporción por Servicio de Salud</div><div class="chart-sub">Comparación entre SS · escala de color según nivel</div></div><div style="display:flex;align-items:center;gap:6px"><div class="chart-badge">SS</div><button class="btn-png" onclick="downloadNearestChart(this)" title="Descargar como PNG">⬇️ PNG</button></div></div>
       <div class="cw xt"><canvas id="prop-c-ss"></canvas></div>
     </div>
     <div class="chart-card">
-      <div class="chart-header"><div><div class="chart-title">IPG vs Controles Individuales por Año</div><div class="chart-sub">Composición del total de controles SM</div></div><div class="chart-badge">Composición</div></div>
+      <div class="chart-header"><div><div class="chart-title">IPG vs Controles Individuales por Año</div><div class="chart-sub">Composición del total de controles SM</div></div><div style="display:flex;align-items:center;gap:6px"><div class="chart-badge">Composición</div><button class="btn-png" onclick="downloadNearestChart(this)" title="Descargar como PNG">⬇️ PNG</button></div></div>
       <div class="cw t"><canvas id="prop-c-comp"></canvas></div>
     </div>
   </div>
   <div class="sec-title" style="margin-top:22px">🏥 Proporción por Tipo y Dependencia</div><div class="sec-sep"></div>
   <div class="charts-grid g2">
     <div class="chart-card">
-      <div class="chart-header"><div><div class="chart-title">Proporción IPG por Tipo de Establecimiento</div><div class="chart-sub">Uso de modalidad grupal según tipo de centro</div></div><div class="chart-badge">Tipo</div></div>
+      <div class="chart-header"><div><div class="chart-title">Proporción IPG por Tipo de Establecimiento</div><div class="chart-sub">Uso de modalidad grupal según tipo de centro</div></div><div style="display:flex;align-items:center;gap:6px"><div class="chart-badge">Tipo</div><button class="btn-png" onclick="downloadNearestChart(this)" title="Descargar como PNG">⬇️ PNG</button></div></div>
       <div class="cw t"><canvas id="prop-c-tipo"></canvas></div>
     </div>
     <div class="chart-card">
-      <div class="chart-header"><div><div class="chart-title">Proporción IPG por Dependencia Administrativa</div><div class="chart-sub">Municipal vs SS vs Otra</div></div><div class="chart-badge">Dependencia</div></div>
+      <div class="chart-header"><div><div class="chart-title">Proporción IPG por Dependencia Administrativa</div><div class="chart-sub">Municipal vs SS vs Otra</div></div><div style="display:flex;align-items:center;gap:6px"><div class="chart-badge">Dependencia</div><button class="btn-png" onclick="downloadNearestChart(this)" title="Descargar como PNG">⬇️ PNG</button></div></div>
       <div class="cw t"><canvas id="prop-c-dep"></canvas></div>
     </div>
   </div>
   <div class="sec-title" style="margin-top:22px">📊 Evolución por Servicio de Salud</div><div class="sec-sep"></div>
   <div class="charts-grid g1">
     <div class="chart-card">
-      <div class="chart-header"><div><div class="chart-title">Proporción IPG por SS y Año — Líneas Múltiples</div><div class="chart-sub">Trayectoria de cada SS en el tiempo · Top 15 SS</div></div><div class="chart-badge">2014–2025</div></div>
+      <div class="chart-header"><div><div class="chart-title">Proporción IPG por SS y Año — Líneas Múltiples</div><div class="chart-sub">Trayectoria de cada SS en el tiempo · Top 15 SS</div></div><div style="display:flex;align-items:center;gap:6px"><div class="chart-badge">2014–2025</div><button class="btn-png" onclick="downloadNearestChart(this)" title="Descargar como PNG">⬇️ PNG</button></div></div>
       <div class="cw xxxl"><canvas id="prop-c-ss-linea"></canvas></div>
     </div>
   </div>
   <div class="sec-title" style="margin-top:22px">📋 Tabla por Establecimiento</div><div class="sec-sep"></div>
   <div class="charts-grid g1">
     <div class="chart-card">
-      <div class="chart-header"><div><div class="chart-title">Proporción IPG por Establecimiento</div><div class="chart-sub">Solo establecimientos con al menos un control · Clic en encabezados para ordenar</div></div><div class="chart-badge" id="prop-badge-tabla">—</div></div>
+      <div class="chart-header"><div><div class="chart-title">Proporción IPG por Establecimiento</div><div class="chart-sub">Solo establecimientos con al menos un control · Clic en encabezados para ordenar</div></div><div style="display:flex;gap:6px;align-items:center;flex-shrink:0"><div class="chart-badge" id="prop-badge-tabla">—</div><button class="btn-png" onclick="downloadNearestChart(this)" title="Descargar PNG">📥 PNG</button></div></div>
       <div class="tabla-wrap">
         <table><thead><tr>
           <th onclick="sortTab('prop-tabla-body',0)">#</th>
@@ -1522,57 +1524,57 @@ tbody td.rank{font-weight:800;color:var(--az2);text-align:center}
   <div class="sec-title">📈 Tendencia Temporal</div><div class="sec-sep"></div>
   <div class="charts-grid g1" style="margin-bottom:18px">
     <div class="chart-card">
-      <div class="chart-header"><div><div class="chart-title">Evolución Total de Abandonos SM por Año (2014–2025)</div><div class="chart-sub">Total nacional · Tendencia creciente preocupante: de 121.758 en 2014 a 243.414 en 2025</div></div><div class="chart-badge">Nacional</div></div>
+      <div class="chart-header"><div><div class="chart-title">Evolución Total de Abandonos SM por Año (2014–2025)</div><div class="chart-sub">Total nacional · Tendencia creciente preocupante: de 121.758 en 2014 a 243.414 en 2025</div></div><div style="display:flex;align-items:center;gap:6px"><div class="chart-badge">Nacional</div><button class="btn-png" onclick="downloadNearestChart(this)" title="Descargar como PNG">⬇️ PNG</button></div></div>
       <div class="cw t"><canvas id="ab-c-tend"></canvas></div>
     </div>
   </div>
   <div class="charts-grid g2">
     <div class="chart-card">
-      <div class="chart-header"><div><div class="chart-title">Abandonos por Servicio de Salud</div><div class="chart-sub">Comparación entre los 29 SS</div></div><div class="chart-badge">SS</div></div>
+      <div class="chart-header"><div><div class="chart-title">Abandonos por Servicio de Salud</div><div class="chart-sub">Comparación entre los 29 SS</div></div><div style="display:flex;align-items:center;gap:6px"><div class="chart-badge">SS</div><button class="btn-png" onclick="downloadNearestChart(this)" title="Descargar como PNG">⬇️ PNG</button></div></div>
       <div class="cw xt"><canvas id="ab-c-ss"></canvas></div>
     </div>
     <div class="chart-card">
-      <div class="chart-header"><div><div class="chart-title">Variación % Año a Año</div><div class="chart-sub">Cambio porcentual respecto al año anterior</div></div><div class="chart-badge">Δ%</div></div>
+      <div class="chart-header"><div><div class="chart-title">Variación % Año a Año</div><div class="chart-sub">Cambio porcentual respecto al año anterior</div></div><div style="display:flex;align-items:center;gap:6px"><div class="chart-badge">Δ%</div><button class="btn-png" onclick="downloadNearestChart(this)" title="Descargar como PNG">⬇️ PNG</button></div></div>
       <div class="cw t"><canvas id="ab-c-var"></canvas></div>
     </div>
   </div>
   <div class="sec-title" style="margin-top:22px">🏥 Análisis por Tipo y Dependencia</div><div class="sec-sep"></div>
   <div class="charts-grid g3">
     <div class="chart-card">
-      <div class="chart-header"><div><div class="chart-title">Distribución por Tipo de Establecimiento</div><div class="chart-sub">Participación en el total de abandonos</div></div><div class="chart-badge">Tipo</div></div>
+      <div class="chart-header"><div><div class="chart-title">Distribución por Tipo de Establecimiento</div><div class="chart-sub">Participación en el total de abandonos</div></div><div style="display:flex;align-items:center;gap:6px"><div class="chart-badge">Tipo</div><button class="btn-png" onclick="downloadNearestChart(this)" title="Descargar como PNG">⬇️ PNG</button></div></div>
       <div class="cw t"><canvas id="ab-c-tipo-dona"></canvas></div>
     </div>
     <div class="chart-card">
-      <div class="chart-header"><div><div class="chart-title">Evolución por Tipo de Establecimiento</div><div class="chart-sub">Tendencia 2014–2025</div></div><div class="chart-badge">Tendencia</div></div>
+      <div class="chart-header"><div><div class="chart-title">Evolución por Tipo de Establecimiento</div><div class="chart-sub">Tendencia 2014–2025</div></div><div style="display:flex;align-items:center;gap:6px"><div class="chart-badge">Tendencia</div><button class="btn-png" onclick="downloadNearestChart(this)" title="Descargar como PNG">⬇️ PNG</button></div></div>
       <div class="cw t"><canvas id="ab-c-tipo-linea"></canvas></div>
     </div>
     <div class="chart-card">
-      <div class="chart-header"><div><div class="chart-title">Abandonos por Dependencia</div><div class="chart-sub">Municipal vs SS vs Otra</div></div><div class="chart-badge">Dependencia</div></div>
+      <div class="chart-header"><div><div class="chart-title">Abandonos por Dependencia</div><div class="chart-sub">Municipal vs SS vs Otra</div></div><div style="display:flex;align-items:center;gap:6px"><div class="chart-badge">Dependencia</div><button class="btn-png" onclick="downloadNearestChart(this)" title="Descargar como PNG">⬇️ PNG</button></div></div>
       <div class="cw t"><canvas id="ab-c-dep"></canvas></div>
     </div>
   </div>
   <div class="sec-title" style="margin-top:22px">🌆 Análisis Comunal y por Establecimiento</div><div class="sec-sep"></div>
   <div class="charts-grid g2c">
     <div class="chart-card">
-      <div class="chart-header"><div><div class="chart-title">Top 20 Comunas — Abandonos SM</div><div class="chart-sub">Ordenadas por total acumulado</div></div><div class="chart-badge">Top 20</div></div>
+      <div class="chart-header"><div><div class="chart-title">Top 20 Comunas — Abandonos SM</div><div class="chart-sub">Ordenadas por total acumulado</div></div><div style="display:flex;align-items:center;gap:6px"><div class="chart-badge">Top 20</div><button class="btn-png" onclick="downloadNearestChart(this)" title="Descargar como PNG">⬇️ PNG</button></div></div>
       <div class="cw xxxl"><canvas id="ab-c-comunas"></canvas></div>
     </div>
     <div class="chart-card">
-      <div class="chart-header"><div><div class="chart-title">Top 10 Establecimientos</div><div class="chart-sub">Centros con más abandonos</div></div><div class="chart-badge">Ranking</div></div>
+      <div class="chart-header"><div><div class="chart-title">Top 10 Establecimientos</div><div class="chart-sub">Centros con más abandonos</div></div><div style="display:flex;align-items:center;gap:6px"><div class="chart-badge">Ranking</div><button class="btn-png" onclick="downloadNearestChart(this)" title="Descargar como PNG">⬇️ PNG</button></div></div>
       <div class="cw xxxl"><canvas id="ab-c-top-estab"></canvas></div>
     </div>
   </div>
   <div class="sec-title" style="margin-top:22px">🔥 Distribución Temporal por Servicio de Salud</div><div class="sec-sep"></div>
   <div class="charts-grid g1">
     <div class="chart-card">
-      <div class="chart-header"><div><div class="chart-title">Abandonos por SS y Año — Barras Apiladas</div><div class="chart-sub">Comparación multianual</div></div><div class="chart-badge">2014–2025</div></div>
+      <div class="chart-header"><div><div class="chart-title">Abandonos por SS y Año — Barras Apiladas</div><div class="chart-sub">Comparación multianual</div></div><div style="display:flex;align-items:center;gap:6px"><div class="chart-badge">2014–2025</div><button class="btn-png" onclick="downloadNearestChart(this)" title="Descargar como PNG">⬇️ PNG</button></div></div>
       <div class="cw xxxl"><canvas id="ab-c-ss-anio"></canvas></div>
     </div>
   </div>
   <div class="sec-title" style="margin-top:22px">🗺️ Mapa de Abandonos por Establecimiento</div><div class="sec-sep"></div>
   <div class="charts-grid g1">
     <div class="chart-card">
-      <div class="chart-header"><div><div class="chart-title">Mapa de Abandonos SM por Centro APS</div><div class="chart-sub">Tamaño proporcional al número de abandonos</div></div><div class="chart-badge">Georreferenciado</div></div>
+      <div class="chart-header"><div><div class="chart-title">Mapa de Abandonos SM por Centro APS</div><div class="chart-sub">Tamaño proporcional al número de abandonos</div></div><div style="display:flex;align-items:center;gap:6px"><div class="chart-badge">Georreferenciado</div><button class="btn-png" onclick="downloadNearestChart(this)" title="Descargar como PNG">⬇️ PNG</button></div></div>
       <div class="map-ctrl">
         <label style="font-size:11px;font-weight:600;color:var(--texto-s)">Año mapa:</label>
         <select class="map-sel" id="ab-map-year" onchange="actualizarMapaAb()"><option value="total">Total 2014–2025</option></select>
@@ -1590,7 +1592,7 @@ tbody td.rank{font-weight:800;color:var(--az2);text-align:center}
   <div class="sec-title" style="margin-top:22px">📋 Tabla de Establecimientos</div><div class="sec-sep"></div>
   <div class="charts-grid g1">
     <div class="chart-card">
-      <div class="chart-header"><div><div class="chart-title">Detalle por Establecimiento — Abandonos SM</div><div class="chart-sub">Top 100 · Clic en encabezados para ordenar</div></div><div class="chart-badge" id="ab-badge-tabla">Top 100</div></div>
+      <div class="chart-header"><div><div class="chart-title">Detalle por Establecimiento — Abandonos SM</div><div class="chart-sub">Top 100 · Clic en encabezados para ordenar</div></div><div style="display:flex;gap:6px;align-items:center;flex-shrink:0"><div class="chart-badge" id="ab-badge-tabla">Top 100</div><button class="btn-png" onclick="downloadNearestChart(this)" title="Descargar PNG">📥 PNG</button></div></div>
       <div class="tabla-wrap">
         <table><thead><tr>
           <th onclick="sortTab('ab-tabla-body',0)">#</th>
@@ -1625,42 +1627,42 @@ tbody td.rank{font-weight:800;color:var(--az2);text-align:center}
   <div class="sec-title">📈 Tendencia del Indicador</div><div class="sec-sep"></div>
   <div class="charts-grid g1" style="margin-bottom:18px">
     <div class="chart-card">
-      <div class="chart-header"><div><div class="chart-title">Evolución del % Abandonos/PBC (2014–2025)</div><div class="chart-sub">Tasa de deserción anual sobre población en control · nivel nacional</div></div><div class="chart-badge">% Deserción</div></div>
+      <div class="chart-header"><div><div class="chart-title">Evolución del % Abandonos/PBC (2014–2025)</div><div class="chart-sub">Tasa de deserción anual sobre población en control · nivel nacional</div></div><div style="display:flex;align-items:center;gap:6px"><div class="chart-badge">% Deserción</div><button class="btn-png" onclick="downloadNearestChart(this)" title="Descargar como PNG">⬇️ PNG</button></div></div>
       <div class="cw t"><canvas id="abpbc-c-tend"></canvas></div>
     </div>
   </div>
   <div class="charts-grid g2">
     <div class="chart-card">
-      <div class="chart-header"><div><div class="chart-title">% Abandonos/PBC por Servicio de Salud</div><div class="chart-sub">Comparación entre SS · rojo = mayor deserción</div></div><div class="chart-badge">SS</div></div>
+      <div class="chart-header"><div><div class="chart-title">% Abandonos/PBC por Servicio de Salud</div><div class="chart-sub">Comparación entre SS · rojo = mayor deserción</div></div><div style="display:flex;align-items:center;gap:6px"><div class="chart-badge">SS</div><button class="btn-png" onclick="downloadNearestChart(this)" title="Descargar como PNG">⬇️ PNG</button></div></div>
       <div class="cw xt"><canvas id="abpbc-c-ss"></canvas></div>
     </div>
     <div class="chart-card">
-      <div class="chart-header"><div><div class="chart-title">Abandonos vs PBC por Año</div><div class="chart-sub">Volumen absoluto con % superpuesto</div></div><div class="chart-badge">Dual</div></div>
+      <div class="chart-header"><div><div class="chart-title">Abandonos vs PBC por Año</div><div class="chart-sub">Volumen absoluto con % superpuesto</div></div><div style="display:flex;align-items:center;gap:6px"><div class="chart-badge">Dual</div><button class="btn-png" onclick="downloadNearestChart(this)" title="Descargar como PNG">⬇️ PNG</button></div></div>
       <div class="cw t"><canvas id="abpbc-c-dual"></canvas></div>
     </div>
   </div>
   <div class="sec-title" style="margin-top:22px">🏥 Por Tipo y Dependencia</div><div class="sec-sep"></div>
   <div class="charts-grid g2">
     <div class="chart-card">
-      <div class="chart-header"><div><div class="chart-title">% Abandonos/PBC por Tipo de Establecimiento</div><div class="chart-sub">Tasa de deserción según tipo de centro</div></div><div class="chart-badge">Tipo</div></div>
+      <div class="chart-header"><div><div class="chart-title">% Abandonos/PBC por Tipo de Establecimiento</div><div class="chart-sub">Tasa de deserción según tipo de centro</div></div><div style="display:flex;align-items:center;gap:6px"><div class="chart-badge">Tipo</div><button class="btn-png" onclick="downloadNearestChart(this)" title="Descargar como PNG">⬇️ PNG</button></div></div>
       <div class="cw t"><canvas id="abpbc-c-tipo"></canvas></div>
     </div>
     <div class="chart-card">
-      <div class="chart-header"><div><div class="chart-title">% Abandonos/PBC por Dependencia</div><div class="chart-sub">Municipal vs SS vs Otra</div></div><div class="chart-badge">Dependencia</div></div>
+      <div class="chart-header"><div><div class="chart-title">% Abandonos/PBC por Dependencia</div><div class="chart-sub">Municipal vs SS vs Otra</div></div><div style="display:flex;align-items:center;gap:6px"><div class="chart-badge">Dependencia</div><button class="btn-png" onclick="downloadNearestChart(this)" title="Descargar como PNG">⬇️ PNG</button></div></div>
       <div class="cw t"><canvas id="abpbc-c-dep"></canvas></div>
     </div>
   </div>
   <div class="sec-title" style="margin-top:22px">📊 Evolución por SS</div><div class="sec-sep"></div>
   <div class="charts-grid g1">
     <div class="chart-card">
-      <div class="chart-header"><div><div class="chart-title">% Abandonos/PBC por SS y Año — Líneas Múltiples</div><div class="chart-sub">Trayectoria de deserción de cada SS · Top 15</div></div><div class="chart-badge">2014–2025</div></div>
+      <div class="chart-header"><div><div class="chart-title">% Abandonos/PBC por SS y Año — Líneas Múltiples</div><div class="chart-sub">Trayectoria de deserción de cada SS · Top 15</div></div><div style="display:flex;align-items:center;gap:6px"><div class="chart-badge">2014–2025</div><button class="btn-png" onclick="downloadNearestChart(this)" title="Descargar como PNG">⬇️ PNG</button></div></div>
       <div class="cw xxxl"><canvas id="abpbc-c-ss-linea"></canvas></div>
     </div>
   </div>
   <div class="sec-title" style="margin-top:22px">📋 Tabla por Establecimiento</div><div class="sec-sep"></div>
   <div class="charts-grid g1">
     <div class="chart-card">
-      <div class="chart-header"><div><div class="chart-title">% Abandonos/PBC por Establecimiento</div><div class="chart-sub">Solo establecimientos con PBC > 0 · Clic para ordenar</div></div><div class="chart-badge" id="abpbc-badge-tabla">—</div></div>
+      <div class="chart-header"><div><div class="chart-title">% Abandonos/PBC por Establecimiento</div><div class="chart-sub">Solo establecimientos con PBC > 0 · Clic para ordenar</div></div><div style="display:flex;gap:6px;align-items:center;flex-shrink:0"><div class="chart-badge" id="abpbc-badge-tabla">—</div><button class="btn-png" onclick="downloadNearestChart(this)" title="Descargar PNG">📥 PNG</button></div></div>
       <div class="tabla-wrap">
         <table><thead><tr>
           <th onclick="sortTab('abpbc-tabla-body',0)">#</th>
@@ -1696,42 +1698,42 @@ tbody td.rank{font-weight:800;color:var(--az2);text-align:center}
   <div class="sec-title">📈 Tendencia del Indicador</div><div class="sec-sep"></div>
   <div class="charts-grid g1" style="margin-bottom:18px">
     <div class="chart-card">
-      <div class="chart-header"><div><div class="chart-title">Evolución Tasa de Resolución Clínica SM (2014–2025)</div><div class="chart-sub">Altas ÷ (Altas + Abandonos) × 100 · nivel nacional según filtros</div></div><div class="chart-badge">% Resolución</div></div>
+      <div class="chart-header"><div><div class="chart-title">Evolución Tasa de Resolución Clínica SM (2014–2025)</div><div class="chart-sub">Altas ÷ (Altas + Abandonos) × 100 · nivel nacional según filtros</div></div><div style="display:flex;align-items:center;gap:6px"><div class="chart-badge">% Resolución</div><button class="btn-png" onclick="downloadNearestChart(this)" title="Descargar como PNG">⬇️ PNG</button></div></div>
       <div class="cw t"><canvas id="res-c-tend"></canvas></div>
     </div>
   </div>
   <div class="charts-grid g2">
     <div class="chart-card">
-      <div class="chart-header"><div><div class="chart-title">Tasa de Resolución por Servicio de Salud</div><div class="chart-sub">Verde = mayor resolución clínica · Rojo = mayor deserción</div></div><div class="chart-badge">SS</div></div>
+      <div class="chart-header"><div><div class="chart-title">Tasa de Resolución por Servicio de Salud</div><div class="chart-sub">Verde = mayor resolución clínica · Rojo = mayor deserción</div></div><div style="display:flex;align-items:center;gap:6px"><div class="chart-badge">SS</div><button class="btn-png" onclick="downloadNearestChart(this)" title="Descargar como PNG">⬇️ PNG</button></div></div>
       <div class="cw xt"><canvas id="res-c-ss"></canvas></div>
     </div>
     <div class="chart-card">
-      <div class="chart-header"><div><div class="chart-title">Altas vs Abandonos por Año</div><div class="chart-sub">Composición de egresos SM con tasa de resolución superpuesta</div></div><div class="chart-badge">Composición</div></div>
+      <div class="chart-header"><div><div class="chart-title">Altas vs Abandonos por Año</div><div class="chart-sub">Composición de egresos SM con tasa de resolución superpuesta</div></div><div style="display:flex;align-items:center;gap:6px"><div class="chart-badge">Composición</div><button class="btn-png" onclick="downloadNearestChart(this)" title="Descargar como PNG">⬇️ PNG</button></div></div>
       <div class="cw t"><canvas id="res-c-comp"></canvas></div>
     </div>
   </div>
   <div class="sec-title" style="margin-top:22px">🏥 Por Tipo y Dependencia</div><div class="sec-sep"></div>
   <div class="charts-grid g2">
     <div class="chart-card">
-      <div class="chart-header"><div><div class="chart-title">Tasa de Resolución por Tipo de Establecimiento</div><div class="chart-sub">Efectividad clínica comparada según tipo de centro</div></div><div class="chart-badge">Tipo</div></div>
+      <div class="chart-header"><div><div class="chart-title">Tasa de Resolución por Tipo de Establecimiento</div><div class="chart-sub">Efectividad clínica comparada según tipo de centro</div></div><div style="display:flex;align-items:center;gap:6px"><div class="chart-badge">Tipo</div><button class="btn-png" onclick="downloadNearestChart(this)" title="Descargar como PNG">⬇️ PNG</button></div></div>
       <div class="cw t"><canvas id="res-c-tipo"></canvas></div>
     </div>
     <div class="chart-card">
-      <div class="chart-header"><div><div class="chart-title">Tasa de Resolución por Dependencia</div><div class="chart-sub">Municipal vs SS vs Otra</div></div><div class="chart-badge">Dependencia</div></div>
+      <div class="chart-header"><div><div class="chart-title">Tasa de Resolución por Dependencia</div><div class="chart-sub">Municipal vs SS vs Otra</div></div><div style="display:flex;align-items:center;gap:6px"><div class="chart-badge">Dependencia</div><button class="btn-png" onclick="downloadNearestChart(this)" title="Descargar como PNG">⬇️ PNG</button></div></div>
       <div class="cw t"><canvas id="res-c-dep"></canvas></div>
     </div>
   </div>
   <div class="sec-title" style="margin-top:22px">📊 Evolución por SS</div><div class="sec-sep"></div>
   <div class="charts-grid g1">
     <div class="chart-card">
-      <div class="chart-header"><div><div class="chart-title">Tasa de Resolución por SS y Año — Líneas Múltiples</div><div class="chart-sub">Trayectoria de efectividad clínica de cada SS · Top 15</div></div><div class="chart-badge">2014–2025</div></div>
+      <div class="chart-header"><div><div class="chart-title">Tasa de Resolución por SS y Año — Líneas Múltiples</div><div class="chart-sub">Trayectoria de efectividad clínica de cada SS · Top 15</div></div><div style="display:flex;align-items:center;gap:6px"><div class="chart-badge">2014–2025</div><button class="btn-png" onclick="downloadNearestChart(this)" title="Descargar como PNG">⬇️ PNG</button></div></div>
       <div class="cw xxxl"><canvas id="res-c-ss-linea"></canvas></div>
     </div>
   </div>
   <div class="sec-title" style="margin-top:22px">📋 Tabla por Establecimiento</div><div class="sec-sep"></div>
   <div class="charts-grid g1">
     <div class="chart-card">
-      <div class="chart-header"><div><div class="chart-title">Tasa de Resolución Clínica por Establecimiento</div><div class="chart-sub">Solo establecimientos con egresos registrados · Clic para ordenar</div></div><div class="chart-badge" id="res-badge-tabla">—</div></div>
+      <div class="chart-header"><div><div class="chart-title">Tasa de Resolución Clínica por Establecimiento</div><div class="chart-sub">Solo establecimientos con egresos registrados · Clic para ordenar</div></div><div style="display:flex;gap:6px;align-items:center;flex-shrink:0"><div class="chart-badge" id="res-badge-tabla">—</div><button class="btn-png" onclick="downloadNearestChart(this)" title="Descargar PNG">📥 PNG</button></div></div>
       <div class="tabla-wrap">
         <table><thead><tr>
           <th onclick="sortTab('res-tabla-body',0)">#</th>
@@ -1768,57 +1770,57 @@ tbody td.rank{font-weight:800;color:var(--az2);text-align:center}
   <div class="sec-title">📈 Tendencia Temporal (2020–2025)</div><div class="sec-sep"></div>
   <div class="charts-grid g1" style="margin-bottom:18px">
     <div class="chart-card">
-      <div class="chart-header"><div><div class="chart-title">Evolución Total de PCI SM por Año (2020–2025)</div><div class="chart-sub">Total nacional · Crecimiento sostenido desde la implementación del registro</div></div><div class="chart-badge">Nacional</div></div>
+      <div class="chart-header"><div><div class="chart-title">Evolución Total de PCI SM por Año (2020–2025)</div><div class="chart-sub">Total nacional · Crecimiento sostenido desde la implementación del registro</div></div><div style="display:flex;align-items:center;gap:6px"><div class="chart-badge">Nacional</div><button class="btn-png" onclick="downloadNearestChart(this)" title="Descargar como PNG">⬇️ PNG</button></div></div>
       <div class="cw t"><canvas id="pci-c-tend"></canvas></div>
     </div>
   </div>
   <div class="charts-grid g2">
     <div class="chart-card">
-      <div class="chart-header"><div><div class="chart-title">PCI por Servicio de Salud</div><div class="chart-sub">Comparación entre los 29 SS</div></div><div class="chart-badge">SS</div></div>
+      <div class="chart-header"><div><div class="chart-title">PCI por Servicio de Salud</div><div class="chart-sub">Comparación entre los 29 SS</div></div><div style="display:flex;align-items:center;gap:6px"><div class="chart-badge">SS</div><button class="btn-png" onclick="downloadNearestChart(this)" title="Descargar como PNG">⬇️ PNG</button></div></div>
       <div class="cw xt"><canvas id="pci-c-ss"></canvas></div>
     </div>
     <div class="chart-card">
-      <div class="chart-header"><div><div class="chart-title">Variación % Año a Año</div><div class="chart-sub">Cambio porcentual respecto al año anterior</div></div><div class="chart-badge">Δ%</div></div>
+      <div class="chart-header"><div><div class="chart-title">Variación % Año a Año</div><div class="chart-sub">Cambio porcentual respecto al año anterior</div></div><div style="display:flex;align-items:center;gap:6px"><div class="chart-badge">Δ%</div><button class="btn-png" onclick="downloadNearestChart(this)" title="Descargar como PNG">⬇️ PNG</button></div></div>
       <div class="cw t"><canvas id="pci-c-var"></canvas></div>
     </div>
   </div>
   <div class="sec-title" style="margin-top:22px">🏥 Análisis por Tipo y Dependencia</div><div class="sec-sep"></div>
   <div class="charts-grid g3">
     <div class="chart-card">
-      <div class="chart-header"><div><div class="chart-title">Distribución por Tipo de Establecimiento</div><div class="chart-sub">Participación en el total de PCI</div></div><div class="chart-badge">Tipo</div></div>
+      <div class="chart-header"><div><div class="chart-title">Distribución por Tipo de Establecimiento</div><div class="chart-sub">Participación en el total de PCI</div></div><div style="display:flex;align-items:center;gap:6px"><div class="chart-badge">Tipo</div><button class="btn-png" onclick="downloadNearestChart(this)" title="Descargar como PNG">⬇️ PNG</button></div></div>
       <div class="cw t"><canvas id="pci-c-tipo-dona"></canvas></div>
     </div>
     <div class="chart-card">
-      <div class="chart-header"><div><div class="chart-title">Evolución por Tipo de Establecimiento</div><div class="chart-sub">Tendencia 2020–2025</div></div><div class="chart-badge">Tendencia</div></div>
+      <div class="chart-header"><div><div class="chart-title">Evolución por Tipo de Establecimiento</div><div class="chart-sub">Tendencia 2020–2025</div></div><div style="display:flex;align-items:center;gap:6px"><div class="chart-badge">Tendencia</div><button class="btn-png" onclick="downloadNearestChart(this)" title="Descargar como PNG">⬇️ PNG</button></div></div>
       <div class="cw t"><canvas id="pci-c-tipo-linea"></canvas></div>
     </div>
     <div class="chart-card">
-      <div class="chart-header"><div><div class="chart-title">PCI por Dependencia</div><div class="chart-sub">Municipal vs SS vs Otra</div></div><div class="chart-badge">Dependencia</div></div>
+      <div class="chart-header"><div><div class="chart-title">PCI por Dependencia</div><div class="chart-sub">Municipal vs SS vs Otra</div></div><div style="display:flex;align-items:center;gap:6px"><div class="chart-badge">Dependencia</div><button class="btn-png" onclick="downloadNearestChart(this)" title="Descargar como PNG">⬇️ PNG</button></div></div>
       <div class="cw t"><canvas id="pci-c-dep"></canvas></div>
     </div>
   </div>
   <div class="sec-title" style="margin-top:22px">🌆 Análisis Comunal y por Establecimiento</div><div class="sec-sep"></div>
   <div class="charts-grid g2c">
     <div class="chart-card">
-      <div class="chart-header"><div><div class="chart-title">Top 20 Comunas — PCI</div><div class="chart-sub">Ordenadas por total acumulado 2020–2025</div></div><div class="chart-badge">Top 20</div></div>
+      <div class="chart-header"><div><div class="chart-title">Top 20 Comunas — PCI</div><div class="chart-sub">Ordenadas por total acumulado 2020–2025</div></div><div style="display:flex;align-items:center;gap:6px"><div class="chart-badge">Top 20</div><button class="btn-png" onclick="downloadNearestChart(this)" title="Descargar como PNG">⬇️ PNG</button></div></div>
       <div class="cw xxxl"><canvas id="pci-c-comunas"></canvas></div>
     </div>
     <div class="chart-card">
-      <div class="chart-header"><div><div class="chart-title">Top 10 Establecimientos</div><div class="chart-sub">Centros con más PCI elaborados</div></div><div class="chart-badge">Ranking</div></div>
+      <div class="chart-header"><div><div class="chart-title">Top 10 Establecimientos</div><div class="chart-sub">Centros con más PCI elaborados</div></div><div style="display:flex;align-items:center;gap:6px"><div class="chart-badge">Ranking</div><button class="btn-png" onclick="downloadNearestChart(this)" title="Descargar como PNG">⬇️ PNG</button></div></div>
       <div class="cw xxxl"><canvas id="pci-c-top-estab"></canvas></div>
     </div>
   </div>
   <div class="sec-title" style="margin-top:22px">🔥 Distribución Temporal por Servicio de Salud</div><div class="sec-sep"></div>
   <div class="charts-grid g1">
     <div class="chart-card">
-      <div class="chart-header"><div><div class="chart-title">PCI por SS y Año — Barras Apiladas (2020–2025)</div><div class="chart-sub">Comparación multianual entre SS</div></div><div class="chart-badge">2020–2025</div></div>
+      <div class="chart-header"><div><div class="chart-title">PCI por SS y Año — Barras Apiladas (2020–2025)</div><div class="chart-sub">Comparación multianual entre SS</div></div><div style="display:flex;align-items:center;gap:6px"><div class="chart-badge">2020–2025</div><button class="btn-png" onclick="downloadNearestChart(this)" title="Descargar como PNG">⬇️ PNG</button></div></div>
       <div class="cw xxxl"><canvas id="pci-c-ss-anio"></canvas></div>
     </div>
   </div>
   <div class="sec-title" style="margin-top:22px">📋 Tabla de Establecimientos</div><div class="sec-sep"></div>
   <div class="charts-grid g1">
     <div class="chart-card">
-      <div class="chart-header"><div><div class="chart-title">Detalle por Establecimiento — PCI SM</div><div class="chart-sub">Top 100 · Clic en encabezados para ordenar</div></div><div class="chart-badge" id="pci-badge-tabla">Top 100</div></div>
+      <div class="chart-header"><div><div class="chart-title">Detalle por Establecimiento — PCI SM</div><div class="chart-sub">Top 100 · Clic en encabezados para ordenar</div></div><div style="display:flex;gap:6px;align-items:center;flex-shrink:0"><div class="chart-badge" id="pci-badge-tabla">Top 100</div><button class="btn-png" onclick="downloadNearestChart(this)" title="Descargar PNG">📥 PNG</button></div></div>
       <div class="tabla-wrap">
         <table><thead><tr>
           <th onclick="sortTab('pci-tabla-body',0)">#</th>
@@ -1853,42 +1855,42 @@ tbody td.rank{font-weight:800;color:var(--az2);text-align:center}
   <div class="sec-title">📈 Tendencia del Indicador (2020–2025)</div><div class="sec-sep"></div>
   <div class="charts-grid g1" style="margin-bottom:18px">
     <div class="chart-card">
-      <div class="chart-header"><div><div class="chart-title">Evolución % PCI/PBC (2020–2025)</div><div class="chart-sub">PCI ÷ PBC × 100 · nivel nacional</div></div><div class="chart-badge">% Cobertura</div></div>
+      <div class="chart-header"><div><div class="chart-title">Evolución % PCI/PBC (2020–2025)</div><div class="chart-sub">PCI ÷ PBC × 100 · nivel nacional</div></div><div style="display:flex;align-items:center;gap:6px"><div class="chart-badge">% Cobertura</div><button class="btn-png" onclick="downloadNearestChart(this)" title="Descargar como PNG">⬇️ PNG</button></div></div>
       <div class="cw t"><canvas id="pcipbc-c-tend"></canvas></div>
     </div>
   </div>
   <div class="charts-grid g2">
     <div class="chart-card">
-      <div class="chart-header"><div><div class="chart-title">% PCI/PBC por Servicio de Salud</div><div class="chart-sub">Comparación entre SS · verde = mayor cobertura</div></div><div class="chart-badge">SS</div></div>
+      <div class="chart-header"><div><div class="chart-title">% PCI/PBC por Servicio de Salud</div><div class="chart-sub">Comparación entre SS · verde = mayor cobertura</div></div><div style="display:flex;align-items:center;gap:6px"><div class="chart-badge">SS</div><button class="btn-png" onclick="downloadNearestChart(this)" title="Descargar como PNG">⬇️ PNG</button></div></div>
       <div class="cw xt"><canvas id="pcipbc-c-ss"></canvas></div>
     </div>
     <div class="chart-card">
-      <div class="chart-header"><div><div class="chart-title">PCI vs PBC por Año</div><div class="chart-sub">Volumen absoluto con % superpuesto</div></div><div class="chart-badge">Dual</div></div>
+      <div class="chart-header"><div><div class="chart-title">PCI vs PBC por Año</div><div class="chart-sub">Volumen absoluto con % superpuesto</div></div><div style="display:flex;align-items:center;gap:6px"><div class="chart-badge">Dual</div><button class="btn-png" onclick="downloadNearestChart(this)" title="Descargar como PNG">⬇️ PNG</button></div></div>
       <div class="cw t"><canvas id="pcipbc-c-dual"></canvas></div>
     </div>
   </div>
   <div class="sec-title" style="margin-top:22px">🏥 Por Tipo y Dependencia</div><div class="sec-sep"></div>
   <div class="charts-grid g2">
     <div class="chart-card">
-      <div class="chart-header"><div><div class="chart-title">% PCI/PBC por Tipo de Establecimiento</div></div><div class="chart-badge">Tipo</div></div>
+      <div class="chart-header"><div><div class="chart-title">% PCI/PBC por Tipo de Establecimiento</div></div><div style="display:flex;align-items:center;gap:6px"><div class="chart-badge">Tipo</div><button class="btn-png" onclick="downloadNearestChart(this)" title="Descargar como PNG">⬇️ PNG</button></div></div>
       <div class="cw t"><canvas id="pcipbc-c-tipo"></canvas></div>
     </div>
     <div class="chart-card">
-      <div class="chart-header"><div><div class="chart-title">% PCI/PBC por Dependencia</div></div><div class="chart-badge">Dependencia</div></div>
+      <div class="chart-header"><div><div class="chart-title">% PCI/PBC por Dependencia</div></div><div style="display:flex;align-items:center;gap:6px"><div class="chart-badge">Dependencia</div><button class="btn-png" onclick="downloadNearestChart(this)" title="Descargar como PNG">⬇️ PNG</button></div></div>
       <div class="cw t"><canvas id="pcipbc-c-dep"></canvas></div>
     </div>
   </div>
   <div class="sec-title" style="margin-top:22px">📊 Evolución por SS</div><div class="sec-sep"></div>
   <div class="charts-grid g1">
     <div class="chart-card">
-      <div class="chart-header"><div><div class="chart-title">% PCI/PBC por SS y Año — Líneas Múltiples (2020–2025)</div><div class="chart-sub">Trayectoria de cada SS · Top 15</div></div><div class="chart-badge">2020–2025</div></div>
+      <div class="chart-header"><div><div class="chart-title">% PCI/PBC por SS y Año — Líneas Múltiples (2020–2025)</div><div class="chart-sub">Trayectoria de cada SS · Top 15</div></div><div style="display:flex;align-items:center;gap:6px"><div class="chart-badge">2020–2025</div><button class="btn-png" onclick="downloadNearestChart(this)" title="Descargar como PNG">⬇️ PNG</button></div></div>
       <div class="cw xxxl"><canvas id="pcipbc-c-ss-linea"></canvas></div>
     </div>
   </div>
   <div class="sec-title" style="margin-top:22px">📋 Tabla por Establecimiento</div><div class="sec-sep"></div>
   <div class="charts-grid g1">
     <div class="chart-card">
-      <div class="chart-header"><div><div class="chart-title">% PCI/PBC por Establecimiento</div><div class="chart-sub">Solo establecimientos con PBC > 0 · Clic para ordenar</div></div><div class="chart-badge" id="pcipbc-badge-tabla">—</div></div>
+      <div class="chart-header"><div><div class="chart-title">% PCI/PBC por Establecimiento</div><div class="chart-sub">Solo establecimientos con PBC > 0 · Clic para ordenar</div></div><div style="display:flex;gap:6px;align-items:center;flex-shrink:0"><div class="chart-badge" id="pcipbc-badge-tabla">—</div><button class="btn-png" onclick="downloadNearestChart(this)" title="Descargar PNG">📥 PNG</button></div></div>
       <div class="tabla-wrap">
         <table><thead><tr>
           <th onclick="sortTab('pcipbc-tabla-body',0)">#</th>
@@ -1924,57 +1926,57 @@ tbody td.rank{font-weight:800;color:var(--az2);text-align:center}
   <div class="sec-title">📈 Tendencia Temporal</div><div class="sec-sep"></div>
   <div class="charts-grid g1" style="margin-bottom:18px">
     <div class="chart-card">
-      <div class="chart-header"><div><div class="chart-title">Evolución de la Población Inscrita y Validada (PIV) por Año (2014–2025)</div><div class="chart-sub">Total nacional según filtros activos</div></div><div class="chart-badge">Nacional</div></div>
+      <div class="chart-header"><div><div class="chart-title">Evolución de la Población Inscrita y Validada (PIV) por Año (2014–2025)</div><div class="chart-sub">Total nacional según filtros activos</div></div><div style="display:flex;align-items:center;gap:6px"><div class="chart-badge">Nacional</div><button class="btn-png" onclick="downloadNearestChart(this)" title="Descargar como PNG">⬇️ PNG</button></div></div>
       <div class="cw t"><canvas id="piv-c-tend"></canvas></div>
     </div>
   </div>
   <div class="charts-grid g2">
     <div class="chart-card">
-      <div class="chart-header"><div><div class="chart-title">PIV por Servicio de Salud</div><div class="chart-sub">Comparación entre los 29 SS</div></div><div class="chart-badge">SS</div></div>
+      <div class="chart-header"><div><div class="chart-title">PIV por Servicio de Salud</div><div class="chart-sub">Comparación entre los 29 SS</div></div><div style="display:flex;align-items:center;gap:6px"><div class="chart-badge">SS</div><button class="btn-png" onclick="downloadNearestChart(this)" title="Descargar como PNG">⬇️ PNG</button></div></div>
       <div class="cw xt"><canvas id="piv-c-ss"></canvas></div>
     </div>
     <div class="chart-card">
-      <div class="chart-header"><div><div class="chart-title">Variación % Año a Año</div><div class="chart-sub">Cambio porcentual respecto al año anterior</div></div><div class="chart-badge">Δ%</div></div>
+      <div class="chart-header"><div><div class="chart-title">Variación % Año a Año</div><div class="chart-sub">Cambio porcentual respecto al año anterior</div></div><div style="display:flex;align-items:center;gap:6px"><div class="chart-badge">Δ%</div><button class="btn-png" onclick="downloadNearestChart(this)" title="Descargar como PNG">⬇️ PNG</button></div></div>
       <div class="cw t"><canvas id="piv-c-var"></canvas></div>
     </div>
   </div>
   <div class="sec-title" style="margin-top:22px">🏥 Análisis por Tipo y Dependencia</div><div class="sec-sep"></div>
   <div class="charts-grid g3">
     <div class="chart-card">
-      <div class="chart-header"><div><div class="chart-title">Distribución PIV por Tipo de Establecimiento</div></div><div class="chart-badge">Tipo</div></div>
+      <div class="chart-header"><div><div class="chart-title">Distribución PIV por Tipo de Establecimiento</div></div><div style="display:flex;align-items:center;gap:6px"><div class="chart-badge">Tipo</div><button class="btn-png" onclick="downloadNearestChart(this)" title="Descargar como PNG">⬇️ PNG</button></div></div>
       <div class="cw t"><canvas id="piv-c-tipo-dona"></canvas></div>
     </div>
     <div class="chart-card">
-      <div class="chart-header"><div><div class="chart-title">Evolución PIV por Tipo de Establecimiento</div></div><div class="chart-badge">Tendencia</div></div>
+      <div class="chart-header"><div><div class="chart-title">Evolución PIV por Tipo de Establecimiento</div></div><div style="display:flex;align-items:center;gap:6px"><div class="chart-badge">Tendencia</div><button class="btn-png" onclick="downloadNearestChart(this)" title="Descargar como PNG">⬇️ PNG</button></div></div>
       <div class="cw t"><canvas id="piv-c-tipo-linea"></canvas></div>
     </div>
     <div class="chart-card">
-      <div class="chart-header"><div><div class="chart-title">PIV por Dependencia</div></div><div class="chart-badge">Dependencia</div></div>
+      <div class="chart-header"><div><div class="chart-title">PIV por Dependencia</div></div><div style="display:flex;align-items:center;gap:6px"><div class="chart-badge">Dependencia</div><button class="btn-png" onclick="downloadNearestChart(this)" title="Descargar como PNG">⬇️ PNG</button></div></div>
       <div class="cw t"><canvas id="piv-c-dep"></canvas></div>
     </div>
   </div>
   <div class="sec-title" style="margin-top:22px">🌆 Top Comunas y Establecimientos</div><div class="sec-sep"></div>
   <div class="charts-grid g2c">
     <div class="chart-card">
-      <div class="chart-header"><div><div class="chart-title">Top 20 Comunas — PIV</div></div><div class="chart-badge">Top 20</div></div>
+      <div class="chart-header"><div><div class="chart-title">Top 20 Comunas — PIV</div></div><div style="display:flex;align-items:center;gap:6px"><div class="chart-badge">Top 20</div><button class="btn-png" onclick="downloadNearestChart(this)" title="Descargar como PNG">⬇️ PNG</button></div></div>
       <div class="cw xxxl"><canvas id="piv-c-comunas"></canvas></div>
     </div>
     <div class="chart-card">
-      <div class="chart-header"><div><div class="chart-title">Top 10 Establecimientos — PIV</div></div><div class="chart-badge">Ranking</div></div>
+      <div class="chart-header"><div><div class="chart-title">Top 10 Establecimientos — PIV</div></div><div style="display:flex;align-items:center;gap:6px"><div class="chart-badge">Ranking</div><button class="btn-png" onclick="downloadNearestChart(this)" title="Descargar como PNG">⬇️ PNG</button></div></div>
       <div class="cw xxxl"><canvas id="piv-c-top-estab"></canvas></div>
     </div>
   </div>
   <div class="sec-title" style="margin-top:22px">🔥 Distribución por SS y Año</div><div class="sec-sep"></div>
   <div class="charts-grid g1">
     <div class="chart-card">
-      <div class="chart-header"><div><div class="chart-title">PIV por SS y Año — Barras Apiladas</div></div><div class="chart-badge">2014–2025</div></div>
+      <div class="chart-header"><div><div class="chart-title">PIV por SS y Año — Barras Apiladas</div></div><div style="display:flex;align-items:center;gap:6px"><div class="chart-badge">2014–2025</div><button class="btn-png" onclick="downloadNearestChart(this)" title="Descargar como PNG">⬇️ PNG</button></div></div>
       <div class="cw xxxl"><canvas id="piv-c-ss-anio"></canvas></div>
     </div>
   </div>
   <div class="sec-title" style="margin-top:22px">📋 Tabla de Establecimientos</div><div class="sec-sep"></div>
   <div class="charts-grid g1">
     <div class="chart-card">
-      <div class="chart-header"><div><div class="chart-title">Detalle por Establecimiento — PIV</div><div class="chart-sub">Top 100 · Clic en encabezados para ordenar</div></div><div class="chart-badge" id="piv-badge-tabla">Top 100</div></div>
+      <div class="chart-header"><div><div class="chart-title">Detalle por Establecimiento — PIV</div><div class="chart-sub">Top 100 · Clic en encabezados para ordenar</div></div><div style="display:flex;gap:6px;align-items:center;flex-shrink:0"><div class="chart-badge" id="piv-badge-tabla">Top 100</div><button class="btn-png" onclick="downloadNearestChart(this)" title="Descargar PNG">📥 PNG</button></div></div>
       <div class="tabla-wrap">
         <table><thead><tr>
           <th onclick="sortTab('piv-tabla-body',0)">#</th>
@@ -2009,42 +2011,42 @@ tbody td.rank{font-weight:800;color:var(--az2);text-align:center}
   <div class="sec-title">📈 Tendencia de Cobertura (2014–2025)</div><div class="sec-sep"></div>
   <div class="charts-grid g1" style="margin-bottom:18px">
     <div class="chart-card">
-      <div class="chart-header"><div><div class="chart-title">Evolución de la Cobertura SM APS (2014–2025)</div><div class="chart-sub">PBC ÷ (PIV × 0,22) × 100 · nivel nacional · Prevalencia SM 22% (Vicente et al., 2002)</div></div><div class="chart-badge">% Cobertura</div></div>
+      <div class="chart-header"><div><div class="chart-title">Evolución de la Cobertura SM APS (2014–2025)</div><div class="chart-sub">PBC ÷ (PIV × 0,22) × 100 · nivel nacional · Prevalencia SM 22% (Vicente et al., 2002)</div></div><div style="display:flex;align-items:center;gap:6px"><div class="chart-badge">% Cobertura</div><button class="btn-png" onclick="downloadNearestChart(this)" title="Descargar como PNG">⬇️ PNG</button></div></div>
       <div class="cw t"><canvas id="cob-c-tend"></canvas></div>
     </div>
   </div>
   <div class="charts-grid g2">
     <div class="chart-card">
-      <div class="chart-header"><div><div class="chart-title">Cobertura SM por Servicio de Salud</div><div class="chart-sub">Verde = mayor cobertura · Solo SS con PBC y PIV > 0</div></div><div class="chart-badge">SS</div></div>
+      <div class="chart-header"><div><div class="chart-title">Cobertura SM por Servicio de Salud</div><div class="chart-sub">Verde = mayor cobertura · Solo SS con PBC y PIV > 0</div></div><div style="display:flex;align-items:center;gap:6px"><div class="chart-badge">SS</div><button class="btn-png" onclick="downloadNearestChart(this)" title="Descargar como PNG">⬇️ PNG</button></div></div>
       <div class="cw xt"><canvas id="cob-c-ss"></canvas></div>
     </div>
     <div class="chart-card">
-      <div class="chart-header"><div><div class="chart-title">PBC vs PIV×0,22 por Año</div><div class="chart-sub">Población bajo control vs población esperada con necesidad SM</div></div><div class="chart-badge">Dual</div></div>
+      <div class="chart-header"><div><div class="chart-title">PBC vs PIV×0,22 por Año</div><div class="chart-sub">Población bajo control vs población esperada con necesidad SM</div></div><div style="display:flex;align-items:center;gap:6px"><div class="chart-badge">Dual</div><button class="btn-png" onclick="downloadNearestChart(this)" title="Descargar como PNG">⬇️ PNG</button></div></div>
       <div class="cw t"><canvas id="cob-c-dual"></canvas></div>
     </div>
   </div>
   <div class="sec-title" style="margin-top:22px">🏥 Cobertura por Tipo y Dependencia</div><div class="sec-sep"></div>
   <div class="charts-grid g2">
     <div class="chart-card">
-      <div class="chart-header"><div><div class="chart-title">Cobertura SM por Tipo de Establecimiento</div></div><div class="chart-badge">Tipo</div></div>
+      <div class="chart-header"><div><div class="chart-title">Cobertura SM por Tipo de Establecimiento</div></div><div style="display:flex;align-items:center;gap:6px"><div class="chart-badge">Tipo</div><button class="btn-png" onclick="downloadNearestChart(this)" title="Descargar como PNG">⬇️ PNG</button></div></div>
       <div class="cw t"><canvas id="cob-c-tipo"></canvas></div>
     </div>
     <div class="chart-card">
-      <div class="chart-header"><div><div class="chart-title">Cobertura SM por Dependencia</div></div><div class="chart-badge">Dependencia</div></div>
+      <div class="chart-header"><div><div class="chart-title">Cobertura SM por Dependencia</div></div><div style="display:flex;align-items:center;gap:6px"><div class="chart-badge">Dependencia</div><button class="btn-png" onclick="downloadNearestChart(this)" title="Descargar como PNG">⬇️ PNG</button></div></div>
       <div class="cw t"><canvas id="cob-c-dep"></canvas></div>
     </div>
   </div>
   <div class="sec-title" style="margin-top:22px">📊 Evolución por SS</div><div class="sec-sep"></div>
   <div class="charts-grid g1">
     <div class="chart-card">
-      <div class="chart-header"><div><div class="chart-title">Cobertura SM por SS y Año — Líneas Múltiples (2014–2025)</div><div class="chart-sub">Solo SS con datos disponibles · Top 15</div></div><div class="chart-badge">2014–2025</div></div>
+      <div class="chart-header"><div><div class="chart-title">Cobertura SM por SS y Año — Líneas Múltiples (2014–2025)</div><div class="chart-sub">Solo SS con datos disponibles · Top 15</div></div><div style="display:flex;align-items:center;gap:6px"><div class="chart-badge">2014–2025</div><button class="btn-png" onclick="downloadNearestChart(this)" title="Descargar como PNG">⬇️ PNG</button></div></div>
       <div class="cw xxxl"><canvas id="cob-c-ss-linea"></canvas></div>
     </div>
   </div>
   <div class="sec-title" style="margin-top:22px">📋 Tabla por Establecimiento</div><div class="sec-sep"></div>
   <div class="charts-grid g1">
     <div class="chart-card">
-      <div class="chart-header"><div><div class="chart-title">Cobertura SM por Establecimiento</div><div class="chart-sub">Solo establecimientos con PBC y PIV > 0 — Los que no tienen ambos datos se excluyen del cálculo</div></div><div class="chart-badge" id="cob-badge-tabla">—</div></div>
+      <div class="chart-header"><div><div class="chart-title">Cobertura SM por Establecimiento</div><div class="chart-sub">Solo establecimientos con PBC y PIV > 0 — Los que no tienen ambos datos se excluyen del cálculo</div></div><div style="display:flex;gap:6px;align-items:center;flex-shrink:0"><div class="chart-badge" id="cob-badge-tabla">—</div><button class="btn-png" onclick="downloadNearestChart(this)" title="Descargar PNG">📥 PNG</button></div></div>
       <div class="tabla-wrap">
         <table><thead><tr>
           <th onclick="sortTab('cob-tabla-body',0)">#</th>
@@ -2096,6 +2098,27 @@ window._parseDatos = function(pkg){
 };
 const YEARS = ['2014','2015','2016','2017','2018','2019','2020','2021','2022','2023','2024','2025'];
 
+
+function downloadNearestChart(btn){
+  const card=btn.closest('.chart-card');
+  if(!card){return;}
+  const canvases=card.querySelectorAll('canvas');
+  if(!canvases.length){alert('Gráfico no disponible aún');return;}
+  let canvas=null;
+  for(const c of canvases){if(c.width>0&&c.height>0){canvas=c;break;}}
+  if(!canvas)canvas=canvases[0];
+  const titleEl=card.querySelector('.chart-title');
+  const title=titleEl?titleEl.textContent.replace(/[^\w\sáéíóúñÁÉÍÓÚÑ]/g,'').trim().slice(0,50):'grafico';
+  const tmp=document.createElement('canvas');
+  tmp.width=canvas.width;tmp.height=canvas.height;
+  const ctx=tmp.getContext('2d');
+  ctx.fillStyle='#FFFFFF';ctx.fillRect(0,0,tmp.width,tmp.height);
+  ctx.drawImage(canvas,0,0);
+  const a=document.createElement('a');
+  a.download=title.replace(/\s+/g,'_')+'.png';
+  a.href=tmp.toDataURL('image/png');
+  a.click();
+}
 function ssNom(s){
   if(!s) return s;
   // Abreviar Servicios de Salud Metropolitanos
